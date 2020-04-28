@@ -80,6 +80,17 @@ conv2d_config_template = """struct config{index} : nnet::conv2d_config {{
     typedef {config_t} mult_config;
 }};\n"""
 
+upsampling2d_config_template = """struct config{index} : nnet::upsampling2d_config {{
+    static const unsigned height_factor = {height_factor};
+    static const unsigned width_factor = {width_factor};
+    static const unsigned in_height = {in_height};
+    static const unsigned in_width = {in_width};
+    static const unsigned out_height = {out_height};
+    static const unsigned out_width = {out_width};
+    static const unsigned n_channel = {n_channel};
+    static const nnet::Interp_Op interp_op = nnet::{interp_op};
+}};\n"""
+
 activ_config_template = """struct {type}_config{index} : nnet::activ_config {{
     static const unsigned n_in = {n_in};
     static const unsigned table_size = 1024;
@@ -135,6 +146,7 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
     'BatchNormalization'     : batchnorm_config_template,
     'Conv1D'                 : [conv1d_config_template, conv_mult_config_template],
     'Conv2D'                 : [conv2d_config_template, conv_mult_config_template],
+    'Upsample2D'             : upsampling2d_config_template,
     'Activation'             : activ_config_template,
     'ParametrizedActivation' : activ_config_template,
     'PReLU'                  : activ_config_template,
@@ -148,6 +160,7 @@ dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config
 batchnorm_function_template = 'nnet::normalize<{input_t}, {output_t}, {config}>({input}, {output}, {scale}, {bias});'
 conv1d_function_template = 'nnet::conv_1d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 conv2d_function_template = 'nnet::conv_2d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
+upsampling2d_function_template = 'nnet:upsampling2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
 activ_function_template = 'nnet::{activation}<{input_t}, {output_t}, {config}>({input}, {output});'
 param_activ_function_template = 'nnet::{activation}<{input_t}, {output_t}, {config}>({input}, {param}, {output});'
 pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {output});'
@@ -160,6 +173,7 @@ merge_function_template = 'nnet::{merge}<{input1_t}, {input2_t}, {output_t}, {co
     'BatchNormalization'     : batchnorm_function_template,
     'Conv1D'                 : conv1d_function_template,
     'Conv2D'                 : conv2d_function_template,
+    'UpSampling2D'           : upsampling2d_function_template,
     'Activation'             : activ_function_template,
     'ParametrizedActivation' : param_activ_function_template,
     'PReLU'                  : param_activ_function_template,
@@ -177,6 +191,7 @@ class VivadoBackend(Backend):
         self.register_templates('BatchNormalization'     , batchnorm_function_template,   batchnorm_config_template)
         self.register_templates('Conv1D'                 , conv1d_function_template,      [conv1d_config_template, conv_mult_config_template])
         self.register_templates('Conv2D'                 , conv2d_function_template,      [conv2d_config_template, conv_mult_config_template])
+        self.register_templates('UpSampling2D'           , upsampling2d_function_template, upsampling2d_config_template)
         self.register_templates('Activation'             , activ_function_template,       activ_config_template)
         self.register_templates('ParametrizedActivation' , param_activ_function_template, activ_config_template)
         self.register_templates('PReLU'                  , param_activ_function_template, activ_config_template)

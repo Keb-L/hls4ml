@@ -894,6 +894,42 @@ class Conv2D(Layer):
         else:
             return self._config_template[0].format(**params)
 
+
+class UpSampling2D(Layer):
+    def initialize(self):
+        if self.get_attr('data_format') == 'channels_last':
+            shape = [self.attributes['out_height'], self.attributes['out_width'], self.attributes['n_channel']]
+            dims = ['OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index), 'N_CHANNEL_{}'.format(self.index)]
+        else:
+            shape = [self.attributes['n_channel'], self.attributes['out_height'], self.attributes['out_width']]
+            dims = ['N_CHANNEL_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
+        self.add_output_variable(shape, dims)
+        self.set_attr('interp_op', self.get_attr('interpolation'))
+
+
+    def function_cpp(self):
+        params = self._default_function_params()
+        params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl'
+
+        return [self._function_template.format(**params)]
+
+    def config_cpp(self):
+        params = self._default_config_params()
+        if self.get_attr('data_format') == 'channels_last':
+            params['in_height'] = self.get_input_variable().dim_names[0]
+            params['in_width'] = self.get_input_variable().dim_names[1]
+            params['out_height'] = self.get_output_variable().dim_names[0]
+            params['out_width'] = self.get_output_variable().dim_names[1]
+            params['n_channel'] = self.get_output_variable().dim_names[2]
+        else:
+            params['in_height'] = self.get_input_variable().dim_names[1]
+            params['in_width'] = self.get_input_variable().dim_names[2]
+            params['out_height'] = self.get_output_variable().dim_names[1]
+            params['out_width'] = self.get_output_variable().dim_names[2]
+            params['n_channel'] = self.get_output_variable().dim_names[0]
+        return self._config_template.format(**params)
+
+
 class Pooling1D(Layer):
     def initialize(self):
         shape = [self.attributes['n_out'], self.attributes['n_filt']]
@@ -1087,6 +1123,7 @@ layer_map = {
     'Conv1D'             : Conv1D,
     'Conv2D'             : Conv2D,
     'BinaryConv2D'       : Conv2D,
+    'UpSampling2D'       : UpSampling2D,
     'BatchNormalization' : BatchNormalization,
     'MaxPooling1D'       : Pooling1D,
     'AveragePooling1D'   : Pooling1D,
