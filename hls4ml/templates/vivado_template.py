@@ -146,7 +146,7 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
     'BatchNormalization'     : batchnorm_config_template,
     'Conv1D'                 : [conv1d_config_template, conv_mult_config_template],
     'Conv2D'                 : [conv2d_config_template, conv_mult_config_template],
-    'Upsample2D'             : upsampling2d_config_template,
+    'Upsampling2D'           : upsampling2d_config_template,
     'Activation'             : activ_config_template,
     'ParametrizedActivation' : activ_config_template,
     'PReLU'                  : activ_config_template,
@@ -160,7 +160,7 @@ dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config
 batchnorm_function_template = 'nnet::normalize<{input_t}, {output_t}, {config}>({input}, {output}, {scale}, {bias});'
 conv1d_function_template = 'nnet::conv_1d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 conv2d_function_template = 'nnet::conv_2d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
-upsampling2d_function_template = 'nnet:upsampling2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
+upsampling2d_function_template = 'nnet::upsampling2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
 activ_function_template = 'nnet::{activation}<{input_t}, {output_t}, {config}>({input}, {output});'
 param_activ_function_template = 'nnet::{activation}<{input_t}, {output_t}, {config}>({input}, {param}, {output});'
 pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {output});'

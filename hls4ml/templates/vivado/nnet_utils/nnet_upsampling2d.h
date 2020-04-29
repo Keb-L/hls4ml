@@ -6,14 +6,14 @@
 
 namespace nnet {
 
-enum Interp_Op { Nearest, Bilinear };
-template<typename T, Interp_Op op, typename CONFIG_T>
-T interp_op(T (&x)[N], float h, float w, int c){
-	switch(op){
-        case Nearest: return pixel_nearest(x);
-        case Bilinear: return pixel_bilinear(x);
-	}
-}
+enum Interp_Op { nearest, bilinear };
+// template<typename T, Interp_Op op, typename CONFIG_T>
+// T interp_op(T (&x)[N], float h, float w, int c){
+// 	switch(op){
+//         case Nearest: return pixel_nearest(x);
+//         case Bilinear: return pixel_bilinear(x);
+// 	}
+// }
 
 struct upsampling2d_config {
 	static const unsigned height_factor = 1;
