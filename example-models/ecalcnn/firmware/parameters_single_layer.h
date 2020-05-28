@@ -21,7 +21,7 @@
 
 //hls-fpga-machine-learning insert numbers
 #define N_INPUT_1_1_TRUE 56
-#define N_INPUT_1_1 56
+#define N_INPUT_1_1 150
 #define N_INPUT_2_1 55
 #define N_INPUT_3_1 4
 #define OUT_HEIGHT_102 56

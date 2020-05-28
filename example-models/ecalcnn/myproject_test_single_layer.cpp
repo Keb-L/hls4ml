@@ -76,33 +76,16 @@ int main(int argc, char **argv)
           }
         } 
 
-      result_t  output[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2];
+      result_t  preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2];
 
-      model_default_t w38[config38::mult_config::n_in*config38::mult_config::n_out];
-      model_default_t w42[config42::n_in*config42::n_out];
-
-      myproject(em_barrel,output,w38,w42);
+      myproject_single_layer(em_barrel, preds);
       
       //hls-fpga-machine-learning insert tb-output
-      for(int i = 0; i < N_LAYER_50; i++) {
-        fout << output[i] << " ";
+      for(int i = 0; i < OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2; i++) {
+        fout << preds[i] << " ";
       }
       fout << std::endl;
 
-      if (e % CHECKPOINT == 0) {
-        std::cout << "Predictions" << std::endl;
-        //hls-fpga-machine-learning insert predictions
-        for(int i = 0; i < N_LAYER_50; i++) {
-          std::cout << pr[i] << " ";
-        }
-        std::cout << std::endl;
-        std::cout << "Quantized predictions" << std::endl;
-        //hls-fpga-machine-learning insert quantized
-        for(int i = 0; i < N_LAYER_50; i++) {
-          std::cout << output[i] << " ";
-        }
-        std::cout << std::endl;
-      }
     }
     fin.close();
     fpr.close();
@@ -111,25 +94,22 @@ int main(int argc, char **argv)
     //hls-fpga-machine-learning insert zero
     input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1] = {1};
 
-    result_t  layer50_out[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2];
-
-    model_default_t w38[config38::mult_config::n_in*config38::mult_config::n_out];
-    model_default_t w42[config42::n_in*config42::n_out];
+    result_t  preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2];
 
     //hls-fpga-machine-learning insert top-level-function
     unsigned short size_in1,size_out1;
     //myproject(em_barrel,layer52_out,size_in1,size_out1);
-    myproject(em_barrel,layer50_out,w38,w42);
+    myproject_single_layer(em_barrel,preds);
 
     //hls-fpga-machine-learning insert output
     for(int i = 0; i < N_LAYER_50; i++) {
-      std::cout << layer50_out[i] << " ";
+      std::cout << preds[i] << " ";
     }
     std::cout << std::endl;
 
     //hls-fpga-machine-learning insert tb-output
     for(int i = 0; i < N_LAYER_50; i++) {
-      fout << layer50_out[i] << " ";
+      fout << preds[i] << " ";
     }
     fout << std::endl;
   }
@@ -140,19 +120,19 @@ int main(int argc, char **argv)
 }
 
   // input_t   gpu_0_data_0[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1];
-  // //result_t  layer50_out[N_LAYER_50];
-  // result_t  layer50_out[OUT_WIDTH_38*OUT_HEIGHT_38*N_FILT_38];
+  // //result_t  preds[N_LAYER_50];
+  // result_t  preds[OUT_WIDTH_38*OUT_HEIGHT_38*N_FILT_38];
 
   // model_default_t w38[config38::mult_config::n_in*config38::mult_config::n_out];
   // model_default_t w42[config42::n_in*config42::n_out];
   // //hls-fpga-machine-learning insert top-level-function
   // //bool iReset = true;
   // //  subimage(iReset, gpu_0_data_0,layer176_out);
-  // myproject(gpu_0_data_0,layer50_out,w38,w42);
+  // myproject(gpu_0_data_0,preds,w38,w42);
   
   // //hls-fpga-machine-learning insert output
   // for(int i = 0; i < N_LAYER_50; i++) {
-  //   fout << layer50_out[i] << " ";
+  //   fout << preds[i] << " ";
   // }
   // fout << std::endl;
 

@@ -21,67 +21,66 @@
 #include "myproject_single_layer.h"
 
 //hls-fpga-machine-learning insert weights
-#include "weights/b103.h"
-#include "weights/s103.h"
+// #include "weights/b103.h"
+// #include "weights/s103.h"
 #include "weights/w2.h"
 #include "weights/b2.h"
 #include "weights/s4.h"
 #include "weights/b4.h"
-#include "weights/w7.h"
-#include "weights/b7.h"
-#include "weights/s9.h"
-#include "weights/b9.h"
-#include "weights/w11.h"
-#include "weights/b11.h"
-#include "weights/s13.h"
-#include "weights/b13.h"
-#include "weights/w16.h"
-#include "weights/b16.h"
-#include "weights/s18.h"
-#include "weights/b18.h"
-#include "weights/w20.h"
-#include "weights/b20.h"
-#include "weights/s22.h"
-#include "weights/b22.h"
-#include "weights/w25.h"
-#include "weights/b25.h"
-#include "weights/s27.h"
-#include "weights/b27.h"
-#include "weights/w29.h"
-#include "weights/b29.h"
-#include "weights/s31.h"
-#include "weights/b31.h"
-#include "weights/w34.h"
-#include "weights/b34.h"
-#include "weights/s36.h"
-#include "weights/b36.h"
-////#include "weights/w38.h"
-#include "weights/b38.h"
-#include "weights/s40.h"
-#include "weights/b40.h"
-////#include "weights/w42.h"
-#include "weights/b42.h"
-#include "weights/w46.h"
-#include "weights/b46.h"
-#include "weights/w50.h"
-#include "weights/b50.h"
+// #include "weights/w7.h"
+// #include "weights/b7.h"
+// #include "weights/s9.h"
+// #include "weights/b9.h"
+// #include "weights/w11.h"
+// #include "weights/b11.h"
+// #include "weights/s13.h"
+// #include "weights/b13.h"
+// #include "weights/w16.h"
+// #include "weights/b16.h"
+// #include "weights/s18.h"
+// #include "weights/b18.h"
+// #include "weights/w20.h"
+// #include "weights/b20.h"
+// #include "weights/s22.h"
+// #include "weights/b22.h"
+// #include "weights/w25.h"
+// #include "weights/b25.h"
+// #include "weights/s27.h"
+// #include "weights/b27.h"
+// #include "weights/w29.h"
+// #include "weights/b29.h"
+// #include "weights/s31.h"
+// #include "weights/b31.h"
+// #include "weights/w34.h"
+// #include "weights/b34.h"
+// #include "weights/s36.h"
+// #include "weights/b36.h"
+// #include "weights/w38.h"
+// #include "weights/b38.h"
+// #include "weights/s40.h"
+// #include "weights/b40.h"
+// #include "weights/w42.h"
+// #include "weights/b42.h"
+// #include "weights/w46.h"
+// #include "weights/b46.h"
+// #include "weights/w50.h"
+// #include "weights/b50.h"
 
-void myproject(
-input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1],
+void myproject_single_layer(
+input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1],
 // result_t layer52_out[N_LAYER_50],
-result_t layer41_out[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2],
+// result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]   
+result_t preds[N_LAYER_50] // For synth!
 
-model_default_t w38[589824],
-model_default_t w42[589824]                    
 //unsigned short &const_size_in_1,
 //unsigned short &const_size_out_1
 ) {
 
-    #pragma HLS interface bram port=w38
-    #pragma HLS interface bram port=w42
+    // #pragma HLS interface bram port=w38
+    // #pragma HLS interface bram port=w42
     //hls-fpga-machine-learning insert IO
-    #pragma HLS ARRAY_RESHAPE variable=layer41_out complete dim=0 
-    #pragma HLS INTERFACE ap_vld port=em_barrel,layer41_out 
+    #pragma HLS ARRAY_RESHAPE variable=preds complete dim=0 
+    #pragma HLS INTERFACE ap_vld port=em_barrel,preds 
     #pragma HLS DATAFLOW 
 
     //const_size_in_1 = N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1;
@@ -91,14 +90,14 @@ model_default_t w42[589824]
     static bool loaded_weights = false;
     if (!loaded_weights) {
     //hls-fpga-machine-learning insert load weights
-    nnet::load_weights_from_txt<model_default_t, 589824>(w42, "w42.txt");
-    nnet::load_weights_from_txt<bias42_t, 256>(b42, "b42.txt");
-    nnet::load_weights_from_txt<model_default_t, 65536>(w46, "w46.txt");
-    nnet::load_weights_from_txt<bias46_t, 256>(b46, "b46.txt");
-    nnet::load_weights_from_txt<model_default_t, 256>(w50, "w50.txt");
-    nnet::load_weights_from_txt<model_default_t, 1>(b50, "b50.txt");
-    nnet::load_weights_from_txt<model_default_t, 4>(s103, "s103.txt");
-    nnet::load_weights_from_txt<model_default_t, 4>(b103, "b103.txt");
+    // nnet::load_weights_from_txt<model_default_t, 589824>(w42, "w42.txt");
+    // nnet::load_weights_from_txt<bias42_t, 256>(b42, "b42.txt");
+    // nnet::load_weights_from_txt<model_default_t, 65536>(w46, "w46.txt");
+    // nnet::load_weights_from_txt<bias46_t, 256>(b46, "b46.txt");
+    // nnet::load_weights_from_txt<model_default_t, 256>(w50, "w50.txt");
+    // nnet::load_weights_from_txt<model_default_t, 1>(b50, "b50.txt");
+    // nnet::load_weights_from_txt<model_default_t, 4>(s103, "s103.txt");
+    // nnet::load_weights_from_txt<model_default_t, 4>(b103, "b103.txt");
     loaded_weights = true;
     }
     #endif
@@ -131,29 +130,31 @@ model_default_t w42[589824]
         for(unsigned i1 = 0; i1 < N_INPUT_2_1; i1++) {
             LoopInput:
             for(unsigned i2 = 0; i2 < N_INPUT_3_1; i2++) { 
-            #pragma HLS UNROLL
-            if(i1*iC < N_INPUT_1_1_TRUE*N_INPUT_2_1) {
-                sInput[i2].write(em_barrel[iC][i1][i2]);
-            } else { 
-                input_t pVal = 0; 
-                sInput[i2].write(pVal);
-                }
+                #pragma HLS UNROLL
+                if(i1*iC < N_INPUT_1_1_TRUE*N_INPUT_2_1) {
+                    sInput[i2].write(em_barrel[iC][i1][i2]);
+                    // std::cout << "write_pixel >" << em_barrel[iC][i1][i2] << std::endl;
+                } else { 
+                    input_t pVal = 0; 
+                    sInput[i2].write(pVal);
+                    }
             }
-
-            subimage_stream(lReset,sInput,sOutput,w38);
+            std::cout << "Processing (" << iC << ", " << i1 << ")" << std::endl;
+            subimage_stream(lReset,sInput,sOutput);
             lReset = false;
 
             if(!sOutput[0].empty()) { 
-            LoopOutput:
-            std::cout << "---> " <<std::endl;
-            for(unsigned iX = 0; iX < N_FILT_2; iX++) { 
-                #pragma HLS UNROLL 
-                layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
-            }
-            index++; 
-            // if(index > 9) break;
-            std::cout << "---> " << index << std::endl;
-                if(index == (OUT_WIDTH_2*OUT_HEIGHT_2)) { 
+                LoopOutput:
+                std::cout << "---> " <<std::endl;
+                for(unsigned iX = 0; iX < N_FILT_2; iX++) { 
+                    #pragma HLS UNROLL 
+                    if(index < OUT_WIDTH_2*OUT_HEIGHT_2) preds[0] = (result_t)sOutput[iX].read(); // For synth!
+                    // if(index < OUT_WIDTH_2*OUT_HEIGHT_2) preds[index*N_FILT_2+iX] = (result_t)sOutput[iX].read(); //layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
+                }
+                index++; 
+                // if(index > 9) break;
+                std::cout << "---> " << index << std::endl;
+                if(index >= (OUT_WIDTH_2*OUT_HEIGHT_2)) { 
                     //dense layers
 
                     //     layer42_t layer42_out[N_LAYER_42];
@@ -182,16 +183,17 @@ model_default_t w42[589824]
                 }
             }
         }
+		if(index >= (OUT_WIDTH_2*OUT_HEIGHT_2)) break;
     }
+    std::cout << std::endl;
 }
 void subimage_stream(bool iReset, 
 hls::stream<input_t>  input[N_INPUT_3_1],
 // hls::stream<result_t> output[N_FILT_38] ,
-hls::stream<result_t> output[N_FILT_2] ,
-model_default_t w38[589824]          
+hls::stream<result_t> output[N_FILT_2]   
 ) { 
 
-    #pragma HLS interface bram port=w38
+    // #pragma HLS interface bram port=w38
 
     #ifndef __SYNTHESIS__
     static bool loaded_weights = false;
@@ -201,38 +203,38 @@ model_default_t w38[589824]
         nnet::load_weights_from_txt<model_default_t, 16>(b2, "b2.txt");
         nnet::load_weights_from_txt<model_default_t, 16>(s4, "s4.txt");
         nnet::load_weights_from_txt<model_default_t, 16>(b4, "b4.txt");
-        nnet::load_weights_from_txt<model_default_t, 4608>(w7, "w7.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(b7, "b7.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(s9, "s9.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(b9, "b9.txt");
-        nnet::load_weights_from_txt<model_default_t, 9216>(w11, "w11.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(b11, "b11.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(s13, "s13.txt");
-        nnet::load_weights_from_txt<model_default_t, 32>(b13, "b13.txt");
-        nnet::load_weights_from_txt<model_default_t, 18432>(w16, "w16.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(b16, "b16.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(s18, "s18.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(b18, "b18.txt");
-        nnet::load_weights_from_txt<model_default_t, 36864>(w20, "w20.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(b20, "b20.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(s22, "s22.txt");
-        nnet::load_weights_from_txt<model_default_t, 64>(b22, "b22.txt");
-        nnet::load_weights_from_txt<model_default_t, 73728>(w25, "w25.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(b25, "b25.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(s27, "s27.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(b27, "b27.txt");
-        nnet::load_weights_from_txt<model_default_t, 147456>(w29, "w29.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(b29, "b29.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(s31, "s31.txt");
-        nnet::load_weights_from_txt<model_default_t, 128>(b31, "b31.txt");
-        nnet::load_weights_from_txt<model_default_t, 294912>(w34, "w34.txt");
-        nnet::load_weights_from_txt<model_default_t, 256>(b34, "b34.txt");
-        nnet::load_weights_from_txt<model_default_t, 256>(s36, "s36.txt");
-        nnet::load_weights_from_txt<model_default_t, 256>(b36, "b36.txt");
-        //nnet::load_weights_from_txt<model_default_t, 589824>(w38, "w38.txt");
-        //nnet::load_weights_from_txt<model_default_t, 256>(b38, "b38.txt");
-        //nnet::load_weights_from_txt<model_default_t, 256>(s40, "s40.txt");
-        //nnet::load_weights_from_txt<model_default_t, 256>(b40, "b40.txt");
+        // nnet::load_weights_from_txt<model_default_t, 4608>(w7, "w7.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(b7, "b7.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(s9, "s9.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(b9, "b9.txt");
+        // nnet::load_weights_from_txt<model_default_t, 9216>(w11, "w11.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(b11, "b11.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(s13, "s13.txt");
+        // nnet::load_weights_from_txt<model_default_t, 32>(b13, "b13.txt");
+        // nnet::load_weights_from_txt<model_default_t, 18432>(w16, "w16.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(b16, "b16.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(s18, "s18.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(b18, "b18.txt");
+        // nnet::load_weights_from_txt<model_default_t, 36864>(w20, "w20.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(b20, "b20.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(s22, "s22.txt");
+        // nnet::load_weights_from_txt<model_default_t, 64>(b22, "b22.txt");
+        // nnet::load_weights_from_txt<model_default_t, 73728>(w25, "w25.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(b25, "b25.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(s27, "s27.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(b27, "b27.txt");
+        // nnet::load_weights_from_txt<model_default_t, 147456>(w29, "w29.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(b29, "b29.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(s31, "s31.txt");
+        // nnet::load_weights_from_txt<model_default_t, 128>(b31, "b31.txt");
+        // nnet::load_weights_from_txt<model_default_t, 294912>(w34, "w34.txt");
+        // nnet::load_weights_from_txt<model_default_t, 256>(b34, "b34.txt");
+        // nnet::load_weights_from_txt<model_default_t, 256>(s36, "s36.txt");
+        // nnet::load_weights_from_txt<model_default_t, 256>(b36, "b36.txt");
+        // nnet::load_weights_from_txt<model_default_t, 589824>(w38, "w38.txt"); // Pass in explicitly as a bram
+        // nnet::load_weights_from_txt<model_default_t, 256>(b38, "b38.txt");
+        // nnet::load_weights_from_txt<model_default_t, 256>(s40, "s40.txt");
+        // nnet::load_weights_from_txt<model_default_t, 256>(b40, "b40.txt"); // Pass in explicitly as a bram
         loaded_weights = true;
     }
     #endif
@@ -242,6 +244,7 @@ model_default_t w38[589824]
     // #pragma HLS stream variable=layer2_out      depth=1
     input_t alpha = 0.3;
     // nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,layer2_out,w2,b2,s4,b4,alpha);
+    //(H,W,C,F) => (F,C,H,W)
     nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
 
     // static hls::stream<layer6_t> layer6_out[N_FILT_6];

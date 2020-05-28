@@ -26,13 +26,12 @@
 
 #include "parameters_single_layer.h"
 
-
 // Prototype of top level function for C-synthesis
-void myproject(
+void myproject_single_layer(
     input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1],
-    result_t layer52_out[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2],
-    model_default_t w38[589824],
-    model_default_t w42[589824]          
+    // result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]
+    result_t preds[N_LAYER_50] // For synth!
+
     //unsigned short &const_size_in_1,
     //unsigned short &const_size_out_1
 );
@@ -40,7 +39,7 @@ void myproject(
 
 void subimage_stream(bool iReset, 
 		     hls::stream<input_t>  input[N_INPUT_3_1],
-		     hls::stream<result_t> output[N_FILT_2],
-		     model_default_t w38[589824]);
+		     hls::stream<result_t> output[N_FILT_2]
+             );
 
 #endif
