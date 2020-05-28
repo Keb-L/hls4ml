@@ -9,7 +9,7 @@ namespace nnet {
 // Nearest Pixels
 template <typename T, typename CONFIG_T>
 T pixel_nearest_cl(T data[], int h, int w, int c) {
-    int data_h = round((float)(h + 0.5)/CONFIG_T::height_factor - 0.5);
+    int data_h = round((float)(h + 0.5)/CONFIG_T::height_factor - 0.5); // Multiply by fixed point (don't divide)
     int data_w = round((float)(w + 0.5)/CONFIG_T::width_factor - 0.5);
 
     // Check channel first vs. channel last
@@ -103,6 +103,7 @@ struct upsampling2d_config {
 };
 
 template<class data_T, class res_T, typename CONFIG_T>
+// Implement streaming
 void upsampling2d_cf(
     data_T data[CONFIG_T::in_height*CONFIG_T::in_width*CONFIG_T::n_channel],
     res_T  res[CONFIG_T::out_height*CONFIG_T::out_width*CONFIG_T::n_channel]

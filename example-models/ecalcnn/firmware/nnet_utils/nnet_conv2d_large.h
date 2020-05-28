@@ -617,7 +617,7 @@ void shift_right_stride_2dNew(unsigned iShiftX,unsigned iShiftY,
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
-void shift_left_stride_2d_KL(unsigned iX,unsigned iY,
+void shift_left_2d_KL(unsigned iX,unsigned iY,
             data_T input[CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right][CONFIG_T::filt_height][CONFIG_T::n_chan],
             res_T  data[CONFIG_T::filt_width   * CONFIG_T::filt_height * CONFIG_T::n_chan]) { 
   #pragma HLS PIPELINE
@@ -1275,65 +1275,14 @@ void conv_2d_large_stream_norm_leaky(bool iReset,
       layer_in_row[pX+CONFIG_T::pad_left][(CONFIG_T::pad_top+pY) % CONFIG_T::filt_height][i0] =  data[i0].read();
     } 
 
-    if(pX == lShiftX && pPass) {
-      // Moves the "pointer" to the bottom left of the big buffer.
-      nnet::reset_down_2dXNew<data_T,data_T,CONFIG_T>(pY,layer_in_row,layer_in);
-    }
-
-    // if (pY > lShiftY-1) {
-    //   // Perform left shift. This will always occur when pY >= filt_height (i.e. we have enough vertical values to evaluate)
-
-    //   nnet::shift_left_stride_2d_KL<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in); //add padding
-
-    //   // if (pX < 15) {
-    //   //   // for(int h = 0; h < CONFIG_T::filt_height; h++) {
-    //   //   //   for(int w = 0; w < CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right; w++) {
-    //   //   //     std::cout << layer_in_row[w][h][0] << "";
-    //   //   //   }
-    //   //   //   std::cout << std::endl;
-    //   //   // }
-
-    //   //   for(int h = 0; h < CONFIG_T::filt_height; h++) {
-    //   //     for(int w = 0; w < CONFIG_T::filt_width; w++) {
-    //   //       printf("%0.4f ", (float)layer_in[(h*CONFIG_T::filt_width + w)*CONFIG_T::n_chan]);
-    //   //       //std::cout << layer_in[(h*CONFIG_T::filt_width + w)*CONFIG_T::n_chan] << " ";
-    //   //     }
-    //   //     std::cout << std::endl;
-    //   //   }
-    //   // }
-
-    // }
+    // KL: ASSUMES 0 padding! Need to implement non-zero padding initialization
+    // Perform left shift. This will always occur when pY >= filt_height (i.e. we have enough vertical values to evaluate)
+    if (pY > lShiftY-1) nnet::shift_left_2d_KL<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in); //add padding
 
     if((pX+1) % CONFIG_T::stride_width == 0 && (pY+1) % CONFIG_T::stride_height == 0 && pPass) { 
-      // check initialization
-      // Line buffer
-      // shift register implementation?
-      nnet::shift_right_stride_2dNew<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in);//add padding
-
-      // for(int h = 0; h < CONFIG_T::filt_height; h++) {
-      //   for(int w = 0; w < CONFIG_T::filt_width; w++) {
-      //     printf("%0.4f ", (float)layer_in[(h*CONFIG_T::filt_width + w)*CONFIG_T::n_chan]);
-      //     //std::cout << layer_in[(h*CONFIG_T::filt_width + w)*CONFIG_T::n_chan] << " ";
-      //   }
-      //   std::cout << std::endl;
-      // }
-
-      // for (int i = 0; i < CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan; i++) {
-      //   printf("%0.4f ", (float)layer_in[i]);
-      // }
-      // std::cout << std::endl;
-
       nnet::dense_large_nobias<data_T,res_T,typename CONFIG_T::mult_config>(layer_in,layer_out,weights);
-
-      // for(int f = 0; f < CONFIG_T::n_filt; f++) {
-      //   printf("%0.4f ", (float)layer_out[f]);
-      //     //std::cout << layer_in[(h*CONFIG_T::filt_width + w)*CONFIG_T::n_chan] << " ";
-      // }
-      // std::cout << std::endl;
-
       nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_out, layer_normout,scale,sbiases);
       nnet::leaky_relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_normout,alpha, layer_reluout);
-
       nnet::fill_image_2dS1<data_T,data_T,CONFIG_T>(layer_reluout,res);
     }
     pX = pX+1;
@@ -1343,6 +1292,7 @@ void conv_2d_large_stream_norm_leaky(bool iReset,
       pPass = false;
 
       // KL: Reset the filter buffer at the EOL
+      // ASSUMES 0 padding! Need to implement non-zero padding initialization
       nnet::zeros<data_T, CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan>(layer_in);
     }
 }
