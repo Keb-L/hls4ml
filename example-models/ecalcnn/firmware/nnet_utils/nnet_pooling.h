@@ -168,44 +168,77 @@ void pool_2d_large_stream(
     //#pragma HLS ARRAY_RESHAPE variable=layer_in block factor=CONFIG_T::n_chan dim=0
     #pragma HLS ARRAY_RESHAPE variable=layer_in complete dim=0
 
-    static unsigned pX=0;
-    static unsigned pY=0;
-    static unsigned pX1=0;
-    static unsigned pY1=0;
-    static bool pPass = false;
-    if(pX == 0 && pY == 0) pPass = false;
+    static int pX=0; 
+    static int pY=0;
+    // if(iReset) { 
+    //   pX = 0; 
+    //   pY = 0; 
+    // }
+    static bool pPass = false;  
+    if(pX == lShiftX && pY > lShiftY-1) pPass = true;
+
+    std::cout << "Data write" << std::endl;
     for(int i0 = 0; i0 < CONFIG_T::n_chan; i0++) { 
       #pragma HLS UNROLL
       layer_in_row[pX+CONFIG_T::pad_left][(pY+CONFIG_T::pad_top) % CONFIG_T::filt_height][i0] =  data[i0].read();
+
+      std::cout << layer_in_row[pX+CONFIG_T::pad_left][(pY+CONFIG_T::pad_top) % CONFIG_T::filt_height][i0] << " ";
     }
-    //Processs image
-    if(pX == 0) nnet::reset_down_2dXNew<data_T,data_T,CONFIG_T>(pX,layer_in_row,layer_in); //check stride
+    std::cout << std::endl;
+    // //Processs image
+    // if(pX == 0) nnet::reset_down_2dXNew<data_T,data_T,CONFIG_T>(pX,layer_in_row,layer_in); //check stride
+
+    // KL: ASSUMES 0 padding! Need to implement non-zero padding initialization
+    // Perform left shift. This will always occur when pY >= filt_height (i.e. we have enough vertical values to evaluate)
+    // Always shift in values
+    nnet::shift_left_2d_KL<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in); //add padding
+    
+    printf("Pool pointer (%d, %d) - Row in\n", pX, pY);
+    if (pX < 5 && pY < 5) {
+      for (unsigned i = 0; i < CONFIG_T::filt_height; i++) {
+        for(unsigned j = 0; j < CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right; j++) {
+          // std::cout <<  layer_in_row[(i * CONFIG_T::filt_width + j ) * CONFIG_T::n_chan] << " ";
+          std::cout <<  layer_in_row[j][i][0] << " ";
+        }
+        printf("\n");
+      }
+    }
+
     if((pX+1) % CONFIG_T::stride_width == 0 && (pY+1) % CONFIG_T::stride_height == 0 && pPass) { 
+      printf("Pooling!\n");
       for(unsigned i0 = 0; i0 < CONFIG_T::n_filt; i0++) { 
         #pragma HLS UNROLL
-	data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+	      data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+
         #pragma HLS ARRAY_RESHAPE variable=pool complete dim=0
         for(unsigned i1 = 0; i1 < CONFIG_T::pool_height*CONFIG_T::pool_width; i1++) { 
          #pragma HLS UNROLL
          pool[i1] = layer_in[i1*CONFIG_T::n_filt+i0];
         }
-	data_T maxpool = pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
-	res[i0].write(maxpool);
+        data_T maxpool = pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+        std::cout << maxpool << " ";
+
+        res[i0].write(maxpool);
       }
-      nnet::shift_right_stride_2dNew<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in);//check stride
-      pX1 = pX1+1;
-      if(pX1 == CONFIG_T::out_height) { 
-	pX1 = 0;
-	pY1 = pY1+1;
-      }
+      std::cout << std::endl;
+      // nnet::shift_right_stride_2dNew<data_T,data_T,CONFIG_T>(pX,pY,layer_in_row,layer_in);//check stride
+      // pX1 = pX1+1;
+      // if(pX1 == CONFIG_T::out_height) { 
+      //   pX1 = 0;
+      //   pY1 = pY1+1;
+      // }
     }    
     pX = pX+1;
-    if(pX == CONFIG_T::in_height) { 
+    if(pX == CONFIG_T::in_width) { 
       pX = 0;
       pY = pY+1;
       pPass = false;
+
+      // KL: Reset the filter buffer at the EOL
+      // ASSUMES 0 padding! Need to implement non-zero padding initialization
+      nnet::zeros<data_T, CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan>(layer_in);
     }
-    if(pX == lShiftX && pY > lShiftY-1) pPass = true;
 }
 
 template<class data_T, typename CONFIG_T>

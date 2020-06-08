@@ -29,8 +29,8 @@
 // Prototype of top level function for C-synthesis
 void myproject_single_layer(
     input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1],
-    // result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]
-    result_t preds[N_LAYER_50] // For synth!
+    result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]
+    // result_t preds[N_LAYER_50] // For synth!
 
     //unsigned short &const_size_in_1,
     //unsigned short &const_size_out_1

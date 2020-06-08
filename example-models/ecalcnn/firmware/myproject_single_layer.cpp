@@ -69,8 +69,8 @@
 void myproject_single_layer(
 input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1],
 // result_t layer52_out[N_LAYER_50],
-// result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]   
-result_t preds[N_LAYER_50] // For synth!
+result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]   
+// result_t preds[N_LAYER_50] // For synth!
 
 //unsigned short &const_size_in_1,
 //unsigned short &const_size_out_1
@@ -123,6 +123,8 @@ result_t preds[N_LAYER_50] // For synth!
     // layer103_t layer103_out_uf[OUT_HEIGHT_102][OUT_WIDTH_102][N_CHANNEL_102];
     // nnet::unflatten<layer103_t, OUT_HEIGHT_102, OUT_WIDTH_102, N_CHANNEL_102>(layer103_out, layer103_out_uf);
 
+    const unsigned Nstop = (OUT_WIDTH_2)*(OUT_HEIGHT_2);
+
     bool lReset = true;
     for(unsigned iC = 0; iC < N_INPUT_1_1; iC++) { 
         //Read in the input image to bottom row of buffer
@@ -139,7 +141,7 @@ result_t preds[N_LAYER_50] // For synth!
                     sInput[i2].write(pVal);
                     }
             }
-            std::cout << "Processing (" << iC << ", " << i1 << ")" << std::endl;
+            std::cout << "Processing (" << i1 << ", " << iC << ")" << std::endl;
             subimage_stream(lReset,sInput,sOutput);
             lReset = false;
 
@@ -148,13 +150,13 @@ result_t preds[N_LAYER_50] // For synth!
                 std::cout << "---> " <<std::endl;
                 for(unsigned iX = 0; iX < N_FILT_2; iX++) { 
                     #pragma HLS UNROLL 
-                    if(index < OUT_WIDTH_2*OUT_HEIGHT_2) preds[0] = (result_t)sOutput[iX].read(); // For synth!
-                    // if(index < OUT_WIDTH_2*OUT_HEIGHT_2) preds[index*N_FILT_2+iX] = (result_t)sOutput[iX].read(); //layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
+                    // if(index < OUT_WIDTH_2*OUT_HEIGHT_2) preds[0] = (result_t)sOutput[iX].read(); // For synth!
+                    if(index < Nstop) preds[index*N_FILT_2+iX] = (result_t)sOutput[iX].read(); //layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
                 }
                 index++; 
                 // if(index > 9) break;
                 std::cout << "---> " << index << std::endl;
-                if(index >= (OUT_WIDTH_2*OUT_HEIGHT_2)) { 
+                if(index >= Nstop) { 
                     //dense layers
 
                     //     layer42_t layer42_out[N_LAYER_42];
@@ -183,7 +185,7 @@ result_t preds[N_LAYER_50] // For synth!
                 }
             }
         }
-		if(index >= (OUT_WIDTH_2*OUT_HEIGHT_2)) break;
+		if(index >= Nstop) break;
     }
     std::cout << std::endl;
 }
@@ -245,7 +247,10 @@ hls::stream<result_t> output[N_FILT_2]
     input_t alpha = 0.3;
     // nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,layer2_out,w2,b2,s4,b4,alpha);
     //(H,W,C,F) => (F,C,H,W)
-    nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
+    // nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
+    // nnet::conv_2d_large_stream_norm_leaky_EOL_fix<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
+    nnet::conv_2d_large_cl_sr<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
+
 
     // static hls::stream<layer6_t> layer6_out[N_FILT_6];
     // #pragma HLS stream variable=layer6_out      depth=1
