@@ -68,7 +68,7 @@
 
 void myproject_cnn_layer(
 input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1],
-result_t preds[OUT_WIDTH_6*OUT_HEIGHT_6*N_FILT_6]   
+result_t preds[OUT_WIDTH_2*OUT_HEIGHT_2*N_FILT_2]   
 // result_t preds[N_LAYER_50] // For synth!
 
 //unsigned short &const_size_in_1,
@@ -101,16 +101,15 @@ result_t preds[OUT_WIDTH_6*OUT_HEIGHT_6*N_FILT_6]
     }
     #endif
 
+    const unsigned Nstop = (OUT_WIDTH_2)*(OUT_HEIGHT_2);
+    const unsigned output_stream_size = N_FILT_2;
 
     // layer41_t layer41_out[OUT_WIDTH_38*OUT_HEIGHT_38*N_FILT_38];
     // #pragma HLS ARRAY_RESHAPE variable=layer41_out block factor=256
     unsigned index=0; 
 
-    static const unsigned output_size = N_FILT_6;
-    static const unsigned output_shape = OUT_HEIGHT_6*OUT_WIDTH_6;
-
     hls::stream<input_t>   sInput  [N_INPUT_3_1];
-    hls::stream<result_t>  sOutput [output_size];
+    hls::stream<result_t>  sOutput [output_stream_size];
     #pragma HLS stream variable=sInput      depth=1
     #pragma HLS stream variable=sOutput     depth=1
 
@@ -147,13 +146,13 @@ result_t preds[OUT_WIDTH_6*OUT_HEIGHT_6*N_FILT_6]
             if(!sOutput[0].empty()) { 
                 LoopOutput:
                 std::cout << "---> " <<std::endl;
-                for(unsigned iX = 0; iX < output_size; iX++) { 
+                for(unsigned iX = 0; iX < output_stream_size; iX++) { 
                     #pragma HLS UNROLL 
-                    if(index < output_shape) preds[index*output_size+iX] = (result_t)sOutput[iX].read(); //layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
+                    if(index < Nstop) preds[index*output_stream_size+iX] = (result_t)sOutput[iX].read(); //layer41_out[index*N_FILT_2+iX] = (result_t)sOutput[iX].read();
                 }
                 index++; 
                 std::cout << "---> " << index << std::endl;
-                if(index >= (output_shape)) { 
+                if(index >= Nstop) { 
                     std::cout << "Exiting!" << std::endl;
                     //dense layers
 
@@ -183,13 +182,13 @@ result_t preds[OUT_WIDTH_6*OUT_HEIGHT_6*N_FILT_6]
                 }
             }
         }
-		if(index >= (output_shape)) break;
+		if(index >= Nstop) break;
     }
     std::cout << std::endl;
 }
 void subimage_stream(bool iReset, 
 hls::stream<input_t>  input[N_INPUT_3_1],
-hls::stream<result_t> output[N_FILT_6]
+hls::stream<result_t> output[N_FILT_2]
 ) { 
 
     // #pragma HLS interface bram port=w38
@@ -242,12 +241,13 @@ hls::stream<result_t> output[N_FILT_6]
     static hls::stream<layer2_t> layer2_out[N_FILT_2];
     #pragma HLS stream variable=layer2_out      depth=1
     input_t alpha = 0.3;
-    nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,layer2_out,w2,b2,s4,b4,alpha);
+    nnet::conv_2d_large_cl_sr<input_t,layer2_t,config2>(iReset,input,output,w2,b2,s4,b4,alpha);
+    // nnet::conv_2d_large_stream_norm_leaky<input_t,layer2_t,config2>(iReset,input,layer2_out,w2,b2,s4,b4,alpha);
 
-    static hls::stream<layer6_t> layer6_out[N_FILT_6];
-    #pragma HLS stream variable=layer6_out      depth=1
+    // static hls::stream<layer6_t> layer6_out[N_FILT_6];
+    // #pragma HLS stream variable=layer6_out      depth=1
     // if(!layer2_out[0].empty()) nnet::pool_2d_large_stream<layer2_t,layer6_t,config6>(layer2_out,layer6_out);
-    if(!layer2_out[0].empty()) nnet::pool_2d_large_stream<layer2_t,layer6_t,config6>(layer2_out,output);
+    // if(!layer2_out[0].empty()) nnet::pool_2d_large_stream<layer2_t,layer6_t,config6>(layer2_out,output);
 
     // static hls::stream<layer7_t> layer7_out[N_FILT_7];
     // #pragma HLS stream variable=layer7_out      depth=1

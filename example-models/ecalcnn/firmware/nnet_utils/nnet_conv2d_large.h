@@ -1320,10 +1320,26 @@ template<class data_T, class res_T, typename CONFIG_T>
       for(unsigned i2 = 0; i2 < CONFIG_T::n_filt; i2++) {
       #pragma HLS UNROLL
       // if(i2 == 0) { 
-      //   data[i2].write(pPixId);
+        // data[i2].write(pPixId);
       // } else { 
         data[i2].write(input[i2]); // -1 
       // }  
+  }
+}
+
+template<class data_T, class res_T, typename CONFIG_T>
+  void fill_image_valid(
+		  data_T input[CONFIG_T::n_filt],
+		  bool valid,
+		  hls::stream<res_T>  data [CONFIG_T::n_filt]) { //CONFIG_T::n_filt2
+      #pragma HLS PIPELINE
+      for(unsigned i2 = 0; i2 < CONFIG_T::n_filt; i2++) {
+      #pragma HLS UNROLL
+      if(valid) { 
+        data[i2].write(input[i2]);
+      } else { 
+        data[i2].write((data_T)0); 
+      }  
   }
 }
 
@@ -1373,31 +1389,27 @@ void conv_2d_large_cl_sr(bool iReset,
 
     unsigned pLoop = 1;
     if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
+
+    // Bottom of the iamge check
+    bool valid = !(pY >= CONFIG_T::in_height+CONFIG_T::pad_bottom); 
+    // if(!valid) printf("I'm done\n");
+
     for(int i0 = 0; i0 < pLoop; i0++) { 
       if(i0 > 0) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in); 
-      
-      for(int i = 0; i < CONFIG_T::filt_height; i++) {
-        for(int j = 0; j < CONFIG_T::filt_width; j++) {
-          std::cout << layer_in[i*CONFIG_T::filt_width*CONFIG_T::n_chan + j * CONFIG_T::n_chan] << " ";
-        }
-        std::cout << std::endl;
-      }
-      std::cout << std::endl;
 
-
-      if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (i0+pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) { 
+      // KL: Modified Y stride check, no i0
+      if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) { 
         nnet::dense_large_nobias<data_T,res_T,typename CONFIG_T::mult_config>(layer_in,layer_out,weights);
         nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_out, layer_normout,scale,sbiases);
         nnet::leaky_relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_normout,alpha, layer_reluout);
 
-        for(int i = 0; i < CONFIG_T::n_filt; i++) {
-          std::cout << layer_reluout[i] << " ";
-        }
-        std::cout << std::endl;
+        // for(int i = 0; i < 1; i++) {
+        //     std::cout << layer_reluout[i] << " ";
+        // }
+        // std::cout << std::endl;
+        // std::cout << std::endl;
 
-        res_T pPixId = 0;
-        if(pX > 0 || pY > 0) pPixId = 1;
-        nnet::fill_image<data_T,data_T,CONFIG_T>(layer_reluout,pPixId,res);
+        nnet::fill_image_valid<data_T,data_T,CONFIG_T>(layer_reluout,valid,res);
       }
      }
     pX = pX+1;
@@ -1408,6 +1420,88 @@ void conv_2d_large_cl_sr(bool iReset,
       for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
     }
 }
+
+template<class data_T, class res_T, typename CONFIG_T>
+void conv_2d_large_cl_sr_dense(bool iReset,
+            hls::stream<data_T> data[CONFIG_T::n_chan],
+            hls::stream<res_T>  res [CONFIG_T::n_filt], //Filt Width clocks to read output
+            typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+            typename CONFIG_T::bias_t   biases [CONFIG_T::n_filt],
+            typename CONFIG_T::norm_config::scale_t  scale  [CONFIG_T::n_filt],
+            typename CONFIG_T::norm_config::bias_t   sbiases[CONFIG_T::n_filt],
+            data_T alpha
+		      ) {
+  
+    //#pragma HLS inline
+    const static int lShiftX = CONFIG_T::filt_width-CONFIG_T::pad_left-1;
+    const static int lShiftY = CONFIG_T::filt_height-CONFIG_T::pad_top-1;
+
+    static ap_shift_reg<data_T, (CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right)> layer_in_row[(CONFIG_T::filt_height)-1][CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable=layer_in_row complete dim=2
+    
+    static data_T layer_in[CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable=layer_in complete
+
+    static res_T layer_normout[CONFIG_T::n_filt];
+    #pragma HLS ARRAY_RESHAPE variable=layer_normout complete dim=0
+
+    static res_T layer_reluout[CONFIG_T::n_filt];
+    #pragma HLS ARRAY_RESHAPE variable=layer_reluout complete dim=0
+
+    static res_T layer_out[CONFIG_T::n_filt];
+    #pragma HLS ARRAY_RESHAPE variable=layer_out complete dim=0
+
+    static int pX=0; 
+    static int pY=0;
+    // data_T iReset = data[0].read();
+    // if(iReset==0) { 
+    if(iReset) {
+      pX = 0; 
+      pY = 0; 
+      for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
+    }
+
+    static bool pPass = false;    
+    if(pY > lShiftY-1 && pX == lShiftX) pPass = true;
+    nnet::cnnshift<data_T,res_T,CONFIG_T>(data,layer_in_row,layer_in);
+
+    unsigned pLoop = 1;
+    if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
+
+    // Bottom of the iamge check
+    bool valid = !(pY == CONFIG_T::in_height+CONFIG_T::pad_bottom); 
+
+    for(int i0 = 0; i0 < pLoop; i0++) { 
+      if(i0 > 0) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in); 
+
+      // KL: Modified Y stride check, no i0
+      if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) { 
+
+        printf("Computing (%d, %d)\n", i0+pX-lShiftX, pY-lShiftY);
+        for(int i = 0; i < CONFIG_T::filt_height; i++) {
+          for(int j = 0; j < CONFIG_T::filt_width; j++) {
+            std::cout << layer_in[(i*CONFIG_T::filt_width + j)*CONFIG_T::n_chan] << " ";
+          }
+          std::cout << std::endl;
+        }
+        std::cout << std::endl;
+
+
+        nnet::dense_large_nobias<data_T,res_T,typename CONFIG_T::mult_config>(layer_in,layer_out,weights);
+        // nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_out, layer_normout,scale,sbiases);
+        // nnet::leaky_relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_normout,alpha, layer_reluout);
+        nnet::fill_image_valid<data_T,data_T,CONFIG_T>(layer_out,valid,res);
+      }
+     }
+    pX = pX+1;
+    if(pX == CONFIG_T::in_width) { 
+      pX = 0;
+      pY = pY+1;
+      pPass = false;
+      for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
+    }
+}
+
 
 template<class data_T, class res_T, typename CONFIG_T>
 void conv_2d_large_stream_norm_leaky(bool iReset,
@@ -1480,103 +1574,6 @@ void conv_2d_large_stream_norm_leaky(bool iReset,
       // KL: Reset the filter buffer at the EOL
       // ASSUMES 0 padding! Need to implement non-zero padding initialization
       nnet::zeros<data_T, CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan>(layer_in);
-    }
-}
-
-template<class data_T, class res_T, typename CONFIG_T>
-void conv_2d_large_stream_norm_leaky_EOL_fix(bool iReset,
-				     hls::stream<data_T> data[CONFIG_T::n_chan],
-				     hls::stream<res_T>  res [CONFIG_T::n_filt], //Filt Width clocks to read output
-				     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
-				     typename CONFIG_T::bias_t   biases [CONFIG_T::n_filt],
-				     typename CONFIG_T::norm_config::scale_t  scale  [CONFIG_T::n_filt],
-				     typename CONFIG_T::norm_config::bias_t   sbiases[CONFIG_T::n_filt],
-				     data_T alpha
-		      ) {
-
-  //#pragma HLS inline
-
-    const static int lShiftX = CONFIG_T::filt_width-CONFIG_T::pad_left-1;
-    const static int lShiftY = CONFIG_T::filt_height-CONFIG_T::pad_top-1;
-  
-    static data_T layer_in_row[CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right][CONFIG_T::filt_height][CONFIG_T::n_chan];
-    #pragma HLS ARRAY_RESHAPE variable=layer_in_row complete dim=3
-
-    static data_T layer_in[CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan];
-    //#pragma HLS ARRAY_RESHAPE variable=layer_in block factor=CONFIG_T::n_chan dim=0
-    #pragma HLS ARRAY_RESHAPE variable=layer_in complete dim=0
-
-    static res_T layer_normout[CONFIG_T::n_filt];
-    #pragma HLS ARRAY_RESHAPE variable=layer_normout complete dim=0
-
-    static res_T layer_reluout[CONFIG_T::n_filt];
-    #pragma HLS ARRAY_RESHAPE variable=layer_reluout complete dim=0
-
-    static res_T layer_out[CONFIG_T::n_filt];
-    #pragma HLS ARRAY_RESHAPE variable=layer_out complete dim=0
-
-    // Write pointers
-    static unsigned wX=0; 
-    static unsigned wY=0;
-
-    // Eval pointers
-    static unsigned eX = 0;
-    static unsigned eY = 0;
-
-    // Eval flag
-    static bool eval_en = false;   
-
-    if(iReset) { 
-      wX = 0; 
-      wY = 0; 
-      eX = 0;
-      eY = 0;
-
-      eval_en = false;
-    }
-    
-    //===============================
-    //  Writing to the line buffer
-    //===============================
-    for(int i0 = 0; i0 < CONFIG_T::n_chan; i0++) {
-      #pragma HLS UNROLL
-      layer_in_row[wX+CONFIG_T::pad_left][(CONFIG_T::pad_top+wY) % CONFIG_T::filt_height][i0] =  data[i0].read();
-    } 
-    wX = wX + 1;
-
-    //===============================
-    //  Writing to the filter buffer
-    //===============================
-    // When the write pointer exceeds the lShiftY, there are enough values in line buffer column to shift into layer_in
-    if (wY > lShiftY-1) nnet::shift_left_2d_KL<data_T,data_T,CONFIG_T>(eX,eY,layer_in_row,layer_in); 
-
-    //===============================
-    //    Evaluating the filter
-    //===============================
-    if (wY > lShiftY-1 && wX == lShiftX) eval_en = true;
-    if(eval_en) { // TODO: implement stride
-      printf("Evaluating convolution for (%d, %d)!\n", eX, eY);
-      nnet::dense_large_nobias<data_T,res_T,typename CONFIG_T::mult_config>(layer_in,layer_out,weights);
-      nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_out, layer_normout,scale,sbiases);
-      nnet::leaky_relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_normout,alpha, layer_reluout);
-      nnet::fill_image_2dS1<data_T,data_T,CONFIG_T>(layer_reluout,res);
-
-      eX = eX + 1;
-    }
-    
-    //===============================
-    //        Pointer update
-    //===============================
-    // Reached EOL for writer
-    if (wX == CONFIG_T::in_width) {
-      wX = 0;
-      wY = wY + 1;
-    }
-
-    // Reached the EOL for evaluation
-    if (eX == CONFIG_T::in_width) {
-      eX = 0;
-      eY = eY + 1;
     }
 }
 
