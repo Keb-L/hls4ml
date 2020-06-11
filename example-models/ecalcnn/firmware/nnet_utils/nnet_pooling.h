@@ -398,38 +398,16 @@ template<class data_T, class res_T, typename CONFIG_T>
     if(pY > lShiftY-1 && pX == lShiftX) pPass = true;
     nnet::cnnshift<data_T,res_T,CONFIG_T>(data,layer_in_row,layer_in);
 
-    // printf("> PrePooling (%d, %d)\n", pX, pY);
-    // for(int i = 0; i < CONFIG_T::pool_height; i++) {
-    //   for(int j = 0; j < CONFIG_T::pool_width; j++) {
-    //     std::cout << layer_in[i*CONFIG_T::pool_width*CONFIG_T::n_filt + j*CONFIG_T::n_filt] << " ";
-    //   }
-    //   std::cout << std::endl;
-    // }
-    // std::cout << std::endl;
-
-
-    //Processs image
+    //Process image
     unsigned pLoop = 1;
     if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
+
+    bool valid = !(pY >= CONFIG_T::in_height+CONFIG_T::pad_bottom); 
+
     for(int i0 = 0; i0 < pLoop; i0++) { 
       if(i0 > 0) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in); 
 
-      if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (i0+pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) {
-      // if((pX+1) % CONFIG_T::stride_width == 0 && (pY+1) % CONFIG_T::stride_height == 0 && pPass) { 
-
-        // res_T pId = 1;
-        // if(pX == 0 && pY == 0) pId = 0;
-        // res[0].write(pId);
-
-        // printf("> PrePooling (%d, %d)\n", pX, pY);
-        // for(int i = 0; i < CONFIG_T::pool_height; i++) {
-        //   for(int j = 0; j < CONFIG_T::pool_width; j++) {
-        //     std::cout << layer_in[i*CONFIG_T::pool_width*CONFIG_T::n_filt + j*CONFIG_T::n_filt] << " ";
-        //   }
-        //   std::cout << std::endl;
-        // }
-        // std::cout << std::endl;
-
+      if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (+pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) {
 
         for(unsigned i0 = 0; i0 < CONFIG_T::n_filt; i0++) { 
           #pragma HLS UNROLL
@@ -441,19 +419,8 @@ template<class data_T, class res_T, typename CONFIG_T>
           }
           res_T poolval = pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
 
-          // if (i0 == 0) {
-          //   std::cout << ">Pooling " << std::endl;
-          //   for(int i = 0; i < CONFIG_T::pool_height; i++) {
-          //     for(int j = 0; j < CONFIG_T::pool_width; j++) {
-          //       std::cout << pool[i*CONFIG_T::pool_width + j] << " ";
-          //     }
-          //     std::cout << std::endl;
-          //   }
-          //   std::cout << ">Pooling Result " << poolval << std::endl;
-          //   std::cout << std::endl;
-          // }
-
-          res[i0].write(poolval);
+          if (valid) res[i0].write(poolval);
+          else       res[i0].write(0); 
         }
       }
     }

@@ -29,7 +29,7 @@
 // Prototype of top level function for C-synthesis
 void myproject_full_layer(
     input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1],
-    result_t layer52_out[N_SIZE*N_RES]
+    result_t layer52_out[N_LAYER_50]
     // result_t preds[N_LAYER_50] // For synth!
 
     //unsigned short &const_size_in_1,

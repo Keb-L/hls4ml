@@ -21,55 +21,55 @@
 #include "myproject_full_layer.h"
 
 //hls-fpga-machine-learning insert weights
-// #include "weights32/b103.h"
-// #include "weights32/s103.h"
-#include "weights32/w2.h"
-#include "weights32/b2.h"
-#include "weights32/s4.h"
-#include "weights32/b4.h"
-#include "weights32/w7.h"
-#include "weights32/b7.h"
-#include "weights32/s9.h"
-#include "weights32/b9.h"
-#include "weights32/w11.h"
-#include "weights32/b11.h"
-#include "weights32/s13.h"
-#include "weights32/b13.h"
-#include "weights32/w16.h"
-#include "weights32/b16.h"
-#include "weights32/s18.h"
-#include "weights32/b18.h"
-#include "weights32/w20.h"
-#include "weights32/b20.h"
-#include "weights32/s22.h"
-#include "weights32/b22.h"
-#include "weights32/w25.h"
-#include "weights32/b25.h"
-#include "weights32/s27.h"
-#include "weights32/b27.h"
-#include "weights32/w29.h"
-#include "weights32/b29.h"
-#include "weights32/s31.h"
-#include "weights32/b31.h"
-#include "weights32/w34.h"
-#include "weights32/b34.h"
-#include "weights32/s36.h"
-#include "weights32/b36.h"
-#include "weights32/w38.h"
-#include "weights32/b38.h"
-#include "weights32/s40.h"
-#include "weights32/b40.h"
-#include "weights32/w42.h"
-#include "weights32/b42.h"
-#include "weights32/w46.h"
-#include "weights32/b46.h"
-#include "weights32/w50.h"
-#include "weights32/b50.h"
+// #include "weights/b103.h"
+// #include "weights/s103.h"
+#include "weights/w2.h"
+#include "weights/b2.h"
+#include "weights/s4.h"
+#include "weights/b4.h"
+#include "weights/w7.h"
+#include "weights/b7.h"
+#include "weights/s9.h"
+#include "weights/b9.h"
+#include "weights/w11.h"
+#include "weights/b11.h"
+#include "weights/s13.h"
+#include "weights/b13.h"
+#include "weights/w16.h"
+#include "weights/b16.h"
+#include "weights/s18.h"
+#include "weights/b18.h"
+#include "weights/w20.h"
+#include "weights/b20.h"
+#include "weights/s22.h"
+#include "weights/b22.h"
+#include "weights/w25.h"
+#include "weights/b25.h"
+#include "weights/s27.h"
+#include "weights/b27.h"
+#include "weights/w29.h"
+#include "weights/b29.h"
+#include "weights/s31.h"
+#include "weights/b31.h"
+#include "weights/w34.h"
+#include "weights/b34.h"
+#include "weights/s36.h"
+#include "weights/b36.h"
+#include "weights/w38.h"
+#include "weights/b38.h"
+#include "weights/s40.h"
+#include "weights/b40.h"
+#include "weights/w42.h"
+#include "weights/b42.h"
+#include "weights/w46.h"
+#include "weights/b46.h"
+#include "weights/w50.h"
+#include "weights/b50.h"
 
 void myproject_full_layer(
 input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1],
-// result_t layer52_out[OUT_WIDTH_15*OUT_HEIGHT_15*N_FILT_15]
-result_t preds[N_SIZE*N_RES]   
+result_t layer52_out[N_LAYER_50]
+// result_t preds[N_SIZE*N_RES]   
 // result_t preds[N_LAYER_50] // For synth!
 
 //unsigned short &const_size_in_1,
@@ -90,20 +90,20 @@ result_t preds[N_SIZE*N_RES]
     static bool loaded_weights = false;
     if (!loaded_weights) {
     //hls-fpga-machine-learning insert load weights
-    // nnet::load_weights_from_txt<model_default_t, 589824>(w42, "w42.txt");
-    // nnet::load_weights_from_txt<bias42_t, 256>(b42, "b42.txt");
-    // nnet::load_weights_from_txt<model_default_t, 65536>(w46, "w46.txt");
-    // nnet::load_weights_from_txt<bias46_t, 256>(b46, "b46.txt");
-    // nnet::load_weights_from_txt<model_default_t, 256>(w50, "w50.txt");
-    // nnet::load_weights_from_txt<model_default_t, 1>(b50, "b50.txt");
+    nnet::load_weights_from_txt<model_default_t, 589824>(w42, "w42.txt");
+    nnet::load_weights_from_txt<bias42_t, 256>(b42, "b42.txt");
+    nnet::load_weights_from_txt<model_default_t, 65536>(w46, "w46.txt");
+    nnet::load_weights_from_txt<bias46_t, 256>(b46, "b46.txt");
+    nnet::load_weights_from_txt<model_default_t, 256>(w50, "w50.txt");
+    nnet::load_weights_from_txt<model_default_t, 1>(b50, "b50.txt");
     // nnet::load_weights_from_txt<model_default_t, 4>(s103, "s103.txt");
     // nnet::load_weights_from_txt<model_default_t, 4>(b103, "b103.txt");
     loaded_weights = true;
     }
     #endif
 
-    // layer41_t layer41_out[OUT_WIDTH_15*OUT_HEIGHT_15*N_FILT_15];
-    // #pragma HLS ARRAY_RESHAPE variable=layer41_out block factor=256
+    layer41_t layer41_out[OUT_WIDTH_15*OUT_HEIGHT_15*N_FILT_15];
+    #pragma HLS ARRAY_RESHAPE variable=layer41_out block factor=256
     unsigned index=0; 
 
     hls::stream<input_t>   sInput  [N_INPUT_3_1];
@@ -148,35 +148,35 @@ result_t preds[N_SIZE*N_RES]
                 for(unsigned iX = 0; iX < N_RES; iX++) { 
                     #pragma HLS UNROLL 
                     // if(index < Nstop) preds[0] = (result_t)sOutput[iX].read(); // For synth!
-                    if(index < N_SIZE) preds[index*N_RES+iX] = (result_t)sOutput[iX].read();
+                    if(index < N_SIZE) layer41_out[index*N_RES+iX] = (result_t)sOutput[iX].read();
                 }
                 index++; 
                 // if(index > 9) break;
                 std::cout << "---> " << index << std::endl;
                 if(index >= N_SIZE) { 
                     //dense layers
-                    // layer42_t layer42_out[N_LAYER_42];
-                    // #pragma HLS ARRAY_PARTITION variable=layer42_out complete dim=0
-                    // nnet::dense_large<layer41_t, layer42_t, config42>(layer41_out, layer42_out, w42, b42);
+                    layer42_t layer42_out[N_LAYER_42];
+                    #pragma HLS ARRAY_PARTITION variable=layer42_out complete dim=0
+                    nnet::dense_large<layer41_t, layer42_t, config42>(layer41_out, layer42_out, w42, b42);
 
-                    // input_t alpha = 0.3;
-                    // layer45_t layer45_out[N_LAYER_42];
-                    // #pragma HLS ARRAY_PARTITION variable=layer45_out complete dim=0
-                    // nnet::leaky_relu<layer42_t, layer45_t, LeakyReLU_config45>(layer42_out,alpha, layer45_out);
+                    input_t alpha = 0.3;
+                    layer45_t layer45_out[N_LAYER_42];
+                    #pragma HLS ARRAY_PARTITION variable=layer45_out complete dim=0
+                    nnet::leaky_relu<layer42_t, layer45_t, LeakyReLU_config45>(layer42_out,alpha, layer45_out);
 
-                    // layer46_t layer46_out[N_LAYER_46];
-                    // #pragma HLS ARRAY_PARTITION variable=layer46_out complete dim=0
-                    // nnet::dense_large<layer45_t, layer46_t, config46>(layer45_out, layer46_out, w46, b46);
+                    layer46_t layer46_out[N_LAYER_46];
+                    #pragma HLS ARRAY_PARTITION variable=layer46_out complete dim=0
+                    nnet::dense_large<layer45_t, layer46_t, config46>(layer45_out, layer46_out, w46, b46);
 
-                    // layer49_t layer49_out[N_LAYER_46];
-                    // #pragma HLS ARRAY_PARTITION variable=layer49_out complete dim=0
-                    // nnet::leaky_relu<layer46_t, layer49_t, LeakyReLU_config49>(layer46_out,alpha, layer49_out);
+                    layer49_t layer49_out[N_LAYER_46];
+                    #pragma HLS ARRAY_PARTITION variable=layer49_out complete dim=0
+                    nnet::leaky_relu<layer46_t, layer49_t, LeakyReLU_config49>(layer46_out,alpha, layer49_out);
 
-                    // layer50_t layer50_out[N_LAYER_50];
-                    // #pragma HLS ARRAY_PARTITION variable=layer50_out complete dim=0
-                    // nnet::dense_large<layer49_t, layer50_t, config50>(layer49_out, layer50_out, w50, b50);
+                    layer50_t layer50_out[N_LAYER_50];
+                    #pragma HLS ARRAY_PARTITION variable=layer50_out complete dim=0
+                    nnet::dense_large<layer49_t, layer50_t, config50>(layer49_out, layer50_out, w50, b50);
 
-                    // nnet::relu<layer50_t, result_t, relu_config52>(layer50_out, layer52_out);
+                    nnet::relu<layer50_t, result_t, relu_config52>(layer50_out, layer52_out);
                     break;
                 }
             }
@@ -256,46 +256,45 @@ hls::stream<result_t> output[N_RES]
     #pragma HLS stream variable=layer7_out      depth=1
     if(!layer6_out[0].empty()) nnet::conv_2d_large_cl_sr<layer6_t,layer2_t,config7>(iReset,layer6_out,layer7_out,w7,b7,s9,b9,alpha);
 
+    static hls::stream<layer11_t> layer11_out[N_FILT_11];
+    #pragma HLS stream variable=layer11_out      depth=1
+    if(!layer7_out[0].empty())  nnet::conv_2d_large_cl_sr<layer7_t,layer11_t,config11>(iReset,layer7_out,layer11_out,w11,b11,s13,b13,alpha);
+
+    static hls::stream<layer15_t> layer15_out[N_FILT_15];
+    #pragma HLS stream variable=layer15_out      depth=1
+    if(!layer11_out[0].empty()) nnet::pooling2d_cl<layer11_t,layer15_t,config15>(iReset,layer11_out,layer15_out);
+
+    static hls::stream<layer16_t> layer16_out[N_FILT_16];
+    #pragma HLS stream variable=layer16_out      depth=1
+    if(!layer15_out[0].empty()) nnet::conv_2d_large_cl_sr<layer15_t,layer16_t,config16>(iReset,layer15_out,layer16_out,w16,b16,s18,b18,alpha);
+
+    static hls::stream<layer20_t> layer20_out[N_FILT_20];
+    #pragma HLS stream variable=layer20_out      depth=1
+    if(!layer16_out[0].empty()) nnet::conv_2d_large_cl_sr<layer16_t,layer20_t,config20>(iReset,layer16_out,layer20_out,w20,b20,s22,b22,alpha);
+
+    static hls::stream<layer24_t> layer24_out[N_FILT_24];
+    #pragma HLS stream variable=layer24_out      depth=1
+    if(!layer20_out[0].empty()) nnet::pooling2d_cl<layer20_t,layer24_t,config24>(iReset,layer20_out,layer24_out);
+
+    static hls::stream<layer25_t> layer25_out[N_FILT_25];
+    #pragma HLS stream variable=layer25_out      depth=1
+    if(!layer24_out[0].empty()) nnet::conv_2d_large_cl_sr<layer24_t,layer25_t,config25>(iReset,layer24_out,layer25_out,w25,b25,s27,b27,alpha);
+
+    static hls::stream<layer29_t> layer29_out[N_FILT_29];
+    #pragma HLS stream variable=layer29_out      depth=1
+    if(!layer25_out[0].empty()) nnet::conv_2d_large_cl_sr<layer25_t,layer29_t,config29>(iReset,layer25_out,layer29_out,w29,b29,s31,b31,alpha);
+
+    static hls::stream<layer33_t> layer33_out[N_FILT_33];
+    #pragma HLS stream variable=layer33_out      depth=1
+    if(!layer29_out[0].empty()) nnet::pooling2d_cl<layer29_t,layer33_t,config33>(iReset,layer29_out,layer33_out);
 
 // clean
 
-    static hls::stream<layer11_t> layer11_out[N_FILT_11];
-    #pragma HLS stream variable=layer11_out      depth=1
-    if(!layer7_out[0].empty())  nnet::conv_2d_large_cl_sr<layer7_t,layer11_t,config11>(iReset,layer7_out,output,w11,b11,s13,b13,alpha);
+    static hls::stream<layer34_t> layer34_out[N_FILT_34];
+    #pragma HLS stream variable=layer34_out      depth=1
+    if(!layer33_out[0].empty()) nnet::conv_2d_large_cl_sr<layer33_t,layer34_t,config34>(iReset,layer33_out,layer34_out,w34,b34,s36,b36,alpha);
 
-    // static hls::stream<layer15_t> layer15_out[N_FILT_15];
-    // #pragma HLS stream variable=layer15_out      depth=1
-    // if(!layer11_out[0].empty()) nnet::pooling2d_cl<layer11_t,layer15_t,config15>(iReset,layer11_out,layer15_out);
-
-    // static hls::stream<layer16_t> layer16_out[N_FILT_16];
-    // #pragma HLS stream variable=layer16_out      depth=1
-    // if(!layer15_out[0].empty()) nnet::conv_2d_large_cl_sr<layer15_t,layer16_t,config16>(iReset,layer15_out,layer16_out,w16,b16,s18,b18,alpha);
-
-    // static hls::stream<layer20_t> layer20_out[N_FILT_20];
-    // #pragma HLS stream variable=layer20_out      depth=1
-    // if(!layer16_out[0].empty()) nnet::conv_2d_large_cl_sr<layer16_t,layer20_t,config20>(iReset,layer16_out,layer20_out,w20,b20,s22,b22,alpha);
-
-    // static hls::stream<layer24_t> layer24_out[N_FILT_24];
-    // #pragma HLS stream variable=layer24_out      depth=1
-    // if(!layer20_out[0].empty()) nnet::pooling2d_cl<layer20_t,layer24_t,config24>(iReset,layer20_out,layer24_out);
-
-    // static hls::stream<layer25_t> layer25_out[N_FILT_25];
-    // #pragma HLS stream variable=layer25_out      depth=1
-    // if(!layer24_out[0].empty()) nnet::conv_2d_large_cl_sr<layer24_t,layer25_t,config25>(iReset,layer24_out,layer25_out,w25,b25,s27,b27,alpha);
-
-    // static hls::stream<layer29_t> layer29_out[N_FILT_29];
-    // #pragma HLS stream variable=layer29_out      depth=1
-    // if(!layer25_out[0].empty()) nnet::conv_2d_large_cl_sr<layer25_t,layer29_t,config29>(iReset,layer25_out,layer29_out,w29,b29,s31,b31,alpha);
-
-    // static hls::stream<layer33_t> layer33_out[N_FILT_33];
-    // #pragma HLS stream variable=layer33_out      depth=1
-    // if(!layer29_out[0].empty()) nnet::pooling2d_cl<layer29_t,layer33_t,config33>(iReset,layer29_out,layer33_out);
-
-    // static hls::stream<layer34_t> layer34_out[N_FILT_34];
-    // #pragma HLS stream variable=layer34_out      depth=1
-    // if(!layer33_out[0].empty()) nnet::conv_2d_large_cl_sr<layer33_t,layer34_t,config34>(iReset,layer33_out,layer34_out,w34,b34,s36,b36,alpha);
-
-    // //hls::stream<layer38_t> layer38_out[N_FILT_38];
-    // //#pragma HLS stream variable=layer38_out      depth=1
-    // if(!layer34_out[0].empty())  nnet::conv_2d_large_cl_sr<layer34_t,layer38_t,config38>(iReset,layer34_out,output,w38,b38,s40,b40,alpha);
+    //hls::stream<layer38_t> layer38_out[N_FILT_38];
+    //#pragma HLS stream variable=layer38_out      depth=1
+    if(!layer34_out[0].empty())  nnet::conv_2d_large_cl_sr<layer34_t,layer38_t,config38>(iReset,layer34_out,output,w38,b38,s40,b40,alpha);
 }

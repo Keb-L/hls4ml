@@ -9,7 +9,7 @@
 #ifndef __SYNTHESIS__
 model_default_t b50[1];
 #else
-model_default_t b50[1] = {28.5898};
+model_default_t b50[1] = {28.5898189545};
 #endif
 
 #endif

@@ -70,8 +70,8 @@
 #define N_LAYER_46 256
 #define N_LAYER_50 1
 
-#define N_RES N_FILT_11
-#define N_SIZE OUT_WIDTH_11*OUT_HEIGHT_11
+#define N_RES N_FILT_38
+#define N_SIZE OUT_WIDTH_38*OUT_HEIGHT_38
 
 //hls-fpga-machine-learning insert layer-precision
 typedef ap_fixed<64,32> model_default_t;
