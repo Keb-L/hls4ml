@@ -1390,7 +1390,7 @@ void conv_2d_large_cl_sr(bool iReset,
     unsigned pLoop = 1;
     if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
 
-    // Bottom of the iamge check
+    // Bottom of the image check
     bool valid = !(pY >= CONFIG_T::in_height+CONFIG_T::pad_bottom); 
 
     for(int i0 = 0; i0 < pLoop; i0++) { 
@@ -1398,11 +1398,10 @@ void conv_2d_large_cl_sr(bool iReset,
 
       // KL: Modified Y stride check, no i0
       if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) { 
-      
         nnet::dense_large_nobias<data_T,res_T,typename CONFIG_T::mult_config>(layer_in,layer_out,weights);
         nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_out, layer_normout,scale,sbiases);
         nnet::leaky_relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_normout,alpha, layer_reluout);
-        nnet::fill_image_valid<data_T,data_T,CONFIG_T>(layer_reluout,valid,res);
+        nnet::fill_image_valid<data_T,data_T,CONFIG_T>(layer_reluout,valid,res); // Writes 0 if not valid, otherwise writes layer_reluout
       }
      }
     pX = pX+1;

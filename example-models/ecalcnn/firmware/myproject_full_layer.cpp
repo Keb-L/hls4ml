@@ -21,8 +21,8 @@
 #include "myproject_full_layer.h"
 
 //hls-fpga-machine-learning insert weights
-// #include "weights/b103.h"
-// #include "weights/s103.h"
+#include "weights/b103.h"
+#include "weights/s103.h"
 #include "weights/w2.h"
 #include "weights/b2.h"
 #include "weights/s4.h"
@@ -68,6 +68,7 @@
 
 void myproject_full_layer(
   input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1]
+//   input_t em_barrel[IN_HEIGHT_102*IN_WIDTH_102*IN_CHANNEL_102]
 , result_t layer52_out[N_LAYER_50]
 , model_default_t w38[589824]
 , model_default_t w42[589824]
@@ -85,8 +86,6 @@ void myproject_full_layer(
     #pragma HLS INTERFACE ap_vld port=em_barrel,preds 
     #pragma HLS DATAFLOW 
 
-    //const_size_in_1 = N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1;
-    //const_size_out_1 = N_LAYER_50;
 
     #ifndef __SYNTHESIS__
     static bool loaded_weights = false;
@@ -98,8 +97,8 @@ void myproject_full_layer(
     nnet::load_weights_from_txt<bias46_t, 256>(b46, "b46.txt");
     nnet::load_weights_from_txt<model_default_t, 256>(w50, "w50.txt");
     nnet::load_weights_from_txt<model_default_t, 1>(b50, "b50.txt");
-    // nnet::load_weights_from_txt<model_default_t, 4>(s103, "s103.txt");
-    // nnet::load_weights_from_txt<model_default_t, 4>(b103, "b103.txt");
+    nnet::load_weights_from_txt<model_default_t, 4>(s103, "s103.txt");
+    nnet::load_weights_from_txt<model_default_t, 4>(b103, "b103.txt");
     loaded_weights = true;
     }
     #endif
@@ -121,9 +120,6 @@ void myproject_full_layer(
     // #pragma HLS ARRAY_PARTITION variable=layer103_out complete dim=0
     // nnet::normalize<layer102_t, layer103_t, config103>(layer102_out, layer103_out, s103, b103);
 
-    // layer103_t layer103_out_uf[OUT_HEIGHT_102][OUT_WIDTH_102][N_CHANNEL_102];
-    // nnet::unflatten<layer103_t, OUT_HEIGHT_102, OUT_WIDTH_102, N_CHANNEL_102>(layer103_out, layer103_out_uf)
-
     bool lReset = true;
     for(unsigned iC = 0; iC < N_INPUT_1_1; iC++) { 
         //Read in the input image to bottom row of buffer
@@ -134,12 +130,15 @@ void myproject_full_layer(
                 #pragma HLS UNROLL
                 if(i1*iC < N_INPUT_1_1_TRUE*N_INPUT_2_1) {
                     sInput[i2].write(em_barrel[iC][i1][i2]);
+                    // sInput[i2].write(layer103_out[(iC*N_INPUT_2_1+i1)*N_INPUT_3_1+i2]);
                 } else { 
                     input_t pVal = 0; 
                     sInput[i2].write(pVal);
                     }
             }
             subimage_stream(lReset,sInput,sOutput, w38);
+            // subimage_stream(lReset,sInput,sOutput);
+
             lReset = false;
             if(!sOutput[0].empty()) { 
                 LoopOutput:

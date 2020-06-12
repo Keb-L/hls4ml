@@ -9,8 +9,8 @@ namespace nnet {
 // Nearest Pixels
 template <typename T, typename CONFIG_T>
 T pixel_nearest_cl(T data[], int h, int w, int c) {
-    int data_h = round((T)(h + 0.5)*CONFIG_T::height_factor - 0.5); // Multiply by fixed point (don't divide)
-    int data_w = round((T)(w + 0.5)*CONFIG_T::width_factor - 0.5);
+    int data_h = round((float)(h + 0.5)*CONFIG_T::height_factor - 0.5); // Multiply by fixed point (don't divide)
+    int data_w = round((float)(w + 0.5)*CONFIG_T::width_factor - 0.5);
 
     // Check channel first vs. channel last
     // Channel last implementation
@@ -23,8 +23,8 @@ T pixel_nearest_cl(T data[], int h, int w, int c) {
 
 template <typename T, typename CONFIG_T>
 T pixel_nearest_cf(T data[], int h, int w, int c) {
-    int data_h = round((T)(h + 0.5)*CONFIG_T::height_factor - 0.5);
-    int data_w = round((T)(w + 0.5)*CONFIG_T::width_factor - 0.5);
+    int data_h = round((float)(h + 0.5)*CONFIG_T::height_factor - 0.5);
+    int data_w = round((float)(w + 0.5)*CONFIG_T::width_factor - 0.5);
 
     // channel first implementation
     int data_index = c * CONFIG_T::in_width * CONFIG_T::in_height
@@ -49,8 +49,8 @@ int clamp_address_cl(int h, int w, int c) {
 
 template <typename T, typename CONFIG_T>
 T pixel_bilinear_cl(T data[], int h, int w, int c) {
-    float hf = (float)(h+0.5)/CONFIG_T::height_factor - 0.5;
-    float wf = (float)(w+0.5)/CONFIG_T::width_factor - 0.5;
+    float hf = (float)(h+0.5)*CONFIG_T::height_factor - 0.5;
+    float wf = (float)(w+0.5)*CONFIG_T::width_factor - 0.5;
 
     int data_h = floor(hf);
     int data_w = floor(wf);
@@ -206,6 +206,22 @@ void upsampling2d_cl(
 //       pPass = false;
 //       for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
 //     }
+    
+//     // // Channel Last: format = [None, Height, Width, Channel]
+//     // InterpHeight: for(int oh = 0; oh < CONFIG_T::out_height; oh++) {
+//     //     InterpWidth: for(int ow = 0; ow < CONFIG_T::out_width; ow++) {
+//     //         InterpChan: for(int cc = 0; cc < CONFIG_T::n_channel; cc++){
+//     //             // Nearest Neighbor implementation
+//     //             // For each pixel in the output image, find the nearest neighbor in the input image
+//     //             // Index in the result image
+//     //             int res_index = oh * CONFIG_T::out_width*CONFIG_T::n_channel
+//     //                           + ow * CONFIG_T::n_channel
+//     //                           + cc;
+
+//     //             res[res_index] = interp_op_cl<data_T, CONFIG_T::interp_op, CONFIG_T>(data, oh, ow, cc);
+//     //         } // end by-channel loop
+//     //     } // end by-width loop
+//     // } // end by-height loop
 
 // }
 

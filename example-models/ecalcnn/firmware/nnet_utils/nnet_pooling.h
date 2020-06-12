@@ -402,6 +402,7 @@ template<class data_T, class res_T, typename CONFIG_T>
     unsigned pLoop = 1;
     if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
 
+    // End of image check
     bool valid = !(pY >= CONFIG_T::in_height+CONFIG_T::pad_bottom); 
 
     for(int i0 = 0; i0 < pLoop; i0++) { 
@@ -419,8 +420,9 @@ template<class data_T, class res_T, typename CONFIG_T>
           }
           res_T poolval = pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
 
+          res_T pVal = 0; 
           if (valid) res[i0].write(poolval);
-          else       res[i0].write(0); 
+          else       res[i0].write(pVal); 
         }
       }
     }

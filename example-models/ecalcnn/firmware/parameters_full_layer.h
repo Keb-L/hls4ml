@@ -24,6 +24,9 @@
 #define N_INPUT_1_1 300
 #define N_INPUT_2_1 55
 #define N_INPUT_3_1 4
+#define IN_HEIGHT_102 56
+#define IN_WIDTH_102 11
+#define IN_CHANNEL_102 4
 #define OUT_HEIGHT_102 56
 #define OUT_WIDTH_102 55
 #define N_CHANNEL_102 4
@@ -74,88 +77,89 @@
 #define N_SIZE OUT_WIDTH_38*OUT_HEIGHT_38
 
 //hls-fpga-machine-learning insert layer-precision
-typedef ap_fixed<64,32> model_default_t;
-typedef ap_fixed<64,32> input_t;
-typedef ap_fixed<64,32> layer102_t;
-typedef ap_fixed<64,32> layer103_t;
-typedef ap_fixed<64,32> layer2_t;
-typedef ap_fixed<64,32> layer4_t;
-typedef ap_fixed<64,32> layer5_t;
-typedef ap_fixed<64,32> layer6_t;
-typedef ap_fixed<64,32> layer7_t;
-typedef ap_fixed<64,32> layer9_t;
-typedef ap_fixed<64,32> layer10_t;
-typedef ap_fixed<64,32> layer11_t;
-typedef ap_fixed<64,32> layer13_t;
-typedef ap_fixed<64,32> layer14_t;
-typedef ap_fixed<64,32> layer15_t;
-typedef ap_fixed<64,32> layer16_t;
-typedef ap_fixed<64,32> layer18_t;
-typedef ap_fixed<64,32> layer19_t;
-typedef ap_fixed<64,32> layer20_t;
-typedef ap_fixed<64,32> layer22_t;
-typedef ap_fixed<64,32> layer23_t;
-typedef ap_fixed<64,32> layer24_t;
-typedef ap_fixed<64,32> layer25_t;
-typedef ap_fixed<64,32> layer27_t;
-typedef ap_fixed<64,32> layer28_t;
-typedef ap_fixed<64,32> layer29_t;
-typedef ap_fixed<64,32> layer31_t;
-typedef ap_fixed<64,32> layer32_t;
-typedef ap_fixed<64,32> layer33_t;
-typedef ap_fixed<64,32> layer34_t;
-typedef ap_fixed<64,32> layer36_t;
-typedef ap_fixed<64,32> layer37_t;
-typedef ap_fixed<64,32> layer38_t;
-typedef ap_fixed<64,32> layer40_t;
-typedef ap_fixed<64,32> layer41_t;
-typedef ap_fixed<64,32> layer42_t;
+typedef ap_fixed<16,6> model_default_t;
+typedef ap_fixed<16,6> input_t;
+typedef ap_fixed<16,6> layer102_t;
+typedef ap_fixed<16,6> layer103_t;
+typedef ap_fixed<16,6> layer2_t;
+typedef ap_fixed<16,6> layer4_t;
+typedef ap_fixed<16,6> layer5_t;
+typedef ap_fixed<16,6> layer6_t;
+typedef ap_fixed<16,6> layer7_t;
+typedef ap_fixed<16,6> layer9_t;
+typedef ap_fixed<16,6> layer10_t;
+typedef ap_fixed<16,6> layer11_t;
+typedef ap_fixed<16,6> layer13_t;
+typedef ap_fixed<16,6> layer14_t;
+typedef ap_fixed<16,6> layer15_t;
+typedef ap_fixed<16,6> layer16_t;
+typedef ap_fixed<16,6> layer18_t;
+typedef ap_fixed<16,6> layer19_t;
+typedef ap_fixed<16,6> layer20_t;
+typedef ap_fixed<16,6> layer22_t;
+typedef ap_fixed<16,6> layer23_t;
+typedef ap_fixed<16,6> layer24_t;
+typedef ap_fixed<16,6> layer25_t;
+typedef ap_fixed<16,6> layer27_t;
+typedef ap_fixed<16,6> layer28_t;
+typedef ap_fixed<16,6> layer29_t;
+typedef ap_fixed<16,6> layer31_t;
+typedef ap_fixed<16,6> layer32_t;
+typedef ap_fixed<16,6> layer33_t;
+typedef ap_fixed<16,6> layer34_t;
+typedef ap_fixed<16,6> layer36_t;
+typedef ap_fixed<16,6> layer37_t;
+typedef ap_fixed<16,6> layer38_t;
+typedef ap_fixed<16,6> layer40_t;
+typedef ap_fixed<16,6> layer41_t;
+typedef ap_fixed<16,6> layer42_t;
 typedef ap_uint<1> bias42_t;
-typedef ap_fixed<64,32> layer45_t;
-typedef ap_fixed<64,32> layer46_t;
+typedef ap_fixed<16,6> layer45_t;
+typedef ap_fixed<16,6> layer46_t;
 typedef ap_uint<1> bias46_t;
-typedef ap_fixed<64,32> layer49_t;
-typedef ap_fixed<64,32> layer50_t;
-typedef ap_fixed<64,32> result_t;
+typedef ap_fixed<16,6> layer49_t;
+typedef ap_fixed<16,6> layer50_t;
+typedef ap_fixed<16,6> result_t;
 
 //hls-fpga-machine-learning insert layer-config
-// struct config103_norm : nnet::batchnorm_config {
-//     static const unsigned n_in = N_CHANNEL_102;
-//     static const unsigned n_filt = 4;
-//     static const unsigned io_type = nnet::io_parallel;
-//     static const unsigned reuse_factor = 2;
-//     static const bool store_weights_in_bram = false;
-//     typedef model_default_t bias_t;
-//     typedef model_default_t scale_t;
-// };
+struct config102 : nnet::upsampling2d_config {
+    static const unsigned height_factor = 1;
+    static const unsigned width_factor = 0.2;
+    static const unsigned in_height = N_INPUT_1_1_TRUE;
+    static const unsigned in_width = N_INPUT_2_1;
+    static const unsigned out_height = OUT_HEIGHT_102;
+    static const unsigned out_width = OUT_WIDTH_102;
+    static const unsigned n_chan = N_CHANNEL_102;
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const nnet::Interp_Op interp_op = nnet::nearest;
 
-// struct config102 : nnet::upsampling2d_config {
-//     static const unsigned height_factor = 1;
-//     static const unsigned width_factor = 5;
-//     static const unsigned in_height = N_INPUT_1_1_TRUE;
-//     static const unsigned in_width = N_INPUT_2_1;
-//     static const unsigned out_height = OUT_HEIGHT_102;
-//     static const unsigned out_width = OUT_WIDTH_102;
-//     static const unsigned n_chan = N_CHANNEL_102;
-//     static const unsigned pad_top = 0;
-//     static const unsigned pad_bottom = 0;
-//     static const unsigned pad_left = 0;
-//     static const unsigned pad_right = 0;
-//     static const unsigned stride_height = 1;
-//     static const unsigned stride_width = 1;
-//     static const unsigned filt_height = 1;
-//     static const unsigned filt_width = 1;
-//     static const nnet::Interp_Op interp_op = nnet::nearest;
+    // typedef config103_norm norm_config;
+};
 
-//     typedef config103_norm norm_config;
-// };
+struct config103 : nnet::batchnorm_config {
+    static const unsigned n_in = N_CHANNEL_102;
+    static const unsigned n_filt = 4;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 2;
+    static const bool store_weights_in_bram = false;
+    typedef model_default_t bias_t;
+    typedef model_default_t scale_t;
+};
+
 
 
 struct config2_mult : nnet::dense_config {
     static const unsigned n_in = 100;
     static const unsigned n_out = 16;
     static const unsigned reuse_factor = 20;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -195,7 +199,7 @@ struct config2 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config2_mult mult_config;
@@ -228,7 +232,7 @@ struct config7_mult : nnet::dense_config {
     static const unsigned n_in = 144;
     static const unsigned n_out = 32;
     static const unsigned reuse_factor = 72;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -267,7 +271,7 @@ struct config7 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config7_mult mult_config;
@@ -279,7 +283,7 @@ struct config11_mult : nnet::dense_config {
     static const unsigned n_in = 288;
     static const unsigned n_out = 32;
     static const unsigned reuse_factor = 72;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -318,7 +322,7 @@ struct config11 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config11_mult mult_config;
@@ -351,7 +355,7 @@ struct config16_mult : nnet::dense_config {
     static const unsigned n_in = 288;
     static const unsigned n_out = 64;
     static const unsigned reuse_factor = 144;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -390,7 +394,7 @@ struct config16 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config16_mult mult_config;
@@ -403,7 +407,7 @@ struct config20_mult : nnet::dense_config {
     static const unsigned n_in = 576;
     static const unsigned n_out = 64;
     static const unsigned reuse_factor = 144;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -442,7 +446,7 @@ struct config20 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config20_mult mult_config;
@@ -475,7 +479,7 @@ struct config25_mult : nnet::dense_config {
     static const unsigned n_in = 576;
     static const unsigned n_out = 128;
     static const unsigned reuse_factor = 288;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -514,7 +518,7 @@ struct config25 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config25_mult mult_config;
@@ -526,7 +530,7 @@ struct config29_mult : nnet::dense_config {
     static const unsigned n_in = 1152;
     static const unsigned n_out = 128;
     static const unsigned reuse_factor = 576;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -564,7 +568,7 @@ struct config29 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config29_mult mult_config;
@@ -597,7 +601,7 @@ struct config34_mult : nnet::dense_config {
     static const unsigned n_in = 1152;
     static const unsigned n_out = 256;
     static const unsigned reuse_factor = 576;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -636,7 +640,7 @@ struct config34 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config34_mult mult_config;
@@ -648,7 +652,7 @@ struct config38_mult : nnet::dense_config {
     static const unsigned n_in = 2304;
     static const unsigned n_out = 256;
     static const unsigned reuse_factor = 1152;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
 };
@@ -687,7 +691,7 @@ struct config38 : nnet::conv2d_config {
     static const unsigned reuse_factor = 64;
     static const unsigned n_zeros = 0;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef config38_mult mult_config;
@@ -703,7 +707,7 @@ struct config42 : nnet::dense_config {
     static const unsigned n_zeros = 0;
     static const unsigned n_nonzeros = 589824;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef bias42_t bias_t;
     typedef model_default_t weight_t;
     typedef ap_uint<1> index_t;
@@ -723,7 +727,7 @@ struct config46 : nnet::dense_config {
     static const unsigned n_zeros = 0;
     static const unsigned n_nonzeros = 65536;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef bias46_t bias_t;
     typedef model_default_t weight_t;
     typedef ap_uint<1> index_t;
@@ -743,7 +747,7 @@ struct config50 : nnet::dense_config {
     static const unsigned n_zeros = 0;
     static const unsigned n_nonzeros = 256;
     static const bool store_weights_in_bram = false;
-    typedef ap_fixed<64,32> accum_t;
+    typedef ap_fixed<16,6> accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
     typedef ap_uint<1> index_t;

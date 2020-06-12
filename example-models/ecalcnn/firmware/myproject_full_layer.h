@@ -29,6 +29,7 @@
 // Prototype of top level function for C-synthesis
 void myproject_full_layer(
   input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1]
+//   input_t em_barrel[IN_HEIGHT_102*IN_WIDTH_102*IN_CHANNEL_102]
 , result_t layer52_out[N_LAYER_50]
 // ,    result_t preds[N_RES*N_SIZE] // For synth!
 , model_default_t w38[589824]
