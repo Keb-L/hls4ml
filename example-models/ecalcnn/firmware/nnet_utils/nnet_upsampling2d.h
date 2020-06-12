@@ -9,8 +9,8 @@ namespace nnet {
 // Nearest Pixels
 template <typename T, typename CONFIG_T>
 T pixel_nearest_cl(T data[], int h, int w, int c) {
-    int data_h = round((float)(h + 0.5)/CONFIG_T::height_factor - 0.5); // Multiply by fixed point (don't divide)
-    int data_w = round((float)(w + 0.5)/CONFIG_T::width_factor - 0.5);
+    int data_h = round((T)(h + 0.5)*CONFIG_T::height_factor - 0.5); // Multiply by fixed point (don't divide)
+    int data_w = round((T)(w + 0.5)*CONFIG_T::width_factor - 0.5);
 
     // Check channel first vs. channel last
     // Channel last implementation
@@ -23,8 +23,8 @@ T pixel_nearest_cl(T data[], int h, int w, int c) {
 
 template <typename T, typename CONFIG_T>
 T pixel_nearest_cf(T data[], int h, int w, int c) {
-    int data_h = round((float)(h + 0.5)/CONFIG_T::height_factor - 0.5);
-    int data_w = round((float)(w + 0.5)/CONFIG_T::width_factor - 0.5);
+    int data_h = round((T)(h + 0.5)*CONFIG_T::height_factor - 0.5);
+    int data_w = round((T)(w + 0.5)*CONFIG_T::width_factor - 0.5);
 
     // channel first implementation
     int data_index = c * CONFIG_T::in_width * CONFIG_T::in_height
@@ -137,20 +137,77 @@ void upsampling2d_cl(
                 int res_index = oh * CONFIG_T::out_width*CONFIG_T::n_channel
                               + ow * CONFIG_T::n_channel
                               + cc;
-                // Find index of nearest neighbor in data image
-                //int data_h = round((float)(oh + 0.5)/CONFIG_T::height_factor - 0.5);
-                //int data_w = round((float)(ow + 0.5)/CONFIG_T::width_factor - 0.5);
 
-                //int data_index = data_h * CONFIG_T::in_width*CONFIG_T::n_channel
-                //               + data_w * CONFIG_T::n_channel
-                //               + cc;
-                //res[res_index] = data[data_index];
                 res[res_index] = interp_op_cl<data_T, CONFIG_T::interp_op, CONFIG_T>(data, oh, ow, cc);
             } // end by-channel loop
         } // end by-width loop
     } // end by-height loop
-
 }
+
+// // Channel-last, nearest-neighbor, upsampling streaming
+// template<class data_T, class res_T, typename CONFIG_T>
+// void upsampling2d_cl_norm_nn_stream(bool iReset,
+//     hls::stream<data_T> data[CONFIG_T::n_chan],
+//     hls::stream<res_T>  res [CONFIG_T::n_chan],
+//     typename CONFIG_T::norm_config::scale_t  scale  [CONFIG_T::n_filt],
+//     typename CONFIG_T::norm_config::bias_t   sbiases[CONFIG_T::n_filt]
+// )
+// {
+//     const static int lShiftX = 0;
+//     const static int lShiftY = 0;
+
+//     static ap_shift_reg<data_T, (CONFIG_T::in_width+CONFIG_T::pad_left+CONFIG_T::pad_right)> layer_in_row[(CONFIG_T::filt_height)-1][CONFIG_T::n_chan];
+//     #pragma HLS ARRAY_RESHAPE variable=layer_in_row complete dim=2
+    
+//     static data_T layer_in[CONFIG_T::filt_height*CONFIG_T::filt_width*CONFIG_T::n_chan];
+//     #pragma HLS ARRAY_RESHAPE variable=layer_in complete
+
+//     static res_T layer_normout[CONFIG_T::n_filt];
+//     #pragma HLS ARRAY_RESHAPE variable=layer_normout complete dim=0
+
+//     // Pointers to original image
+//     static int pX=0; 
+//     static int pY=0;
+
+//     if(iReset) {
+//       pX = 0; 
+//       pY = 0; 
+//       for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
+//     }
+
+//     static bool pPass = false;    
+//     if(pY > lShiftY-1 && pX == lShiftX) pPass = true;
+//     nnet::cnnshift<data_T,res_T,CONFIG_T>(data,layer_in_row,layer_in);
+
+//     unsigned pLoop = 1;
+//     if(pX == CONFIG_T::in_width-1) pLoop = CONFIG_T::pad_right+1;
+
+//     // Bottom of the iamge check
+//     bool valid = !(pY >= CONFIG_T::in_height+CONFIG_T::pad_bottom); 
+
+//     for(int i0 = 0; i0 < pLoop; i0++) { 
+//       if(i0 > 0) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in); 
+
+//       // KL: Modified Y stride check, no i0
+//       if((i0+pX-lShiftX) % CONFIG_T::stride_width == 0 && (pY-lShiftY) % CONFIG_T::stride_height == 0 && pPass) { 
+      
+//         nnet::normalize2<res_T, res_T,typename CONFIG_T::norm_config>(layer_in, layer_normout,scale,sbiases);
+        
+//         for(int i0 = 0; i0 < CONFIG_T::n_chan; i0++) {
+//             for(int k=0; k < CONFIG_T::)
+//             res[i0].write(layer_normout[i0]);
+//         }
+//       }
+//      }
+//     pX = pX+1;
+//     if(pX == CONFIG_T::in_width) { 
+//       pX = 0;
+//       pY = pY+1;
+//       pPass = false;
+//       for(int i0 = 0; i0 < CONFIG_T::pad_left; i0++) nnet::cnnshiftzero<data_T,res_T,CONFIG_T>(layer_in_row,layer_in);
+//     }
+
+// }
 
 
 } // End nnet namespace

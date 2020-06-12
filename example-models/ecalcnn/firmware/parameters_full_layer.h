@@ -119,26 +119,36 @@ typedef ap_fixed<64,32> layer50_t;
 typedef ap_fixed<64,32> result_t;
 
 //hls-fpga-machine-learning insert layer-config
-struct config102 : nnet::upsampling2d_config {
-    static const unsigned height_factor = 1;
-    static const unsigned width_factor = 5;
-    static const unsigned in_height = N_INPUT_1_1_TRUE;
-    static const unsigned in_width = N_INPUT_2_1;
-    static const unsigned out_height = OUT_HEIGHT_102;
-    static const unsigned out_width = OUT_WIDTH_102;
-    static const unsigned n_channel = N_CHANNEL_102;
-    static const nnet::Interp_Op interp_op = nnet::nearest;
-};
+// struct config103_norm : nnet::batchnorm_config {
+//     static const unsigned n_in = N_CHANNEL_102;
+//     static const unsigned n_filt = 4;
+//     static const unsigned io_type = nnet::io_parallel;
+//     static const unsigned reuse_factor = 2;
+//     static const bool store_weights_in_bram = false;
+//     typedef model_default_t bias_t;
+//     typedef model_default_t scale_t;
+// };
 
-struct config103 : nnet::batchnorm_config {
-    static const unsigned n_in = N_CHANNEL_102;
-    static const unsigned n_filt = 4;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned reuse_factor = 2;
-    static const bool store_weights_in_bram = false;
-    typedef model_default_t bias_t;
-    typedef model_default_t scale_t;
-};
+// struct config102 : nnet::upsampling2d_config {
+//     static const unsigned height_factor = 1;
+//     static const unsigned width_factor = 5;
+//     static const unsigned in_height = N_INPUT_1_1_TRUE;
+//     static const unsigned in_width = N_INPUT_2_1;
+//     static const unsigned out_height = OUT_HEIGHT_102;
+//     static const unsigned out_width = OUT_WIDTH_102;
+//     static const unsigned n_chan = N_CHANNEL_102;
+//     static const unsigned pad_top = 0;
+//     static const unsigned pad_bottom = 0;
+//     static const unsigned pad_left = 0;
+//     static const unsigned pad_right = 0;
+//     static const unsigned stride_height = 1;
+//     static const unsigned stride_width = 1;
+//     static const unsigned filt_height = 1;
+//     static const unsigned filt_width = 1;
+//     static const nnet::Interp_Op interp_op = nnet::nearest;
+
+//     typedef config103_norm norm_config;
+// };
 
 
 struct config2_mult : nnet::dense_config {

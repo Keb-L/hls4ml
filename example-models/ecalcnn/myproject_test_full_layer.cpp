@@ -49,36 +49,38 @@ int main(int argc, char **argv)
   if (fin.is_open() && fpr.is_open()) {
     while ( std::getline(fin,iline) && std::getline (fpr,pline) ) {
       if (e % CHECKPOINT == 0) std::cout << "Processing input " << e << std::endl;
-        e++;
-        char* cstr=const_cast<char*>(iline.c_str());
-        char* current;
-        std::vector<float> in;
-        current=strtok(cstr," ");
-        while(current!=NULL) {
-          in.push_back(atof(current));
-          current=strtok(NULL," ");
-        }
-        cstr=const_cast<char*>(pline.c_str());
-        std::vector<float> pr;
-        current=strtok(cstr," ");
-        while(current!=NULL) {
-          pr.push_back(atof(current));
-          current=strtok(NULL," ");
-        }
+      e++;
+      char* cstr=const_cast<char*>(iline.c_str());
+      char* current;
+      std::vector<float> in;
+      current=strtok(cstr," ");
+      while(current!=NULL) {
+        in.push_back(atof(current));
+        current=strtok(NULL," ");
+      }
+      cstr=const_cast<char*>(pline.c_str());
+      std::vector<float> pr;
+      current=strtok(cstr," ");
+      while(current!=NULL) {
+        pr.push_back(atof(current));
+        current=strtok(NULL," ");
+      }
 
-        //hls-fpga-machine-learning insert data
-        input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1];
-        for(int i1=0; i1<N_INPUT_1_1; i1++){
-          for(int i2=0; i2<N_INPUT_2_1; i2++){
-            for(int i3=0; i3<N_INPUT_3_1; i3++){
-              em_barrel[i1][i2][i3] = (input_t)in[i1*N_INPUT_2_1*N_INPUT_3_1+i2*N_INPUT_3_1+i3];
-            }
+      //hls-fpga-machine-learning insert data
+      input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1];
+      for(int i1=0; i1<N_INPUT_1_1; i1++){
+        for(int i2=0; i2<N_INPUT_2_1; i2++){
+          for(int i3=0; i3<N_INPUT_3_1; i3++){
+            em_barrel[i1][i2][i3] = (input_t)in[i1*N_INPUT_2_1*N_INPUT_3_1+i2*N_INPUT_3_1+i3];
           }
-        } 
+        }
+      } 
 
-      result_t  preds[N_LAYER_50];
+      result_t  preds [N_LAYER_50];
+      model_default_t w38[config38::mult_config::n_in*config38::mult_config::n_out];
+      model_default_t w42[config42::n_in*config42::n_out];
 
-      myproject_full_layer(em_barrel, preds);
+      myproject_full_layer(em_barrel, preds, w38, w42);
       
       //hls-fpga-machine-learning insert tb-output
       for(int i = 0; i < N_LAYER_50; i++) {
@@ -95,11 +97,13 @@ int main(int argc, char **argv)
     input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1] = {1};
 
     result_t  preds[N_LAYER_50];
+    model_default_t w38[config38::mult_config::n_in*config38::mult_config::n_out];
+    model_default_t w42[config42::n_in*config42::n_out];
 
     //hls-fpga-machine-learning insert top-level-function
     unsigned short size_in1,size_out1;
     //myproject(em_barrel,layer52_out,size_in1,size_out1);
-    myproject_full_layer(em_barrel,preds);
+    myproject_full_layer(em_barrel,preds, w38, w42);
 
     //hls-fpga-machine-learning insert output
     for(int i = 0; i < N_LAYER_50; i++) {

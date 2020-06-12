@@ -55,11 +55,11 @@
 #include "weights/b34.h"
 #include "weights/s36.h"
 #include "weights/b36.h"
-#include "weights/w38.h"
+// #include "weights/w38.h"
 #include "weights/b38.h"
 #include "weights/s40.h"
 #include "weights/b40.h"
-#include "weights/w42.h"
+// #include "weights/w42.h"
 #include "weights/b42.h"
 #include "weights/w46.h"
 #include "weights/b46.h"
@@ -67,17 +67,19 @@
 #include "weights/b50.h"
 
 void myproject_full_layer(
-input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1],
-result_t layer52_out[N_LAYER_50]
+  input_t em_barrel[N_INPUT_1_1_TRUE][N_INPUT_2_1][N_INPUT_3_1]
+, result_t layer52_out[N_LAYER_50]
+, model_default_t w38[589824]
+, model_default_t w42[589824]
 // result_t preds[N_SIZE*N_RES]   
-// result_t preds[N_LAYER_50] // For synth!
 
 //unsigned short &const_size_in_1,
 //unsigned short &const_size_out_1
 ) {
 
-    // #pragma HLS interface bram port=w38
-    // #pragma HLS interface bram port=w42
+    #pragma HLS interface bram port=w38
+    #pragma HLS interface bram port=w42
+
     //hls-fpga-machine-learning insert IO
     #pragma HLS ARRAY_RESHAPE variable=preds complete dim=0 
     #pragma HLS INTERFACE ap_vld port=em_barrel,preds 
@@ -132,26 +134,23 @@ result_t layer52_out[N_LAYER_50]
                 #pragma HLS UNROLL
                 if(i1*iC < N_INPUT_1_1_TRUE*N_INPUT_2_1) {
                     sInput[i2].write(em_barrel[iC][i1][i2]);
-                    // std::cout << "write_pixel >" << em_barrel[iC][i1][i2] << std::endl;
                 } else { 
                     input_t pVal = 0; 
                     sInput[i2].write(pVal);
                     }
             }
-            std::cout << "Processing (" << i1 << ", " << iC << ")" << std::endl;
-            subimage_stream(lReset,sInput,sOutput);
+            subimage_stream(lReset,sInput,sOutput, w38);
             lReset = false;
-
             if(!sOutput[0].empty()) { 
                 LoopOutput:
                 std::cout << "---> " <<std::endl;
                 for(unsigned iX = 0; iX < N_RES; iX++) { 
                     #pragma HLS UNROLL 
-                    // if(index < Nstop) preds[0] = (result_t)sOutput[iX].read(); // For synth!
                     if(index < N_SIZE) layer41_out[index*N_RES+iX] = (result_t)sOutput[iX].read();
+                    // if(index < N_SIZE) preds[index*N_RES+iX] = (result_t)sOutput[iX].read();
                 }
                 index++; 
-                // if(index > 9) break;
+
                 std::cout << "---> " << index << std::endl;
                 if(index >= N_SIZE) { 
                     //dense layers
@@ -185,13 +184,13 @@ result_t layer52_out[N_LAYER_50]
     }
     std::cout << std::endl;
 }
-void subimage_stream(bool iReset, 
-hls::stream<input_t>  input[N_INPUT_3_1],
-hls::stream<result_t> output[N_RES] 
-// hls::stream<result_t> output[N_FILT_6]   
+void subimage_stream(bool iReset
+, hls::stream<input_t>  input[N_INPUT_3_1]
+, hls::stream<result_t> output[N_RES] 
+, model_default_t w38[589824]
 ) { 
 
-    // #pragma HLS interface bram port=w38
+    #pragma HLS interface bram port=w38
 
     #ifndef __SYNTHESIS__
     static bool loaded_weights = false;
@@ -239,10 +238,6 @@ hls::stream<result_t> output[N_RES]
     }
     #endif
 
-    // static hls::stream<layer103_t> layer103_out[N_CHANNEL_102];
-    // #pragma HLS ARRAY_PARTITION variable=layer103_out complete dim=0
-    // nnet::normalize2<input_t, layer103_t, config103>(input, layer103_out, s103, b103);
-
     static hls::stream<layer2_t> layer2_out[N_FILT_2];
     #pragma HLS stream variable=layer2_out      depth=1
     input_t alpha = 0.3;
@@ -287,8 +282,6 @@ hls::stream<result_t> output[N_RES]
     static hls::stream<layer33_t> layer33_out[N_FILT_33];
     #pragma HLS stream variable=layer33_out      depth=1
     if(!layer29_out[0].empty()) nnet::pooling2d_cl<layer29_t,layer33_t,config33>(iReset,layer29_out,layer33_out);
-
-// clean
 
     static hls::stream<layer34_t> layer34_out[N_FILT_34];
     #pragma HLS stream variable=layer34_out      depth=1

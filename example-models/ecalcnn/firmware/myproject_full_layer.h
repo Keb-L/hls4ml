@@ -28,18 +28,18 @@
 
 // Prototype of top level function for C-synthesis
 void myproject_full_layer(
-    input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1],
-    result_t layer52_out[N_LAYER_50]
-    // result_t preds[N_LAYER_50] // For synth!
-
-    //unsigned short &const_size_in_1,
-    //unsigned short &const_size_out_1
+  input_t em_barrel[N_INPUT_1_1][N_INPUT_2_1][N_INPUT_3_1]
+, result_t layer52_out[N_LAYER_50]
+// ,    result_t preds[N_RES*N_SIZE] // For synth!
+, model_default_t w38[589824]
+, model_default_t w42[589824]
 );
 
 
-void subimage_stream(bool iReset, 
-		     hls::stream<input_t>  input[N_INPUT_3_1],
-		     hls::stream<result_t> output[N_RES]
-             );
+void subimage_stream(bool iReset
+, hls::stream<input_t>  input[N_INPUT_3_1]
+, hls::stream<result_t> output[N_RES]
+, model_default_t w38[589824]
+);
 
 #endif
