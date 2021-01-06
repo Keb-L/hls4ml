@@ -1,0 +1,1402 @@
+
+****** Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2018.2 (64-bit)
+  **** SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+  **** IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+    ** Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+
+source /data/Xilinx/Vivado/Vivado/2018.2/scripts/vivado_hls/hls.tcl -notrace
+INFO: [HLS 200-10] Running '/data/Xilinx/Vivado/Vivado/2018.2/bin/unwrapped/lnx64.o/vivado_hls'
+INFO: [HLS 200-10] For user 'kdlin' on host 'correlator2.fnal.gov' (Linux_x86_64 version 3.10.0-957.21.3.el7.x86_64) on Mon Nov 23 13:49:01 CST 2020
+INFO: [HLS 200-10] On os "Scientific Linux release 7.9 (Nitrogen)"
+INFO: [HLS 200-10] In directory '/home/kdlin/hls4ml/example-models/deepcalo_full'
+INFO: [HLS 200-10] Opening project '/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj'.
+INFO: [HLS 200-10] Adding design file 'firmware/myproject.cpp' to the project
+INFO: [HLS 200-10] Adding test bench file 'myproject_test.cpp' to the project
+INFO: [HLS 200-10] Adding test bench file 'firmware/weights' to the project
+INFO: [HLS 200-10] Adding test bench file 'tb_data' to the project
+INFO: [HLS 200-10] Opening solution '/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1'.
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 5ns.
+INFO: [HLS 200-10] Setting target device to 'xcvu9p-flgb2104-2-i'
+INFO: [XFORM 203-101] Allowed max sub elements number after partition is 4096.
+INFO: [XFORM 203-101] Allowed max sub elements number after partition is 4096.
+***** C SIMULATION *****
+INFO: [SIM 211-2] *************** CSIM start ***************
+INFO: [SIM 211-4] CSIM will launch GCC as the compiler.
+make: `csim.exe' is up to date.
+INFO: Unable to open input/predictions file, using default input.
+INFO: Saved inference results to file: tb_data/csim_results.log
+INFO: [SIM 211-1] CSim done with 0 errors.
+INFO: [SIM 211-3] *************** CSIM finish ***************
+***** C SIMULATION COMPLETED IN 0h0m2s *****
+***** C/RTL SYNTHESIS *****
+INFO: [HLS 200-10] Analyzing design file 'firmware/myproject.cpp' ... 
+WARNING: [HLS 214-114] Only function calls and local variable declarations are allowed in a dataflow region: firmware/nnet_utils/nnet_dense.h:165:9
+WARNING: [HLS 214-111] Static variables and non-static stream cannot be used inside a dataflow region: firmware/nnet_utils/nnet_conv2d_large.h:601:24
+WARNING: [HLS 214-111] Static variables and non-static stream cannot be used inside a dataflow region: firmware/nnet_utils/nnet_pooling.h:331:19
+INFO: [HLS 200-111] Finished Linking Time (s): cpu = 00:00:57 ; elapsed = 00:00:59 . Memory (MB): peak = 460.191 ; gain = 4.266 ; free physical = 1672 ; free virtual = 115378
+INFO: [HLS 200-111] Finished Checking Pragmas Time (s): cpu = 00:00:57 ; elapsed = 00:00:59 . Memory (MB): peak = 460.191 ; gain = 4.266 ; free physical = 1672 ; free virtual = 115378
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [XFORM 203-603] Inlining function 'nnet::shift_right_small<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' into 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' (firmware/nnet_utils/nnet_conv2d_large.h:258).
+INFO: [XFORM 203-603] Inlining function 'nnet::dense_large_rf_leq_nin<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' into 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' (firmware/nnet_utils/nnet_dense_large.h:541).
+INFO: [XFORM 203-603] Inlining function 'nnet::fill_image<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' into 'nnet::conv_2d_large_cl_nopad_pad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' (firmware/nnet_utils/nnet_conv2d_large.h:498).
+INFO: [HLS 200-111] Finished Standard Transforms Time (s): cpu = 00:01:34 ; elapsed = 00:01:37 . Memory (MB): peak = 867.059 ; gain = 411.133 ; free physical = 979 ; free virtual = 115088
+INFO: [HLS 200-10] Checking synthesizability ...
+INFO: [XFORM 203-602] Inlining function 'nnet::cast<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' into 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' (firmware/nnet_utils/nnet_dense_large.h:123->firmware/nnet_utils/nnet_dense_large.h:541) automatically.
+INFO: [HLS 200-111] Finished Checking Synthesizability Time (s): cpu = 00:01:35 ; elapsed = 00:01:38 . Memory (MB): peak = 867.059 ; gain = 411.133 ; free physical = 978 ; free virtual = 115088
+INFO: [XFORM 203-502] Unrolling all sub-loops inside loop 'Loop-2' (firmware/nnet_utils/nnet_dense_large.h:72) in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' for pipelining.
+INFO: [XFORM 203-502] Unrolling all loops for pipelining in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' (firmware/nnet_utils/nnet_conv2d_large.h:106:51).
+WARNING: [XFORM 203-505] Ignored pipeline directive for loop 'Loop-2' (firmware/nnet_utils/nnet_conv2d_large.h:106) because its parent loop or function is pipelined.
+INFO: [XFORM 203-502] Unrolling all loops for pipelining in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' (firmware/nnet_utils/nnet_conv2d_large.h:516:53).
+WARNING: [XFORM 203-505] Ignored pipeline directive for loop 'Loop-2' (firmware/nnet_utils/nnet_conv2d_large.h:533) because its parent loop or function is pipelined.
+INFO: [XFORM 203-502] Unrolling all loops for pipelining in function 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>' (firmware/nnet_utils/nnet_batchnorm.h:127:44).
+INFO: [XFORM 203-502] Unrolling all loops for pipelining in function 'nnet::upsampling2d_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config2>' (firmware/nnet_utils/nnet_upsampling2d.h:160:29).
+WARNING: [XFORM 203-505] Ignored pipeline directive for loop 'Loop-2' (firmware/nnet_utils/nnet_upsampling2d.h:173) because its parent loop or function is pipelined.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1' (firmware/nnet_utils/nnet_conv2d_large.h:477) in function 'nnet::conv_2d_large_cl_nopad_pad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2' (firmware/nnet_utils/nnet_conv2d_large.h:492) in function 'nnet::conv_2d_large_cl_nopad_pad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-3' (firmware/nnet_utils/nnet_conv2d_large.h:129) in function 'nnet::conv_2d_large_cl_nopad_pad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'InitAccum' (firmware/nnet_utils/nnet_dense_large.h:59) in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.1' (firmware/nnet_utils/nnet_dense_large.h:77) in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.2' (firmware/nnet_utils/nnet_dense_large.h:86) in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Result' (firmware/nnet_utils/nnet_dense_large.h:121) in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1' (firmware/nnet_utils/nnet_conv2d_large.h:248) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1.1' (firmware/nnet_utils/nnet_conv2d_large.h:251) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2' (firmware/nnet_utils/nnet_conv2d_large.h:106) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.1' (firmware/nnet_utils/nnet_conv2d_large.h:108) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.1.1' (firmware/nnet_utils/nnet_conv2d_large.h:109) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-3' (firmware/nnet_utils/nnet_conv2d_large.h:115) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-3.1' (firmware/nnet_utils/nnet_conv2d_large.h:117) in function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1' (firmware/nnet_utils/nnet_conv2d_large.h:524) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2' (firmware/nnet_utils/nnet_conv2d_large.h:533) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.1' (firmware/nnet_utils/nnet_conv2d_large.h:536) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-3' (firmware/nnet_utils/nnet_conv2d_large.h:544) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+WARNING: [XFORM 203-503] Cannot unroll loop 'Loop-4' (firmware/nnet_utils/nnet_conv2d_large.h:554) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>': cannot completely unroll a loop with a variable trip count.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-4.1' (firmware/nnet_utils/nnet_conv2d_large.h:556) in function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1' (firmware/nnet_utils/nnet_batchnorm.h:132) in function 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-1' (firmware/nnet_utils/nnet_upsampling2d.h:167) in function 'nnet::upsampling2d_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config2>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2' (firmware/nnet_utils/nnet_upsampling2d.h:173) in function 'nnet::upsampling2d_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config2>' completely.
+INFO: [XFORM 203-501] Unrolling loop 'Loop-2.1' (firmware/nnet_utils/nnet_upsampling2d.h:175) in function 'nnet::upsampling2d_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config2>' completely.
+INFO: [XFORM 203-131] Reshaping array 'tmpdata.V' (firmware/nnet_utils/nnet_conv2d_large.h:460) in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_in.V'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_reluout.V' (firmware/nnet_utils/nnet_conv2d_large.h:466) in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_out.V'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'w4.V'  in dimension 1 with a block factor of 320.
+INFO: [XFORM 203-131] Reshaping array 'tmpinput.V' (firmware/nnet_utils/nnet_conv2d_large.h:245) in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'tmpdata.V' (firmware/nnet_utils/nnet_conv2d_large.h:521) in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 's3.V'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'b3.V'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_in_row.V'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_in.V.1'  in dimension 1 completely.
+INFO: [XFORM 203-131] Reshaping array 'tmpinput.V' (firmware/nnet_utils/nnet_conv2d_large.h:245) in dimension 2 completely.
+INFO: [XFORM 203-131] Reshaping array 'layer_in_row.V'  in dimension 2 completely.
+INFO: [XFORM 203-102] Automatically partitioning shift register array 'layer_in_row.Array.V' .
+INFO: [XFORM 203-102] Automatically partitioning streamed array 'layer3_out.V.V' .
+INFO: [XFORM 203-102] Automatically partitioning streamed array 'layer2_out.V.V' .
+INFO: [XFORM 203-102] Automatically partitioning streamed array 'em_barrel.V.V' (firmware/myproject.cpp:206) .
+INFO: [XFORM 203-102] Automatically partitioning streamed array 'layer54_out.V.V' (firmware/myproject.cpp:207) .
+INFO: [XFORM 203-102] Automatically partitioning streamed array 'ptmp.V.V' (firmware/nnet_utils/nnet_conv2d_large.h:580) .
+INFO: [XFORM 203-101] Partitioning array 'b4.V'  in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'acc.V' (firmware/nnet_utils/nnet_dense_large.h:55) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'tmpmult.V' (firmware/nnet_utils/nnet_dense_large.h:74) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'tmplayer_in.V' (firmware/nnet_utils/nnet_conv2d_large.h:490) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'layer_in_row.Array.V' in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'layer3_out.V.V' in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'layer2_out.V.V' in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'em_barrel.V.V' (firmware/myproject.cpp:206) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'layer54_out.V.V' (firmware/myproject.cpp:207) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'ptmp.V.V' (firmware/nnet_utils/nnet_conv2d_large.h:580) in dimension 1 completely.
+INFO: [XFORM 203-101] Partitioning array 'layer_in_row.Array.V' in dimension 2 completely.
+WARNING: [XFORM 203-104] Completely partitioning array 'tmplayer_in.V' (firmware/nnet_utils/nnet_conv2d_large.h:490) accessed through non-constant indices on dimension 1 (firmware/nnet_utils/nnet_dense_large.h:80:20), which may result in long runtime and suboptimal QoR due to large multiplexers. Please consider wrapping the array access into a function or using a register file core instead.
+INFO: [XFORM 203-602] Inlining function 'nnet::cast<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' into 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' (firmware/nnet_utils/nnet_dense_large.h:123->firmware/nnet_utils/nnet_dense_large.h:541) automatically.
+INFO: [XFORM 203-622] Instantiating function 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>'(firmware/nnet_utils/nnet_batchnorm.h:127:1) to 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>.0' by setting 'scale.V' to 's3.V'.
+INFO: [XFORM 203-622] Instantiating function 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>.0'(firmware/nnet_utils/nnet_batchnorm.h:127:1) to 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>.0.0' by setting 'bias.V' to 'b3.V'.
+INFO: [XFORM 203-11] Balancing expressions in function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' (firmware/nnet_utils/nnet_dense_large.h:72:20)...320 expression(s) balanced.
+INFO: [HLS 200-111] Finished Pre-synthesis Time (s): cpu = 00:03:04 ; elapsed = 00:03:08 . Memory (MB): peak = 1448.094 ; gain = 992.168 ; free physical = 810 ; free virtual = 114061
+WARNING: [XFORM 203-631] Renaming function 'nnet::zeropad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' to 'zeropad' (firmware/nnet_utils/nnet_conv2d_large.h:516:1)
+WARNING: [XFORM 203-631] Renaming function 'nnet::upsampling2d_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config2>' to 'upsampling2d_stream' (firmware/nnet_utils/nnet_upsampling2d.h:160:1)
+WARNING: [XFORM 203-631] Renaming function 'nnet::product<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0> >' to 'product' (firmware/nnet_utils/nnet_dense.h:93:9)
+WARNING: [XFORM 203-631] Renaming function 'nnet::normalize_stream<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config3>.0.0' to 'normalize_stream.0.0' (firmware/nnet_utils/nnet_batchnorm.h:127:1)
+WARNING: [XFORM 203-631] Renaming function 'nnet::dense_large<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4_mult>' to 'dense_large' (firmware/nnet_utils/nnet_dense_large.h:72:20)
+WARNING: [XFORM 203-631] Renaming function 'nnet::conv_2d_large_cl_nopad_pad<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' to 'conv_2d_large_cl_nop' (firmware/nnet_utils/nnet_conv2d_large.h:132:1)
+WARNING: [XFORM 203-631] Renaming function 'nnet::conv_2d_large_cl2<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' to 'conv_2d_large_cl2' (firmware/nnet_utils/nnet_conv2d_large.h:580:35)
+WARNING: [XFORM 203-631] Renaming function 'nnet::cnnshift_arr<ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, ap_fixed<16, 6, (ap_q_mode)5, (ap_o_mode)3, 0>, config4>' to 'cnnshift_arr' (firmware/nnet_utils/nnet_conv2d_large.h:118:1)
+INFO: [HLS 200-111] Finished Architecture Synthesis Time (s): cpu = 00:03:28 ; elapsed = 00:03:31 . Memory (MB): peak = 1448.094 ; gain = 992.168 ; free physical = 778 ; free virtual = 114060
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'myproject' ...
+WARNING: [SYN 201-103] Legalizing function name 'normalize_stream.0.0' to 'normalize_stream_0_0'.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'upsampling2d_stream' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'upsampling2d_stream'.
+WARNING: [SCHED 204-68] Unable to enforce a carried dependence constraint (II = 1, distance = 1, offset = 1)
+   between fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178) and fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178).
+WARNING: [SCHED 204-68] Unable to enforce a carried dependence constraint (II = 2, distance = 1, offset = 1)
+   between fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178) and fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178).
+WARNING: [SCHED 204-68] Unable to enforce a carried dependence constraint (II = 3, distance = 1, offset = 1)
+   between fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178) and fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178).
+WARNING: [SCHED 204-68] Unable to enforce a carried dependence constraint (II = 4, distance = 1, offset = 1)
+   between fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178) and fifo write on port 'layer2_out_V_V_0' (firmware/nnet_utils/nnet_upsampling2d.h:178).
+INFO: [SCHED 204-61] Pipelining result : Target II = 1, Final II = 5, Depth = 5.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 212.94 seconds; current allocated memory: 287.854 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.13 seconds; current allocated memory: 288.160 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'normalize_stream_0_0' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'normalize_stream.0.0'.
+INFO: [SCHED 204-61] Pipelining result : Target II = 1, Final II = 1, Depth = 2.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.3 seconds; current allocated memory: 288.325 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.05 seconds; current allocated memory: 288.571 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'zeropad' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+WARNING: [SCHED 204-65] Unable to satisfy pipeline directive: Function contains subloop(s) not being unrolled.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 11.08 seconds; current allocated memory: 292.038 MB.
+INFO: [HLS 200-434] Only 0 loops out of a total 1 loops have been pipelined in this design.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 1.31 seconds; current allocated memory: 293.581 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'cnnshift_arr' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'cnnshift_arr'.
+INFO: [SCHED 204-61] Pipelining result : Target II = 1, Final II = 1, Depth = 1.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.64 seconds; current allocated memory: 293.755 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.04 seconds; current allocated memory: 293.959 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'product' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining function 'product'.
+INFO: [SCHED 204-61] Pipelining result : Target II = 1, Final II = 1, Depth = 1.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.05 seconds; current allocated memory: 293.990 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.03 seconds; current allocated memory: 294.031 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'dense_large' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [SCHED 204-61] Pipelining result : Target II = 1, Final II = 1, Depth = 3.
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.96 seconds; current allocated memory: 297.619 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 1 seconds; current allocated memory: 305.029 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_large_cl_nop' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 1.16 seconds; current allocated memory: 305.652 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.4 seconds; current allocated memory: 307.115 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_large_cl2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.56 seconds; current allocated memory: 307.316 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.34 seconds; current allocated memory: 307.704 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'myproject_in' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.52 seconds; current allocated memory: 308.034 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.51 seconds; current allocated memory: 308.612 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'myproject' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111]  Elapsed time: 0.53 seconds; current allocated memory: 308.847 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111]  Elapsed time: 0.23 seconds; current allocated memory: 309.448 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'upsampling2d_stream' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'layer_in_row_V' is power-on initialization.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'upsampling2d_stream'.
+INFO: [HLS 200-111]  Elapsed time: 0.61 seconds; current allocated memory: 309.894 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'normalize_stream_0_0' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SYN 201-210] Renamed object name 'myproject_mul_mul_16s_9ns_25_1_1' to 'myproject_mul_mulbkb' due to the length limit 20
+INFO: [RTGEN 206-100] Generating core module 'myproject_mul_mulbkb': 4 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'normalize_stream_0_0'.
+INFO: [HLS 200-111]  Elapsed time: 0.13 seconds; current allocated memory: 311.016 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'zeropad' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'pX' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'pY' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'pReset_V_1' is power-on initialization.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'zeropad'.
+INFO: [HLS 200-111]  Elapsed time: 0.98 seconds; current allocated memory: 314.836 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'cnnshift_arr' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_15' to 'cnnshift_arr_layecud' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_11' to 'cnnshift_arr_layedEe' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_7' to 'cnnshift_arr_layeeOg' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_3' to 'cnnshift_arr_layefYi' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_14' to 'cnnshift_arr_layeg8j' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_10' to 'cnnshift_arr_layehbi' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_6' to 'cnnshift_arr_layeibs' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_2' to 'cnnshift_arr_layejbC' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_13' to 'cnnshift_arr_layekbM' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_9' to 'cnnshift_arr_layelbW' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_5' to 'cnnshift_arr_layemb6' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_1' to 'cnnshift_arr_layencg' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_12' to 'cnnshift_arr_layeocq' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_8' to 'cnnshift_arr_layepcA' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V_4' to 'cnnshift_arr_layeqcK' due to the length limit 20
+INFO: [SYN 201-210] Renamed object name 'cnnshift_arr_layer_in_row_Array_V' to 'cnnshift_arr_layercU' due to the length limit 20
+INFO: [RTGEN 206-100] Finished creating RTL model for 'cnnshift_arr'.
+INFO: [HLS 200-111]  Elapsed time: 0.85 seconds; current allocated memory: 324.906 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'product' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SYN 201-210] Renamed object name 'myproject_mul_mul_16s_16s_26_1_1' to 'myproject_mul_mulsc4' due to the length limit 20
+INFO: [RTGEN 206-100] Generating core module 'myproject_mul_mulsc4': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'product'.
+INFO: [HLS 200-111]  Elapsed time: 0.14 seconds; current allocated memory: 325.619 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'dense_large' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SYN 201-210] Renamed object name 'myproject_mux_1287_16_1_1' to 'myproject_mux_128tde' due to the length limit 20
+INFO: [RTGEN 206-104] Estimated max fanout for 'dense_large' is 5123 from HDL expression: ((exitcond25_i_reg_15291 == 1'd0) & (1'b0 == ap_block_pp0_stage0) & (ap_enable_reg_pp0_iter1 == 1'b1) & (1'b1 == ap_CS_fsm_pp0_stage0))
+INFO: [RTGEN 206-100] Generating core module 'myproject_mux_128tde': 19 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'dense_large'.
+INFO: [HLS 200-111]  Elapsed time: 1.15 seconds; current allocated memory: 343.528 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_large_cl_nop' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+WARNING: [RTGEN 206-101] Register 'pX_1' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'pY_1' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'pReset_V' is power-on initialization.
+WARNING: [RTGEN 206-101] Register 'layer_in_V' is power-on initialization.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_large_cl_nop'.
+INFO: [HLS 200-111]  Elapsed time: 3.09 seconds; current allocated memory: 368.970 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_large_cl2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_large_cl2'.
+INFO: [HLS 200-111]  Elapsed time: 1.76 seconds; current allocated memory: 373.677 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'myproject_in' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'myproject_in'.
+INFO: [HLS 200-111]  Elapsed time: 1.02 seconds; current allocated memory: 377.104 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'myproject' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/em_barrel_0_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/em_barrel_1_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/em_barrel_2_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/em_barrel_3_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/em_barrel_4_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_0_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_1_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_2_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_3_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_4_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_5_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_6_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_7_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_8_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_9_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_10_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_11_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_12_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_13_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_14_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_15_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/layer54_out_16_V_V' to 'axis'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w27_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w31_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w36_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w40_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w44_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/w48_V' to 'ap_memory'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/const_size_in_1' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'myproject/const_size_out_1' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on function 'myproject' to 'ap_ctrl_hs'.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w27_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w27_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w31_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w31_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w36_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w36_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w40_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w40_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w44_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w44_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_address0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_address0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_ce0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_ce0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_we0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_we0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_d0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_d0' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_q0' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_address1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_address1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_ce1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_ce1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_we1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_we1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_d1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+WARNING: [RTGEN 206-101] Setting dangling out port 'myproject/w48_V_d1' to 0.
+WARNING: [RTGEN 206-101] Port 'myproject/w48_V_q1' has no fanin or fanout and is left dangling.
+               Please use C simulation to confirm this function argument can be read from or written to.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'myproject'.
+INFO: [HLS 200-111]  Elapsed time: 1.79 seconds; current allocated memory: 379.630 MB.
+INFO: [RTMG 210-279] Implementing memory 'dense_large_w4_V_rom' using auto ROMs.
+INFO: [RTMG 210-285] Implementing FIFO 'ptmp_0_V_V_U(fifo_w16_d240_A)' using Block RAMs.
+INFO: [RTMG 210-285] Implementing FIFO 'ptmp_1_V_V_U(fifo_w16_d240_A)' using Block RAMs.
+INFO: [RTMG 210-285] Implementing FIFO 'ptmp_2_V_V_U(fifo_w16_d240_A)' using Block RAMs.
+INFO: [RTMG 210-285] Implementing FIFO 'ptmp_3_V_V_U(fifo_w16_d240_A)' using Block RAMs.
+INFO: [RTMG 210-285] Implementing FIFO 'ptmp_4_V_V_U(fifo_w16_d240_A)' using Block RAMs.
+INFO: [RTMG 210-285] Implementing FIFO 'layer2_out_V_V_0_U(fifo_w16_d5_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer2_out_V_V_1_U(fifo_w16_d5_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer2_out_V_V_2_U(fifo_w16_d5_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer2_out_V_V_3_U(fifo_w16_d5_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer2_out_V_V_4_U(fifo_w16_d5_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer3_out_V_V_0_U(fifo_w16_d15_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer3_out_V_V_1_U(fifo_w16_d15_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer3_out_V_V_2_U(fifo_w16_d15_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer3_out_V_V_3_U(fifo_w16_d15_A)' using Shift Registers.
+INFO: [RTMG 210-285] Implementing FIFO 'layer3_out_V_V_4_U(fifo_w16_d15_A)' using Shift Registers.
+INFO: [HLS 200-111] Finished generating all RTL models Time (s): cpu = 00:03:56 ; elapsed = 00:04:08 . Memory (MB): peak = 1448.094 ; gain = 992.168 ; free physical = 719 ; free virtual = 114054
+INFO: [SYSC 207-301] Generating SystemC RTL for myproject.
+INFO: [VHDL 208-304] Generating VHDL RTL for myproject.
+INFO: [VLOG 209-307] Generating Verilog RTL for myproject.
+***** C/RTL SYNTHESIS COMPLETED IN 0h4m3s *****
+***** C/RTL SIMULATION *****
+INFO: [HLS 200-10] Adding test bench file 'myproject_test.cpp' to the project
+INFO: [COSIM 212-47] Using XSIM for RTL simulation.
+INFO: [COSIM 212-14] Instrumenting C test bench ...
+   Build using "/data/Xilinx/Vivado/Vivado/2018.2/tps/lnx64/gcc-6.2.0/bin/g++"
+   Compiling myproject_test.cpp_pre.cpp.tb.cpp
+   Compiling apatb_myproject.cpp
+In file included from apatb_myproject.cpp:20:0:
+/data/Xilinx/Vivado/Vivado/2018.2/include/ap_stream.h:70:2: warning: #warning AP_STREAM macros are deprecated. Please use hls::stream<> from "hls_stream.h" instead. [-Wcpp]
+ #warning AP_STREAM macros are deprecated. Please use hls::stream<> from "hls_stream.h" instead.
+  ^~~~~~~
+apatb_myproject.cpp: In function ‘void AESL_WRAP_myproject(hls::stream<ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0> >*, hls::stream<ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0> >*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, ap_fixed<16, 6, (ap_q_mode)5u, (ap_o_mode)3u, 0>*, short unsigned int&, short unsigned int&)’:
+apatb_myproject.cpp:814:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:816:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:819:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:819:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:819:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:821:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:825:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:826:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:854:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:881:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:883:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_2_2_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:971:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:973:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:976:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:976:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:976:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:978:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:982:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:983:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1011:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1038:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1040:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_3_3_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1128:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1130:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1133:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1133:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1133:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1135:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1139:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1140:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1168:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1195:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1197:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_4_4_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1285:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1287:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1290:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1290:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1290:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1292:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1296:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1297:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1325:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1352:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1354:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_5_5_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1442:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1444:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1447:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1447:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1447:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1449:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1453:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1454:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1482:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1509:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1511:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_6_6_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1599:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1601:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1604:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1604:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1604:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1606:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1610:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1611:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1639:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1666:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1668:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_7_7_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1756:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1758:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1761:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1761:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1761:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1763:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1767:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1768:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1796:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1823:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1825:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_8_8_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:1913:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:1915:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:1918:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:1918:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:1918:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:1920:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:1924:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:1925:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:1953:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1980:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:1982:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_9_9_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2070:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2072:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2075:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2075:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2075:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2077:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2081:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2082:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2110:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2137:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2139:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_10_10_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2227:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2229:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2232:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2232:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2232:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2234:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2238:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2239:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2267:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2294:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2296:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_11_11_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2384:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2386:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2389:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2389:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2389:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2391:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2395:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2396:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2424:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2451:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2453:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_12_12_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2541:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2543:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2546:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2546:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2546:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2548:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2552:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2553:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2581:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2608:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2610:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_13_13_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2698:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2700:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2703:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2703:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2703:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2705:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2709:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2710:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2738:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2765:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2767:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_14_14_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:2855:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:2857:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:2860:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:2860:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:2860:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:2862:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:2866:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:2867:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:2895:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2922:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:2924:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_15_15_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:3012:13: error: expected primary-expression before ‘)’ token
+    if (i != )
+             ^
+apatb_myproject.cpp:3014:6: error: expected primary-expression before ‘=’ token
+      = i;
+      ^
+apatb_myproject.cpp:3017:9: error: expected primary-expression before ‘>’ token
+    if ( > 0 && .size() < )
+         ^
+apatb_myproject.cpp:3017:16: error: expected primary-expression before ‘.’ token
+    if ( > 0 && .size() < )
+                ^
+apatb_myproject.cpp:3017:26: error: expected primary-expression before ‘)’ token
+    if ( > 0 && .size() < )
+                          ^
+apatb_myproject.cpp:3019:17: error: expected primary-expression before ‘.’ token
+     int _size = .size();
+                 ^
+apatb_myproject.cpp:3023:7: error: ‘tmp’ was not declared in this scope
+       tmp;
+       ^~~
+apatb_myproject.cpp:3024:6: error: expected primary-expression before ‘.’ token
+      .push_back(tmp);
+      ^
+apatb_myproject.cpp:3052:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:3079:16: error: expected primary-expression before ‘)’ token
+          if (&() != NULL) // check the null address if the c port is array or others
+                ^
+apatb_myproject.cpp:3081:12: error: expected primary-expression before ‘)’ token
+           ().range() = (layer54_out_V_V_lv0_16_16_2[hls_map_index]).to_string(SC_BIN).c_str();
+            ^
+apatb_myproject.cpp:4217:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_2_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4237:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4240:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4241:46: error: request for member ‘range’ in ‘layer54_out_2_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_2_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4250:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4256:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_2_V_V_depth);
+                       ^
+apatb_myproject.cpp:4266:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_2_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4275:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_3_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4295:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4298:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4299:46: error: request for member ‘range’ in ‘layer54_out_3_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_3_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4308:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4314:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_3_V_V_depth);
+                       ^
+apatb_myproject.cpp:4324:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_3_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4333:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_4_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4353:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4356:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4357:46: error: request for member ‘range’ in ‘layer54_out_4_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_4_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4366:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4372:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_4_V_V_depth);
+                       ^
+apatb_myproject.cpp:4382:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_4_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4391:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_5_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4411:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4414:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4415:46: error: request for member ‘range’ in ‘layer54_out_5_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_5_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4424:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4430:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_5_V_V_depth);
+                       ^
+apatb_myproject.cpp:4440:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_5_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4449:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_6_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4469:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4472:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4473:46: error: request for member ‘range’ in ‘layer54_out_6_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_6_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4482:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4488:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_6_V_V_depth);
+                       ^
+apatb_myproject.cpp:4498:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_6_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4507:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_7_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4527:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4530:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4531:46: error: request for member ‘range’ in ‘layer54_out_7_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_7_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4540:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4546:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_7_V_V_depth);
+                       ^
+apatb_myproject.cpp:4556:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_7_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4565:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_8_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4585:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4588:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4589:46: error: request for member ‘range’ in ‘layer54_out_8_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_8_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4598:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4604:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_8_V_V_depth);
+                       ^
+apatb_myproject.cpp:4614:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_8_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4623:70: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_9_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                      ^
+apatb_myproject.cpp:4643:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4646:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4647:46: error: request for member ‘range’ in ‘layer54_out_9_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_9_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                              ^~~~~
+apatb_myproject.cpp:4656:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4662:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_9_V_V_depth);
+                       ^
+apatb_myproject.cpp:4672:63: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_9_V_V, "%d\n",  - );
+                                                               ^
+apatb_myproject.cpp:4681:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_10_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4701:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4704:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4705:47: error: request for member ‘range’ in ‘layer54_out_10_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_10_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:4714:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4720:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_10_V_V_depth);
+                       ^
+apatb_myproject.cpp:4730:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_10_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:4739:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_11_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4759:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4762:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4763:47: error: request for member ‘range’ in ‘layer54_out_11_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_11_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:4772:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4778:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_11_V_V_depth);
+                       ^
+apatb_myproject.cpp:4788:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_11_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:4797:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_12_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4817:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4820:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4821:47: error: request for member ‘range’ in ‘layer54_out_12_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_12_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:4830:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4836:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_12_V_V_depth);
+                       ^
+apatb_myproject.cpp:4846:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_12_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:4855:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_13_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4875:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4878:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4879:47: error: request for member ‘range’ in ‘layer54_out_13_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_13_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:4888:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4894:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_13_V_V_depth);
+                       ^
+apatb_myproject.cpp:4904:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_13_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:4913:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_14_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4933:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4936:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4937:47: error: request for member ‘range’ in ‘layer54_out_14_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_14_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:4946:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:4952:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_14_V_V_depth);
+                       ^
+apatb_myproject.cpp:4962:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_14_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:4971:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_15_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:4991:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:4994:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:4995:47: error: request for member ‘range’ in ‘layer54_out_15_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_15_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:5004:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:5010:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_15_V_V_depth);
+                       ^
+apatb_myproject.cpp:5020:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_15_V_V, "%d\n",  - );
+                                                                ^
+apatb_myproject.cpp:5029:71: error: expected primary-expression before ‘]’ token
+   sc_bv<16>* layer54_out_16_V_V_tvout_wrapc_buffer = new sc_bv<16>[ - ];
+                                                                       ^
+apatb_myproject.cpp:5049:14: error: expected primary-expression before ‘)’ token
+        if (&() != NULL) // check the null address if the c port is array or others
+              ^
+apatb_myproject.cpp:5052:36: error: expected primary-expression before ‘)’ token
+         layer54_out_V_V_tmp_mem = ().range().to_string(SC_BIN).c_str();
+                                    ^
+apatb_myproject.cpp:5053:47: error: request for member ‘range’ in ‘layer54_out_16_V_V_tvout_wrapc_buffer’, which is of pointer type ‘sc_dt::sc_bv<16>*’ (maybe you meant to use ‘->’ ?)
+         layer54_out_16_V_V_tvout_wrapc_buffer.range(15, 0) = layer54_out_V_V_tmp_mem.range(15, 0);
+                                               ^~~~~
+apatb_myproject.cpp:5062:26: error: expected primary-expression before ‘;’ token
+   for (int i = 0; i <  - ; i++)
+                          ^
+apatb_myproject.cpp:5068:23: error: expected primary-expression before ‘,’ token
+   tcl_file.set_num( - , &tcl_file.layer54_out_16_V_V_depth);
+                       ^
+apatb_myproject.cpp:5078:64: error: expected primary-expression before ‘)’ token
+   sprintf(wrapc_stream_size_out_layer54_out_16_V_V, "%d\n",  - );
+                                                                ^
+make: *** [obj/apatb_myproject.o] Error 1
+ERROR: [COSIM 212-317] C++ compile error.
+ERROR: [COSIM 212-321] EXE file generate failed.
+ERROR: [COSIM 212-321] EXE file generate failed.
+ERROR: [COSIM 212-331] Aborting co-simulation: C simulation failed, compilation errors.
+command 'ap_source' returned error code
+    while executing
+"source [lindex $::argv 1] "
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel \#0 { source [lindex $::argv 1] } "
+
+INFO: [HLS 200-112] Total elapsed time: 286.99 seconds; peak allocated memory: 379.630 MB.
+INFO: [Common 17-206] Exiting vivado_hls at Mon Nov 23 13:53:48 2020...

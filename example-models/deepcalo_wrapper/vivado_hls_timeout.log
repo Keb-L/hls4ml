@@ -1,0 +1,1093 @@
+
+****** Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2018.2 (64-bit)
+  **** SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+  **** IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+    ** Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+
+source /data/Xilinx/Vivado/Vivado/2018.2/scripts/vivado_hls/hls.tcl -notrace
+INFO: [HLS 200-10] Running '/data/Xilinx/Vivado/Vivado/2018.2/bin/unwrapped/lnx64.o/vivado_hls'
+INFO: [HLS 200-10] For user 'kdlin' on host 'correlator2.fnal.gov' (Linux_x86_64 version 3.10.0-957.21.3.el7.x86_64) on Tue Nov 24 00:04:44 CST 2020
+INFO: [HLS 200-10] On os "Scientific Linux release 7.9 (Nitrogen)"
+INFO: [HLS 200-10] In directory '/home/kdlin/hls4ml/example-models/deepcalo_full'
+INFO: [HLS 200-10] Opening project '/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj'.
+INFO: [HLS 200-10] Adding design file 'firmware/myproject.cpp' to the project
+INFO: [HLS 200-10] Adding test bench file 'myproject_test.cpp' to the project
+INFO: [HLS 200-10] Adding test bench file 'firmware/weights' to the project
+INFO: [HLS 200-10] Adding test bench file 'tb_data' to the project
+INFO: [HLS 200-10] Opening solution '/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1'.
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 5ns.
+INFO: [HLS 200-10] Setting target device to 'xcvu9p-flgb2104-2-i'
+INFO: [XFORM 203-101] Allowed max sub elements number after partition is 4096.
+INFO: [XFORM 203-101] Allowed max sub elements number after partition is 4096.
+***** C/RTL SIMULATION *****
+INFO: [HLS 200-10] Adding test bench file 'myproject_test.cpp' to the project
+INFO: [COSIM 212-47] Using XSIM for RTL simulation.
+INFO: [COSIM 212-14] Instrumenting C test bench ...
+   Build using "/data/Xilinx/Vivado/Vivado/2018.2/tps/lnx64/gcc-6.2.0/bin/g++"
+   Compiling myproject_test.cpp_pre.cpp.tb.cpp
+   Compiling apatb_myproject.cpp
+   Compiling myproject.cpp_pre.cpp.tb.cpp
+   Generating cosim.tv.exe
+INFO: [COSIM 212-302] Starting C TB testing ... 
+INFO: Unable to open input/predictions file, using default input.
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+input1  1 1 1 1 1
+Layer  13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+----> Done 
+INFO: Saved inference results to file: tb_data/rtl_cosim_results.log
+INFO: [COSIM 212-333] Generating C post check test bench ...
+INFO: [COSIM 212-12] Generating RTL test bench ...
+INFO: [COSIM 212-323] Starting verilog simulation. 
+INFO: [COSIM 212-15] Starting XSIM ...
+INFO: [XSIM 43-3496] Using init file passed via -initfile option "/data/Xilinx/Vivado/Vivado/2018.2/data/xsim/ip/xsim_ip.ini".
+Vivado Simulator 2018.2
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: /data/Xilinx/Vivado/Vivado/2018.2/bin/unwrapped/lnx64.o/xelab xil_defaultlib.apatb_myproject_top glbl -prj myproject.prj -L smartconnect_v1_0 -L axi_protocol_checker_v1_1_12 -L axi_protocol_checker_v1_1_13 -L axis_protocol_checker_v1_1_11 -L axis_protocol_checker_v1_1_12 -L xil_defaultlib -L unisims_ver -L xpm --initfile /data/Xilinx/Vivado/Vivado/2018.2/data/xsim/ip/xsim_ip.ini --lib ieee_proposed=./ieee_proposed -s myproject -debug wave 
+Multi-threading is on. Using 30 slave threads.
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/glbl.v" into library work
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_myproject_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_em_barrel_0_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_em_barrel_0_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_em_barrel_1_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_em_barrel_1_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_em_barrel_2_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_em_barrel_2_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_em_barrel_3_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_em_barrel_3_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_em_barrel_4_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_em_barrel_4_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_0_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_0_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_1_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_1_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_2_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_2_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_3_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_3_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_4_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_4_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_5_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_5_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_6_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_6_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_7_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_7_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_8_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_8_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_9_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_9_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_10_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_10_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_11_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_11_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_12_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_12_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_13_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_13_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_14_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_14_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_15_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_15_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_16_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_16_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_17_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_17_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_18_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_18_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_19_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_19_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_20_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_20_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_21_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_21_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_22_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_22_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_23_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_23_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_24_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_24_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_25_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_25_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_26_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_26_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_27_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_27_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_28_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_28_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_29_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_29_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_30_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_30_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_31_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_31_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_32_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_32_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_33_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_33_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_34_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_34_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_35_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_35_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_36_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_36_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_37_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_37_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_38_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_38_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_39_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_39_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_40_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_40_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_41_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_41_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_42_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_42_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_43_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_43_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_44_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_44_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_45_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_45_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_46_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_46_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_47_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_47_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_48_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_48_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_49_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_49_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_50_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_50_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_51_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_51_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_52_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_52_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_53_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_53_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_54_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_54_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_55_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_55_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_56_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_56_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_57_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_57_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_58_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_58_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_59_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_59_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_60_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_60_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_61_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_61_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_62_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_62_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_63_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_63_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/AESL_autofifo_layer54_out_64_V_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_autofifo_layer54_out_64_V_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/upsampling2d_stream.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module upsampling2d_stream
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/normalize_stream_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module normalize_stream_0_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/zeropad_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module zeropad_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/product.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module product
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl_nop_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl_nop_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/pool_op.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pool_op
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/pooling2d_cl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pooling2d_cl
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/zeropad.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module zeropad
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl_nop.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl_nop
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/zeropad_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module zeropad_4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl_nop_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl_nop_4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/pooling2d_cl_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pooling2d_cl_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/zeropad_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module zeropad_3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl_nop_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl_nop_3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/zeropad_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module zeropad_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl_nop_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl_nop_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/conv_2d_large_cl2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module conv_2d_large_cl2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/pooling2d_cl_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pooling2d_cl_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject_in.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject_in
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject_mul_mulbkb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject_mul_mulbkb_DSP48_0
+INFO: [VRFC 10-311] analyzing module myproject_mul_mulbkb
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_1_lacud.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_1_lacud_core
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_1_lacud
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject_mul_mulsc4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject_mul_mulsc4_DSP48_1
+INFO: [VRFC 10-311] analyzing module myproject_mul_mulsc4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject_mux_128tde.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject_mux_128tde
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_1_w4_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_1_w4_V_rom
+INFO: [VRFC 10-311] analyzing module dense_large_1_w4_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_layer_inudo.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_layer_inudo_core
+INFO: [VRFC 10-311] analyzing module cnnshift_layer_inudo
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d1_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_layeKfY.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_layeKfY_core
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_layeKfY
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/myproject_mux_256bgk.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module myproject_mux_256bgk
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_w9_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_w9_V_rom
+INFO: [VRFC 10-311] analyzing module dense_large_w9_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_4_w13_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_4_w13_V_rom
+INFO: [VRFC 10-311] analyzing module dense_large_4_w13_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_2_layer_cjv.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_2_layer_cjv_core
+INFO: [VRFC 10-311] analyzing module cnnshift_2_layer_cjv
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d1_A_x.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A_x_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A_x
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_arr_3_lacPA.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_3_lacPA_core
+INFO: [VRFC 10-311] analyzing module cnnshift_arr_3_lacPA
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_3_w18_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_3_w18_V_rom
+INFO: [VRFC 10-311] analyzing module dense_large_3_w18_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/dense_large_2_w22_V.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dense_large_2_w22_V_rom
+INFO: [VRFC 10-311] analyzing module dense_large_2_w22_V
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d32_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d32_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d32_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/cnnshift_1_layer_fV5.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cnnshift_1_layer_fV5_core
+INFO: [VRFC 10-311] analyzing module cnnshift_1_layer_fV5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d1_A_x_x.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A_x_x_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d1_A_x_x
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d5_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d5_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d5_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d15_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d15_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d15_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d118_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d118_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d31_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d31_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d31_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d2_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d2_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d2_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d17_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d17_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d17_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d32_A_x.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d32_A_x_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d32_A_x
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d60_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d60_A_shiftReg
+INFO: [VRFC 10-311] analyzing module fifo_w16_d60_A
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/fifo_w16_d240_A.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fifo_w16_d240_A
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.dense_large_2_w22_V_rom
+Compiling module xil_defaultlib.dense_large_2_w22_V(DataWidth=81...
+Compiling module xil_defaultlib.myproject_mul_mulsc4_DSP48_1
+Compiling module xil_defaultlib.myproject_mul_mulsc4(ID=1,NUM_ST...
+Compiling module xil_defaultlib.product
+Compiling module xil_defaultlib.dense_large_2
+Compiling module xil_defaultlib.cnnshift_arr_3_lacPA_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_arr_3_lacPA(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift_arr_2
+Compiling module xil_defaultlib.conv_2d_large_cl_nop_2
+Compiling module xil_defaultlib.zeropad_2
+Compiling module xil_defaultlib.fifo_w16_d32_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d32_A
+Compiling module xil_defaultlib.conv_2d_large_cl2
+Compiling module xil_defaultlib.pool_op
+Compiling module xil_defaultlib.cnnshift_1_layer_fV5_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_1_layer_fV5(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift_1
+Compiling module xil_defaultlib.fifo_w16_d1_A_x_x_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d1_A_x_x
+Compiling module xil_defaultlib.pooling2d_cl_1
+Compiling module xil_defaultlib.dense_large_1_w4_V_rom
+Compiling module xil_defaultlib.dense_large_1_w4_V(DataWidth=511...
+Compiling module xil_defaultlib.myproject_mux_128tde(ID=1,din0_W...
+Compiling module xil_defaultlib.dense_large_1
+Compiling module xil_defaultlib.cnnshift_arr_1_lacud_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_arr_1_lacud(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift_arr_1
+Compiling module xil_defaultlib.conv_2d_large_cl_nop_1
+Compiling module xil_defaultlib.dense_large_4_w13_V_rom
+Compiling module xil_defaultlib.dense_large_4_w13_V(DataWidth=81...
+Compiling module xil_defaultlib.dense_large_4
+Compiling module xil_defaultlib.cnnshift_arr_layeKfY_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_arr_layeKfY(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift_arr_4
+Compiling module xil_defaultlib.conv_2d_large_cl_nop_4
+Compiling module xil_defaultlib.dense_large_3_w18_V_rom
+Compiling module xil_defaultlib.dense_large_3_w18_V(DataWidth=40...
+Compiling module xil_defaultlib.dense_large_3
+Compiling module xil_defaultlib.cnnshift_arr_3
+Compiling module xil_defaultlib.conv_2d_large_cl_nop_3
+Compiling module xil_defaultlib.cnnshift_2_layer_cjv_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_2_layer_cjv(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift_2
+Compiling module xil_defaultlib.fifo_w16_d1_A_x_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d1_A_x
+Compiling module xil_defaultlib.pooling2d_cl_2
+Compiling module xil_defaultlib.dense_large_w9_V_rom
+Compiling module xil_defaultlib.dense_large_w9_V(DataWidth=4089,...
+Compiling module xil_defaultlib.myproject_mux_256bgk(ID=1,din0_W...
+Compiling module xil_defaultlib.dense_large
+Compiling module xil_defaultlib.cnnshift_arr
+Compiling module xil_defaultlib.conv_2d_large_cl_nop
+Compiling module xil_defaultlib.cnnshift_layer_inudo_core(DATA_W...
+Compiling module xil_defaultlib.cnnshift_layer_inudo(DataWidth=1...
+Compiling module xil_defaultlib.cnnshift
+Compiling module xil_defaultlib.fifo_w16_d1_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d1_A
+Compiling module xil_defaultlib.pooling2d_cl
+Compiling module xil_defaultlib.zeropad_3
+Compiling module xil_defaultlib.zeropad_4
+Compiling module xil_defaultlib.zeropad
+Compiling module xil_defaultlib.zeropad_1
+Compiling module xil_defaultlib.upsampling2d_stream
+Compiling module xil_defaultlib.myproject_mul_mulbkb_DSP48_0
+Compiling module xil_defaultlib.myproject_mul_mulbkb(ID=1,NUM_ST...
+Compiling module xil_defaultlib.normalize_stream_0_0
+Compiling module xil_defaultlib.fifo_w16_d31_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d31_A
+Compiling module xil_defaultlib.fifo_w16_d2_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d2_A
+Compiling module xil_defaultlib.fifo_w16_d17_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d17_A
+Compiling module xil_defaultlib.fifo_w16_d5_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d5_A
+Compiling module xil_defaultlib.fifo_w16_d15_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d15_A
+Compiling module xil_defaultlib.fifo_w16_d118_A
+Compiling module xil_defaultlib.fifo_w16_d32_A_x_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d32_A_x
+Compiling module xil_defaultlib.fifo_w16_d60_A_shiftReg
+Compiling module xil_defaultlib.fifo_w16_d60_A
+Compiling module xil_defaultlib.fifo_w16_d240_A
+Compiling module xil_defaultlib.myproject_in
+Compiling module xil_defaultlib.myproject
+Compiling module xil_defaultlib.AESL_autofifo_em_barrel_0_V_V
+Compiling module xil_defaultlib.AESL_autofifo_em_barrel_1_V_V
+Compiling module xil_defaultlib.AESL_autofifo_em_barrel_2_V_V
+Compiling module xil_defaultlib.AESL_autofifo_em_barrel_3_V_V
+Compiling module xil_defaultlib.AESL_autofifo_em_barrel_4_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_0_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_1_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_2_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_3_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_4_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_5_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_6_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_7_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_8_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_9_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_10_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_11_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_12_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_13_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_14_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_15_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_16_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_17_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_18_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_19_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_20_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_21_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_22_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_23_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_24_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_25_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_26_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_27_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_28_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_29_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_30_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_31_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_32_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_33_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_34_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_35_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_36_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_37_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_38_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_39_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_40_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_41_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_42_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_43_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_44_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_45_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_46_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_47_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_48_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_49_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_50_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_51_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_52_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_53_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_54_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_55_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_56_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_57_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_58_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_59_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_60_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_61_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_62_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_63_V_V
+Compiling module xil_defaultlib.AESL_autofifo_layer54_out_64_V_V
+Compiling module xil_defaultlib.apatb_myproject_top
+Compiling module work.glbl
+Built simulation snapshot myproject
+
+****** Webtalk v2018.2 (64-bit)
+  **** SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+  **** IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+    ** Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+
+source /home/kdlin/hls4ml/example-models/deepcalo_full/myproject_prj/solution1/sim/verilog/xsim.dir/myproject/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Tue Nov 24 00:23:40 2020...
+
+****** xsim v2018.2 (64-bit)
+  **** SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
+  **** IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
+    ** Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/myproject/xsim_script.tcl
+# xsim {myproject} -autoloadwcfg -tclbatch {myproject.tcl}
+Vivado Simulator 2018.2
+Time resolution is 1 ps
+source myproject.tcl
+## log_wave -r /
+## set designtopgroup [add_wave_group "Design Top Signals"]
+## set coutputgroup [add_wave_group "C Outputs" -into $designtopgroup]
+## set const_size_out_1_group [add_wave_group const_size_out_1(wire) -into $coutputgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/const_size_out_1_ap_vld -into $const_size_out_1_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/const_size_out_1 -into $const_size_out_1_group -radix hex
+## set const_size_in_1_group [add_wave_group const_size_in_1(wire) -into $coutputgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/const_size_in_1_ap_vld -into $const_size_in_1_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/const_size_in_1 -into $const_size_in_1_group -radix hex
+## set layer54_out_group [add_wave_group layer54_out(fifo) -into $coutputgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_64_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_64_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_64_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_63_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_63_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_63_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_62_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_62_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_62_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_61_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_61_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_61_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_60_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_60_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_60_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_59_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_59_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_59_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_58_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_58_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_58_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_57_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_57_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_57_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_56_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_56_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_56_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_55_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_55_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_55_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_54_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_54_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_54_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_53_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_53_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_53_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_52_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_52_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_52_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_51_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_51_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_51_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_50_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_50_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_50_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_49_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_49_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_49_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_48_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_48_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_48_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_47_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_47_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_47_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_46_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_46_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_46_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_45_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_45_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_45_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_44_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_44_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_44_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_43_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_43_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_43_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_42_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_42_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_42_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_41_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_41_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_41_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_40_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_40_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_40_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_39_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_39_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_39_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_38_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_38_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_38_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_37_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_37_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_37_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_36_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_36_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_36_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_35_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_35_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_35_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_34_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_34_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_34_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_33_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_33_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_33_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_32_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_32_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_32_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_31_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_31_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_31_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_30_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_30_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_30_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_29_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_29_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_29_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_28_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_28_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_28_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_27_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_27_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_27_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_26_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_26_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_26_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_25_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_25_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_25_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_24_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_24_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_24_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_23_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_23_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_23_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_22_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_22_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_22_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_21_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_21_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_21_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_20_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_20_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_20_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_19_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_19_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_19_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_18_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_18_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_18_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_17_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_17_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_17_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_16_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_16_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_16_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_15_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_15_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_15_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_14_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_14_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_14_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_13_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_13_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_13_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_12_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_12_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_12_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_11_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_11_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_11_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_10_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_10_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_10_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_9_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_9_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_9_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_8_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_8_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_8_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_7_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_7_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_7_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_6_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_6_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_6_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_5_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_5_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_5_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_4_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_4_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_4_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_3_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_3_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_3_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_2_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_2_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_2_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_1_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_1_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_1_V_V_din -into $layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_0_V_V_write -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_0_V_V_full_n -into $layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/layer54_out_0_V_V_din -into $layer54_out_group -radix hex
+## set cinputgroup [add_wave_group "C Inputs" -into $designtopgroup]
+## set em_barrel_group [add_wave_group em_barrel(fifo) -into $cinputgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_4_V_V_read -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_4_V_V_empty_n -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_4_V_V_dout -into $em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_3_V_V_read -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_3_V_V_empty_n -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_3_V_V_dout -into $em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_2_V_V_read -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_2_V_V_empty_n -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_2_V_V_dout -into $em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_1_V_V_read -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_1_V_V_empty_n -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_1_V_V_dout -into $em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_0_V_V_read -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_0_V_V_empty_n -into $em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/AESL_inst_myproject/em_barrel_0_V_V_dout -into $em_barrel_group -radix hex
+## set blocksiggroup [add_wave_group "Block-level IO Handshake" -into $designtopgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_start -into $blocksiggroup
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_done -into $blocksiggroup
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_idle -into $blocksiggroup
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_ready -into $blocksiggroup
+## set resetgroup [add_wave_group "Reset" -into $designtopgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_rst -into $resetgroup
+## set clockgroup [add_wave_group "Clock" -into $designtopgroup]
+## add_wave /apatb_myproject_top/AESL_inst_myproject/ap_clk -into $clockgroup
+## set testbenchgroup [add_wave_group "Test Bench Signals"]
+## set tbinternalsiggroup [add_wave_group "Internal Signals" -into $testbenchgroup]
+## set tb_simstatus_group [add_wave_group "Simulation Status" -into $tbinternalsiggroup]
+## set tb_portdepth_group [add_wave_group "Port Depth" -into $tbinternalsiggroup]
+## add_wave /apatb_myproject_top/AUTOTB_TRANSACTION_NUM -into $tb_simstatus_group -radix hex
+## add_wave /apatb_myproject_top/ready_cnt -into $tb_simstatus_group -radix hex
+## add_wave /apatb_myproject_top/done_cnt -into $tb_simstatus_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_em_barrel_0_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_em_barrel_1_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_em_barrel_2_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_em_barrel_3_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_em_barrel_4_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_0_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_1_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_2_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_3_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_4_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_5_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_6_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_7_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_8_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_9_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_10_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_11_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_12_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_13_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_14_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_15_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_16_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_17_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_18_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_19_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_20_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_21_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_22_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_23_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_24_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_25_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_26_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_27_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_28_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_29_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_30_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_31_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_32_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_33_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_34_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_35_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_36_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_37_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_38_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_39_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_40_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_41_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_42_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_43_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_44_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_45_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_46_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_47_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_48_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_49_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_50_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_51_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_52_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_53_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_54_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_55_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_56_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_57_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_58_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_59_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_60_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_61_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_62_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_63_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_layer54_out_64_V_V -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_const_size_in_1 -into $tb_portdepth_group -radix hex
+## add_wave /apatb_myproject_top/LENGTH_const_size_out_1 -into $tb_portdepth_group -radix hex
+## set tbcoutputgroup [add_wave_group "C Outputs" -into $testbenchgroup]
+## set tb_const_size_out_1_group [add_wave_group const_size_out_1(wire) -into $tbcoutputgroup]
+## add_wave /apatb_myproject_top/const_size_out_1_ap_vld -into $tb_const_size_out_1_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/const_size_out_1 -into $tb_const_size_out_1_group -radix hex
+## set tb_const_size_in_1_group [add_wave_group const_size_in_1(wire) -into $tbcoutputgroup]
+## add_wave /apatb_myproject_top/const_size_in_1_ap_vld -into $tb_const_size_in_1_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/const_size_in_1 -into $tb_const_size_in_1_group -radix hex
+## set tb_layer54_out_group [add_wave_group layer54_out(fifo) -into $tbcoutputgroup]
+## add_wave /apatb_myproject_top/layer54_out_64_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_64_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_64_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_63_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_63_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_63_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_62_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_62_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_62_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_61_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_61_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_61_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_60_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_60_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_60_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_59_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_59_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_59_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_58_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_58_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_58_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_57_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_57_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_57_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_56_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_56_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_56_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_55_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_55_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_55_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_54_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_54_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_54_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_53_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_53_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_53_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_52_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_52_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_52_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_51_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_51_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_51_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_50_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_50_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_50_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_49_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_49_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_49_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_48_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_48_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_48_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_47_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_47_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_47_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_46_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_46_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_46_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_45_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_45_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_45_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_44_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_44_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_44_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_43_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_43_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_43_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_42_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_42_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_42_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_41_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_41_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_41_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_40_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_40_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_40_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_39_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_39_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_39_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_38_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_38_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_38_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_37_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_37_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_37_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_36_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_36_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_36_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_35_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_35_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_35_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_34_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_34_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_34_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_33_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_33_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_33_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_32_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_32_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_32_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_31_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_31_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_31_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_30_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_30_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_30_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_29_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_29_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_29_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_28_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_28_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_28_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_27_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_27_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_27_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_26_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_26_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_26_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_25_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_25_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_25_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_24_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_24_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_24_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_23_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_23_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_23_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_22_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_22_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_22_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_21_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_21_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_21_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_20_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_20_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_20_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_19_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_19_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_19_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_18_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_18_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_18_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_17_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_17_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_17_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_16_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_16_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_16_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_15_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_15_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_15_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_14_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_14_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_14_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_13_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_13_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_13_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_12_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_12_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_12_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_11_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_11_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_11_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_10_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_10_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_10_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_9_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_9_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_9_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_8_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_8_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_8_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_7_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_7_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_7_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_6_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_6_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_6_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_5_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_5_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_5_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_4_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_4_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_4_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_3_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_3_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_3_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_2_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_2_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_2_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_1_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_1_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_1_V_V_din -into $tb_layer54_out_group -radix hex
+## add_wave /apatb_myproject_top/layer54_out_0_V_V_write -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_0_V_V_full_n -into $tb_layer54_out_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/layer54_out_0_V_V_din -into $tb_layer54_out_group -radix hex
+## set tbcinputgroup [add_wave_group "C Inputs" -into $testbenchgroup]
+## set tb_em_barrel_group [add_wave_group em_barrel(fifo) -into $tbcinputgroup]
+## add_wave /apatb_myproject_top/em_barrel_4_V_V_read -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_4_V_V_empty_n -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_4_V_V_dout -into $tb_em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/em_barrel_3_V_V_read -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_3_V_V_empty_n -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_3_V_V_dout -into $tb_em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/em_barrel_2_V_V_read -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_2_V_V_empty_n -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_2_V_V_dout -into $tb_em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/em_barrel_1_V_V_read -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_1_V_V_empty_n -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_1_V_V_dout -into $tb_em_barrel_group -radix hex
+## add_wave /apatb_myproject_top/em_barrel_0_V_V_read -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_0_V_V_empty_n -into $tb_em_barrel_group -color #ffff00 -radix hex
+## add_wave /apatb_myproject_top/em_barrel_0_V_V_dout -into $tb_em_barrel_group -radix hex
+## save_wave_config myproject.wcfg
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 10 [n/a] @ "113000"
+// RTL Simulation : 0 / 10 [n/a] @ "50000123000"
+// RTL Simulation : 0 / 10 [n/a] @ "100000128000"
+// RTL Simulation : 0 / 10 [n/a] @ "150000133000"
+// RTL Simulation : 0 / 10 [n/a] @ "200000138000"
+// RTL Simulation : 0 / 10 [n/a] @ "250000143000"
+// RTL Simulation : 0 / 10 [n/a] @ "300000148000"
+// RTL Simulation : 0 / 10 [n/a] @ "350000153000"
+// RTL Simulation : 0 / 10 [n/a] @ "400000158000"
+// RTL Simulation : 0 / 10 [n/a] @ "450000163000"
+// RTL Simulation : 0 / 10 [n/a] @ "500000168000"
