@@ -1134,7 +1134,7 @@ class Conv2D(Layer):
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
         params['strategy'] = self.get_attr('strategy')
-        params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl'
+        params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl2' # for padded Conv2D
         params['w'] = self.get_weights('weight').name
         params['b'] = self.get_weights('bias').name
         params['1x1'] = ''
@@ -1436,7 +1436,10 @@ class BatchNormalization(Layer):
         #    dims  = [dims[2],dims[1],dims[0]]
         #    shape = [shape[2],shape[1],shape[0]]
         print(np.array(shape))
-        depth=shape[0]*shape[1] # randome number for now
+        if len(shape) > 1:
+            depth=np.prod(shape[:-1]) # randome number for now
+        else:
+            depth=shape[0]
         self.add_output_variable(shape, dims,depth=depth)
 
         gamma = self.model.get_weights_data(self.name, 'gamma')
