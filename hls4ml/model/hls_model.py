@@ -430,7 +430,8 @@ class ArrayVariable(Variable):
     def definition_cpp(self):
         if self.streamcnn:
             array_shape = self.size_cpp_cnn()
-            return 'static hls::stream<{type}> {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape)
+            return 'hls::stream<{type}> {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape)
+            # return 'static hls::stream<{type}> {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape) TODO: KL modified for latency tests
         else:
             array_shape = self.size_cpp()
             return '{type} {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape)
@@ -928,10 +929,10 @@ class Dense(Layer):
         params['b'] = self.get_weights('bias').name
         header=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] += '_stream'
         return [header+self._function_template.format(**params)]
 
@@ -1015,11 +1016,11 @@ class Conv1D(Layer):
         params['w'] = self.get_weights('weight').name
         params['b'] = self.get_weights('bias').name
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
@@ -1143,10 +1144,10 @@ class Conv2D(Layer):
         if self.model.config.get_config_value('IOType') == 'io_serial':
             self.get_input_variable(self.inputs[0]).name = self.get_input_variable(self.inputs[0]).name.replace("/","_")
             params['input']=params['input'].replace("/","_")
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
@@ -1236,11 +1237,11 @@ class Pooling1D(Layer):
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+        #     if iFirst:
+        #         header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        #     else:
+        #         header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
@@ -1282,11 +1283,11 @@ class Pooling2D(Layer):
         if self.is1x1:
             params['1x1'] = '_1x1'
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+        #     if iFirst:
+        #         header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        #     else:
+        #         header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
@@ -1343,10 +1344,10 @@ class Activation(Layer):
         params['strategy']=''
         header=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] = '_stream'
         return [header+self._function_template.format(**params)]
 
@@ -1378,10 +1379,10 @@ class ParametrizedActivation(Activation):
         header=''
         params['strategy']=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] = '_stream'
         return [header+self._function_template.format(**params)]
 
@@ -1415,11 +1416,11 @@ class PReLU(Activation):
         params['param'] = self.get_weights('alpha').name
         params['config'] = '{}_config{}'.format(self.get_attr('activation'), self.index)
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         return [header+self._function_template.format(**params)]
 
     def print_tcl(self):
@@ -1456,10 +1457,10 @@ class BatchNormalization(Layer):
         params['strategy'] = ''
         header=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] = '_stream'
         return [header+self._function_template.format(**params)]
 
@@ -1502,10 +1503,10 @@ class UpSampling2D(Layer):
         params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl'
         params['strategy'] = ''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] = 'stream'
         return [self._function_template.format(**params)]
 
@@ -1554,11 +1555,11 @@ class Merge(Layer):
         params['input2'] = self.get_input_variable(self.inputs[1]).name
         params['output'] = self.get_output_variable().name
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+        #     if iFirst:
+        #         header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        #     else:
+        #         header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         size=1
         if self.model.config.get_config_value('IOType') == 'io_serial':
             size = self.get_input_variable(self.inputs[0]).size_cnn()
@@ -1630,11 +1631,11 @@ class Split(Layer):
         params['output1']   = self.get_output_variable(self.name+'_output1').name
         params['output2']   = self.get_output_variable(self.name+'_output2').name
         header=''
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            if iFirst:
-                header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            else:
-                header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+            # if iFirst:
+            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+            # else:
+            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
         size=1
         if self.model.config.get_config_value('IOType') == 'io_serial':
             size = self.get_input_variable(self.inputs[0]).size_cnn()

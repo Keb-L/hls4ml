@@ -428,7 +428,7 @@ class VivadoWriter(Writer):
                         newline += indent + '#pragma HLS PIPELINE \n'
                 if model.config.get_config_value("IOType") == "io_serial":
                     newline += indent + '#pragma HLS INTERFACE axis port={},{} \n'.format(','.join(all_inputs), ','.join(all_outputs))
-                    #newline += indent + '#pragma HLS DATAFLOW \n'
+                    newline += indent + '#pragma HLS DATAFLOW \n'
 
                 inval_str = '\n    '.join(['const_size_in_{} = {};'.format(i, inp.size_cpp()) for i, inp in enumerate(model_inputs, 1)])
                 outval_str = '\n    '.join(['const_size_out_{} = {};'.format(i, out.size_cpp()) for i, out in enumerate(model_outputs, 1)])
@@ -457,9 +457,21 @@ class VivadoWriter(Writer):
                     if 'put' not in layer.name: #put is short for input
                         first=False
                     if func:
+                        # add for loop if channels != 1
+                        multichannel = False
+                        layer_vars = layer.variables[layer.outputs[-1]]
+                        if (layer_vars.cl or layer.attributes['class_name'] == 'BatchNormalization') and layer_vars.shape[-1] > 1:
+                            multichannel = True
+                    
+                        if multichannel:
+                            newline += '\tfor(int i0 = 0; i0 < %d*%d; i0++) {\n\t' % (layer_vars.shape[0], layer_vars.shape[1])    
+
                         for line in func:
-                            newline += '    ' + line + '\n'
+                            newline += '\t' + line + '\n'
+                        if multichannel:
+                            newline += '\t}\n'
                         newline += '\n'
+                print('Layer done')
 
             #Just copy line
             else:
@@ -492,12 +504,13 @@ class VivadoWriter(Writer):
                     irange=[shape[1],shape[2]]
                 if len(shape) == 2: 
                     irange=[shape[0]] if cl else [shape[1]]
-                for i0 in range(len(irange)):
-                    for i1 in range(i0):
-                        newline += indent
-                    newline += 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,irange[i0],i0)
-                for i1 in range(len(irange)):
-                    newline += indent
+                # KL comment out for latency testing
+                # for i0 in range(len(irange)):
+                #     for i1 in range(i0):
+                #         newline += indent
+                #     newline += 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,irange[i0],i0)
+                # for i1 in range(len(irange)):
+                #     newline += indent
                 inputs=', '.join([i.name for i in model_inputs]) 
                 outputs=', '.join([i.name for i in model_outputs]) 
                 brams=', '.join([i.name for i in model_brams]) 
@@ -507,10 +520,10 @@ class VivadoWriter(Writer):
                        newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+brams+','+insize+','+outsize+');\n'
                 else:
                        newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+insize+','+outsize+');\n'
-                for i0 in irange:
-                    for i1 in range(i0):
-                        newline += indent
-                    newline += '}\n'
+                # for i0 in irange:
+                #     for i1 in range(i0):
+                #         newline += indent
+                #     newline += '}\n'
             newline+='}\n'
             fout.write(newline)
         f.close()
