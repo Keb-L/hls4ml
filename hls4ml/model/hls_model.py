@@ -1086,7 +1086,8 @@ class Conv2D(Layer):
         #self.get_attr('filt_height') * self.get_attr('filt_width')
         if(self.attributes['filt_height'] == 1 and self.attributes['filt_width'] == 1) : 
             self.is1x1 = True
-        depth=(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
+        # depth=(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
+        depth=self.attributes['out_width']*self.attributes['out_height']
         self.add_output_variable(shape, dims,depth=depth,cl=cl)
         #self.add_internal_variable(shapeinternal,diminternal,'dummy','dummy{index}_out',type_name='model_bigdefault_t',precision='ap_uint<27>')
         self.add_weights()
@@ -1266,7 +1267,7 @@ class Pooling2D(Layer):
             shape = [self.attributes['n_filt'], self.attributes['out_height'], self.attributes['out_width']]
             dims = ['N_FILT_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
 
-        depth=(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
+        depth=self.attributes['out_width']*self.attributes['out_height'] #(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
         print("adding :",shape,dims)
         self.add_output_variable(shape, dims,cl=cl,depth=depth)
         self.set_attr('pool_op', self.get_attr('class_name').split('Pooling')[0])
@@ -1433,7 +1434,8 @@ class BatchNormalization(Layer):
         #if 'FILT' not in dims[0] and len(dims) > 2:
         #    dims  = [dims[2],dims[1],dims[0]]
         #    shape = [shape[2],shape[1],shape[0]]
-        depth=15 # randome number for now
+        print(np.array(shape))
+        depth=shape[0]*shape[1] # randome number for now
         self.add_output_variable(shape, dims,depth=depth)
 
         gamma = self.model.get_weights_data(self.name, 'gamma')
