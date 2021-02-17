@@ -486,7 +486,7 @@ class VivadoWriter(Writer):
                     if last_layer:
                         layer_output_shape = output_vars.shape
                         if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {%d}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
-                        newline += '\tfor(int i1 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
+                        newline += '\tfor(int i0 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
                         newline += '\t\t#pragma HLS UNROLL\n'
                         newline += '\t\tresult_t pTmp = (result_t) {name}[i0].read();\n'.format(name=temp_stream)
                         newline += '\t\t{name}[i0].write(pTmp);\n'.format(name=output_vars.cppname)
@@ -755,6 +755,7 @@ class VivadoWriter(Writer):
                 for bram in model_brams:
                     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
+                    newline += indent + 'for(int iX = 0; iX < 5; iX++){\n'
                     newline+= 'unsigned index=0;\n'
                     input_str = '      ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
@@ -762,7 +763,7 @@ class VivadoWriter(Writer):
                     #add a for loop
                     for i0 in range(len(shape)): 
                         if i0 != len(shape)-1:
-                            newline += indent + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+                            newline += indent + 'for(int i{} = 0; i{} < {}*{}; i{}++) {{\n'.format(i0,i0,shape[i0], shape[i0+1],i0)
                         else:
                             newline += indent + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
                     cl=inp.cl
@@ -783,26 +784,31 @@ class VivadoWriter(Writer):
                 for inp in model.get_input_variables():
                     newline += indent + 'for(int iX = 0; iX < 5; iX++){\n'
 
-                    newline+= indent + '{} pTest = 1;\n'.format(inp.type.name)
+                    newline+= indent + '{} pTest = 0;\n'.format(inp.type.name)
                     input_str = '    ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
                     shape=inp.shape
                     #add a for loop
-                    for i0 in range(len(shape)): 
-                        if i0 != len(shape)-1:
-                            newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
-                        else:
-                            newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+                    # for i0 in range(len(shape)): 
+                    #     if i0 != len(shape)-1:
+                    #         newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+                    #     else:
+                    #         newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
 
-                    newline += indent*(len(shape)+1) + 'if (i{} == 0) {}[i{}].write(pTest);\n'.format(len(shape)-1, inp.cppname, len(shape)-1)
+                    newline += indent + 'for(int i0 = 0; i0 < {}*{}; i0++) {{\n'.format(shape[0], shape[1])
+                    newline += indent + 'for(int i2 = 0; i2 < {}+1; i2++) {{\n'.format(shape[-1])
+                    
+                    newline += indent + 'if (i{} == 0) {}[i{}].write(pTest);\n'.format(len(shape)-1, inp.cppname, len(shape)-1)
 
-                    newline += indent*(len(shape)+1) + 'if (i{} > 0 && i{} < 1) {}[i{}].write(iX + 1);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
-                    newline += indent*(len(shape)+1) + 'if (i{} > 0 && i{} > 0) {}[i{}].write(iX + 32);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
+                    newline += indent + 'if (i{} > 0 && i{} < 1) {}[i{}].write(iX + 1);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
+                    newline += indent + 'if (i{} > 0 && i{} > 0) {}[i{}].write(iX + 32);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
 
-                    newline += indent*(len(shape)+1) + 'if (pTest == 0) pTest = 1;\n'
+                    newline += indent + 'if (pTest == 0) pTest = 1;\n'
 
-                    for i0 in range(len(shape)): 
-                        newline += indent*(len(shape)-i0) + '}\n'
+                    newline += indent + '}\n'
+                    newline += indent + '}\n'
+                    # for i0 in range(len(shape)): 
+                    #     newline += indent*(len(shape)-i0) + '}\n'
                 for out in model.get_output_variables():
                     output_str = '    ' + out.definition_cpp().replace('static','') + ';\n'
                     newline += output_str
