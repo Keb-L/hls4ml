@@ -943,9 +943,13 @@ class Dense(Layer):
             params['n_output'] = self.get_output_variable().size_cpp(isSerial=True)
             params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)+'-1'
             params['n_out'] = self.get_output_variable().size_cpp(isSerial=True)+'-1'
+
+            params['reuse'] = self.model.config.backend.set_closest_reuse_factor(self, params['reuse'])
+
             if len(self.get_input_variable().shape) > 2 and (self.get_input_variable().size()/self.get_input_variable().shape[2]) != 1:
                 params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)
                 params['block_factor'] =  (self.get_input_variable().size()/self.get_input_variable().shape[2])
+            
             #elif len(self.get_input_variable().shape) > 1:
             #    print('input2',self.get_input_variable(),',',self.get_input_variable().shape,',',self.get_input_variable().size())
             #    params['block_factor'] =  (self.get_input_variable().size()/self.get_input_variable().shape[1])
@@ -1109,25 +1113,26 @@ class Conv2D(Layer):
             chosen_rf = self.model.config.get_reuse_factor(self)
             #use chosen to balance the throughput in clocks
             shape = self.get_output_variable().shape
-            if chosen_rf < 6*shape[1]*shape[2]: #6 clock min
-                print("Chosen latency cannot be achieved with a signle stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
-            else: 
-                chosen_rf = chosen_rf-6*shape[1]*shape[2]
-            approxrf=float(chosen_rf)/shape[1]/shape[2]
-            if self.get_attr('data_format') == 'channels_last':
-                approxrf=float(chosen_rf)/shape[0]/shape[1]
-            print("Approx RF2",shape[0],shape[1],shape[2],approxrf,self.get_attr('data_format'),self.name)
-            chosen_rf = valid_rf[0]
-            for rf in valid_rf:
-                if approxrf < rf:
-                    break
-                chosen_rf = rf
-            print("Choosing RF",chosen_rf,self.name)
+            # if chosen_rf < 6*shape[1]*shape[2]: #6 clock min
+            #     print("Chosen latency cannot be achieved with a signle stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
+            # else: 
+            #     chosen_rf = chosen_rf-6*shape[1]*shape[2]
+            # approxrf=float(chosen_rf)/shape[1]/shape[2]
+            # if self.get_attr('data_format') == 'channels_last':
+            #     approxrf=float(chosen_rf)/shape[0]/shape[1]
+            # print("Approx RF2",shape[0],shape[1],shape[2],approxrf,self.get_attr('data_format'),self.name)
+            # chosen_rf = valid_rf[0]
+            # for rf in valid_rf:
+            #     if approxrf < rf:
+            #         break
+            #     chosen_rf = rf
+            # print("Choosing RF",chosen_rf,self.name)
             params = self._default_function_params()
-            if chosen_rf not in valid_rf:
-                print('WARNING: Using invalid ReuseFactor={} with "Resource" strategy in layer "{}". Valid ReuseFactor(s): {}'
-                      .format(chosen_rf, self.name, ','.join(map(str, valid_rf))))
-            return chosen_rf
+            return self.model.config.backend.set_closest_reuse_factor(self, chosen_rf)
+
+            # if chosen_rf not in valid_rf:
+            #     print('WARNING: Using invalid ReuseFactor={} with "Resource" strategy in layer "{}". Valid ReuseFactor(s): {}'
+            #           .format(chosen_rf, self.name, ','.join(map(str, valid_rf))))
         else:
             return self.model.config.get_reuse_factor(self)
 
@@ -1269,7 +1274,7 @@ class Pooling2D(Layer):
             dims = ['N_FILT_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
 
         depth=self.attributes['out_width']*self.attributes['out_height'] #(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
-        print("adding :",shape,dims)
+
         self.add_output_variable(shape, dims,cl=cl,depth=depth)
         self.set_attr('pool_op', self.get_attr('class_name').split('Pooling')[0])
         self.is1x1 = False
@@ -1435,7 +1440,7 @@ class BatchNormalization(Layer):
         #if 'FILT' not in dims[0] and len(dims) > 2:
         #    dims  = [dims[2],dims[1],dims[0]]
         #    shape = [shape[2],shape[1],shape[0]]
-        print(np.array(shape))
+
         if len(shape) > 1:
             depth=np.prod(shape[:-1]) # randome number for now
         else:

@@ -439,8 +439,10 @@ class VivadoWriter(Writer):
             elif '//hls-fpga-machine-learning insert layers' in line:
                 newline = line + '\n'
                 inputs = model.get_input_variables()
+                layer_vars = model.output_vars
                 outputs = model.get_output_variables()
                 first=True
+
                 for layer in model.get_layers():
                     last_layer = layer is list(model.get_layers())[-1]
 
@@ -456,7 +458,7 @@ class VivadoWriter(Writer):
                                     newline += '    ' + var.pragma + '\n'
 
                     func = layer.function_cpp(first)
-                    if last_layer:
+                    if last_layer: # for the last layer, insert temporary layer
                         output_vars = model.get_output_variables()[-1]
                         temp_stream = output_vars.name[:-4]+'b_out'
                         newline += '\thls::stream<{type}>{name}[{shape}];\n'.format(type='result_t', name=temp_stream, shape=output_vars.dim_names[-1])
@@ -466,15 +468,14 @@ class VivadoWriter(Writer):
 
                     if 'put' not in layer.name: #put is short for input
                         first=False
+
                     if func:
                         # add for loop if channels != 1
-                        multichannel = False
-                        layer_vars = layer.variables[layer.outputs[-1]]
-                        if (layer_vars.cl or layer.attributes['class_name'] == 'BatchNormalization') and layer_vars.shape[-1] > 1:
-                            multichannel = True
-                    
+                        layer_input_shape = layer_vars[layer.inputs[-1]].shape
+                        multichannel = len(layer_input_shape) > 1
+
                         if multichannel:
-                            newline += '\tfor(int i0 = 0; i0 < %d*%d; i0++) {\n\t' % (layer_vars.shape[0], layer_vars.shape[1])    
+                            newline += '\tfor(int i0 = 0; i0 < %d*%d; i0++) {\n\t' % (layer_input_shape[0], layer_input_shape[1])    
 
                         for line in func:
                             newline += '\t' + line + '\n'
@@ -483,11 +484,16 @@ class VivadoWriter(Writer):
                         newline += '\n'
                     
                     if last_layer:
-                        newline += '\tfor(int i0 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=output_vars.dim_names[-1])
+                        layer_output_shape = output_vars.shape
+                        if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {%d}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
+                        newline += '\tfor(int i1 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
                         newline += '\t\t#pragma HLS UNROLL\n'
                         newline += '\t\tresult_t pTmp = (result_t) {name}[i0].read();\n'.format(name=temp_stream)
                         newline += '\t\t{name}[i0].write(pTmp);\n'.format(name=output_vars.cppname)
                         newline += '\t}\n'
+                        if len(layer_output_shape) > 1: newline += '\t}\n'
+
+                    prev_layer = layer
 
             #Just copy line
             else:
@@ -775,33 +781,28 @@ class VivadoWriter(Writer):
                 for bram in model_brams:
                     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
-                    newline+= '{} pTest = 1;\n'.format(inp.type.name)
+                    newline += indent + 'for(int iX = 0; iX < 5; iX++){\n'
+
+                    newline+= indent + '{} pTest = 1;\n'.format(inp.type.name)
                     input_str = '    ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
                     shape=inp.shape
                     #add a for loop
                     for i0 in range(len(shape)): 
                         if i0 != len(shape)-1:
-                            newline += indent + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+                            newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
                         else:
-                            newline += indent + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
-                    cl=inp.cl
-                    val=0 if cl else 2
-                    ifstate=''
-                    if val > 0: 
-                        val = len(shape)
-                        ifstate='if(i'
-                        for i in range(val):
-                            ifstate+=str(i)
-                            if i < val-1:
-                                ifstate+="== 0 && i"
-                            else:
-                                ifstate+="== 0)"
-                    ifnotstate=ifstate.replace('if(','if(!(').replace(')','))')
-                    newline += indent + ifstate    + ' {}[i{}].write(0);\n'.format(inp.cppname,val-1)
-                    newline += indent + ifnotstate + ' {}[i{}].write(1);\n'.format(inp.cppname,val-1)
+                            newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+
+                    newline += indent*(len(shape)+1) + 'if (i{} == 0) {}[i{}].write(pTest);\n'.format(len(shape)-1, inp.cppname, len(shape)-1)
+
+                    newline += indent*(len(shape)+1) + 'if (i{} > 0 && i{} < 1) {}[i{}].write(iX + 1);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
+                    newline += indent*(len(shape)+1) + 'if (i{} > 0 && i{} > 0) {}[i{}].write(iX + 32);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
+
+                    newline += indent*(len(shape)+1) + 'if (pTest == 0) pTest = 1;\n'
+
                     for i0 in range(len(shape)): 
-                        newline += indent + '}\n'
+                        newline += indent*(len(shape)-i0) + '}\n'
                 for out in model.get_output_variables():
                     output_str = '    ' + out.definition_cpp().replace('static','') + ';\n'
                     newline += output_str
@@ -842,6 +843,7 @@ class VivadoWriter(Writer):
                     for i0 in range(len(shape)): 
                         newline += indent + '}\n'
                     newline += indent + 'fout << std::endl;\n'
+                    newline += indent + '}\n'
             else:
                 newline = line
             fout.write(newline)
