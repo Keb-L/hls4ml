@@ -362,9 +362,10 @@ class VivadoWriter(Writer):
         filedir = os.path.dirname(os.path.abspath(__file__))
         f = open(os.path.join(filedir,'../templates/vivado/firmware/myproject.cpp'),'r')
         fout = open('{}/firmware/{}.cpp'.format(model.config.get_output_dir(), model.config.get_project_name()),'w')
-        serial=''
-        if model.config.get_config_value('IOType') == 'io_serial':
-            serial='_in'
+
+        # serial=''
+        # if model.config.get_config_value('IOType') == 'io_serial':
+        #     serial='_in'
 
         model_inputs  = model.get_input_variables()
         model_outputs = model.get_output_variables()
@@ -375,10 +376,10 @@ class VivadoWriter(Writer):
         for line in f.readlines():
             #Add headers to weights and biases
             if 'myproject' in line:
-                if 'void' in line:
-                    newline = line.replace('myproject', model.config.get_project_name()+serial)
-                else:
-                    newline = line.replace('myproject', model.config.get_project_name())
+                # if 'void' in line:
+                #     newline = line.replace('myproject', model.config.get_project_name()+serial)
+                # else:
+                newline = line.replace('myproject', model.config.get_project_name())
             elif '//hls-fpga-machine-learning insert header' in line:
                 inputs_str = ', '.join([i.definition_cpp() for i in model_inputs])
                 outputs_str = ', '.join([o.definition_cpp() for o in model_outputs])
@@ -503,51 +504,52 @@ class VivadoWriter(Writer):
 
         fout.write('\n')
         fout.write('\n')
-        if model.config.get_config_value('IOType') == 'io_serial':
-            newline = 'void {}(\n'.format(model.config.get_project_name())
-            inputs_str = ', '.join([i.definition_cpp().replace('static','') for i in model_inputs])
-            outputs_str = ', '.join([o.definition_cpp().replace('static','') for o in model_outputs])
-            if len(model_brams) > 0:
-                brams_str  = ',\n'.join([o.definition_cpp() for o in model_brams])
-            insize_str = ', '.join(['unsigned short &const_size_in_{}'.format(i) for i in range(1, len(model_inputs) + 1)])
-            outsize_str = ', '.join(['unsigned short &const_size_out_{}'.format(o) for o in range(1, len(model_outputs) + 1)])
-            newline += indent + inputs_str  + ',\n'
-            newline += indent + outputs_str + ',\n'
-            if len(model_brams) > 0:
-                newline += indent + brams_str + ',\n'
-            newline += indent + insize_str  + ',\n'
-            newline += indent + outsize_str + '\n'
-            newline += ') { \n'
-            for inp in model.get_input_variables():
-                shape=inp.shape
-                #add a for loop
-                irange=[shape[0],shape[1]]
-                if not cl:
-                    irange=[shape[1],shape[2]]
-                if len(shape) == 2: 
-                    irange=[shape[0]] if cl else [shape[1]]
-                # KL comment out for latency testing
-                # for i0 in range(len(irange)):
-                #     for i1 in range(i0):
-                #         newline += indent
-                #     newline += 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,irange[i0],i0)
-                # for i1 in range(len(irange)):
-                #     newline += indent
-                inputs=', '.join([i.name for i in model_inputs]) 
-                outputs=', '.join([i.name for i in model_outputs]) 
-                brams=', '.join([i.name for i in model_brams]) 
-                insize=', '.join(['const_size_in_{}'.format(i) for i in range(1, len(model_inputs) + 1)])
-                outsize=', '.join(['const_size_out_{}'.format(o) for o in range(1, len(model_outputs) + 1)])
-                if len(model_brams) > 0: 
-                       newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+brams+','+insize+','+outsize+');\n'
-                else:
-                       newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+insize+','+outsize+');\n'
-                # for i0 in irange:
-                #     for i1 in range(i0):
-                #         newline += indent
-                #     newline += '}\n'
-            newline+='}\n'
-            fout.write(newline)
+        # if model.config.get_config_value('IOType') == 'io_serial':
+            # newline = 'void {}(\n'.format(model.config.get_project_name())
+            # inputs_str = ', '.join([i.definition_cpp().replace('static','') for i in model_inputs])
+            # outputs_str = ', '.join([o.definition_cpp().replace('static','') for o in model_outputs])
+            # if len(model_brams) > 0:
+            #     brams_str  = ',\n'.join([o.definition_cpp() for o in model_brams])
+            # insize_str = ', '.join(['unsigned short &const_size_in_{}'.format(i) for i in range(1, len(model_inputs) + 1)])
+            # outsize_str = ', '.join(['unsigned short &const_size_out_{}'.format(o) for o in range(1, len(model_outputs) + 1)])
+            # newline += indent + inputs_str  + ',\n'
+            # newline += indent + outputs_str + ',\n'
+            # if len(model_brams) > 0:
+            #     newline += indent + brams_str + ',\n'
+            # newline += indent + insize_str  + ',\n'
+            # newline += indent + outsize_str + '\n'
+            # newline += ') { \n'
+            # for inp in model.get_input_variables():
+            #     shape=inp.shape
+            #     #add a for loop
+            #     irange=[shape[0],shape[1]]
+            #     if not cl:
+            #         irange=[shape[1],shape[2]]
+            #     if len(shape) == 2: 
+            #         irange=[shape[0]] if cl else [shape[1]]
+            #     # KL comment out for latency testing
+            #     # for i0 in range(len(irange)):
+            #     #     for i1 in range(i0):
+            #     #         newline += indent
+            #     #     newline += 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,irange[i0],i0)
+            #     # for i1 in range(len(irange)):
+            #     #     newline += indent
+            #     inputs=', '.join([i.name for i in model_inputs]) 
+            #     outputs=', '.join([i.name for i in model_outputs]) 
+            #     brams=', '.join([i.name for i in model_brams]) 
+            #     insize=', '.join(['const_size_in_{}'.format(i) for i in range(1, len(model_inputs) + 1)])
+            #     outsize=', '.join(['const_size_out_{}'.format(o) for o in range(1, len(model_outputs) + 1)])
+            #     if len(model_brams) > 0: 
+            #            newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+brams+','+insize+','+outsize+');\n'
+            #     else:
+            #            newline += ('{}{}'.format(model.config.get_project_name(),serial))+'('+inputs+','+outputs+','+insize+','+outsize+');\n'
+            #     # for i0 in irange:
+            #     #     for i1 in range(i0):
+            #     #         newline += indent
+            #     #     newline += '}\n'
+            # newline+='}\n'
+            # fout.write(newline)
+       
         f.close()
         fout.close()
 
