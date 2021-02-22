@@ -401,8 +401,9 @@ namespace nnet
       if ((pX - lShiftX) % CONFIG_T::stride_width == 0 && (pY - lShiftY) % CONFIG_T::stride_height == 0 && pY > lShiftY - 1 && pX > lShiftX - 1)
       {
         nnet::dense_large<data_T, res_T, typename CONFIG_T::mult_config>(layer_in, layer_reluout, weights, biases);
-        //nnet::relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_out, layer_reluout);
-        nnet::fill_image<data_T, data_T, CONFIG_T>(layer_reluout, pReset, res);
+        nnet::leaky_relu<data_T, res_T, typename CONFIG_T::relu_config>(layer_reluout, 30000001192092896, layer_out);
+        // nnet::relu<res_T,res_T,typename CONFIG_T::relu_config>(layer_out, layer_reluout);
+        nnet::fill_image<data_T, data_T, CONFIG_T>(layer_out, pReset, res);
         if (pReset == 0)
           pReset = 1;
       }
@@ -505,8 +506,8 @@ namespace nnet
     static data_T layer_in[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
     #pragma HLS ARRAY_RESHAPE variable = layer_in complete
 
-    // res_T layer_reluout[CONFIG_T::n_filt];
-    // #pragma HLS ARRAY_RESHAPE variable = layer_reluout complete dim = 0
+    res_T layer_reluout[CONFIG_T::n_filt];
+    #pragma HLS ARRAY_RESHAPE variable = layer_reluout complete dim = 0
 
     res_T layer_out[CONFIG_T::n_filt];
     #pragma HLS ARRAY_RESHAPE variable = layer_out complete dim = 0
@@ -540,7 +541,8 @@ namespace nnet
         #pragma HLS UNROLL
         filter_in[itmp] = layer_in[itmp];
       }
-      nnet::dense_large<data_T, res_T, typename CONFIG_T::mult_config>(filter_in, layer_out, weights, biases);
+      nnet::dense_large<data_T, res_T, typename CONFIG_T::mult_config>(filter_in, layer_reluout, weights, biases);
+      nnet::leaky_relu<data_T, res_T, typename CONFIG_T::relu_config>(layer_reluout, 30000001192092896, layer_out);
       nnet::fill_image<data_T, data_T, CONFIG_T>(layer_out, pReset, res);
       if (pReset == 0) pReset = 1;
     }

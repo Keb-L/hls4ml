@@ -757,7 +757,7 @@ class VivadoWriter(Writer):
                 for bram in model_brams:
                     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
-                    newline += indent + 'for(int iX = 0; iX < 5; iX++){\n'
+                    newline += indent + 'for(int iX = 0; iX < 11; iX++){\n'
                     newline+= 'unsigned index=0;\n'
                     input_str = '      ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
@@ -784,7 +784,7 @@ class VivadoWriter(Writer):
                 for bram in model_brams:
                     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
-                    newline += indent + 'for(int iX = 0; iX < 5; iX++){\n'
+                    newline += indent + 'for(int iX = 0; iX < 11; iX++){\n'
 
                     newline+= indent + '{} pTest = 0;\n'.format(inp.type.name)
                     input_str = '    ' + inp.definition_cpp().replace('static','') + ';\n'
