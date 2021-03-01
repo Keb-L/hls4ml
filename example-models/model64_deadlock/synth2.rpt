@@ -1,0 +1,116 @@
+Found 1 solution(s) in ./myproject_prj.
+Reports for solution "solution1":
+
+C SIMULATION RESULT:
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Compiling ../../../../myproject_test.cpp in debug mode
+   Compiling ../../../../firmware/myproject.cpp in debug mode
+   Generating csim.exe
+INFO: Unable to open input/predictions file, using default input.
+Iteration 0
+Iteration 1
+Iteration 2
+Iteration 3
+Iteration 4
+Iteration 5
+Iteration 6
+Iteration 7
+Iteration 8
+Iteration 9
+Iteration 10
+INFO: Saved inference results to file: tb_data/csim_results.log
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************
+
+SYNTHESIS REPORT:
+================================================================
+== Vivado HLS Report for 'myproject'
+================================================================
+* Date:           Tue Feb 23 12:39:10 2021
+
+* Version:        2019.1 (Build 2552052 on Fri May 24 15:28:33 MDT 2019)
+* Project:        myproject_prj
+* Solution:       solution1
+* Product family: kintexu
+* Target device:  xcku115-flvb2104-2-i
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |   5.00|     4.355|        0.62|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +---------+---------+------+---------+----------+
+    |      Latency      |    Interval    | Pipeline |
+    |   min   |   max   |  min |   max   |   Type   |
+    +---------+---------+------+---------+----------+
+    |  4848342|  4867329|  2562|  4867330| dataflow |
+    +---------+---------+------+---------+----------+
+
+    + Detail: 
+        * Instance: 
+        +-------------------+----------------+------+---------+------+---------+---------+
+        |                   |                |     Latency    |    Interval    | Pipeline|
+        |      Instance     |     Module     |  min |   max   |  min |   max   |   Type  |
+        +-------------------+----------------+------+---------+------+---------+---------+
+        |Loop_3_proc_U0     |Loop_3_proc     |   385|   561217|   385|   561217|   none  |
+        |Loop_2_proc_U0     |Loop_2_proc     |  2561|     2561|  2561|     2561|   none  |
+        |Loop_1_proc_U0     |Loop_1_proc     |  1793|  4867329|  1793|  4867329|   none  |
+        |Loop_4_proc244_U0  |Loop_4_proc244  |   129|      129|   129|      129|   none  |
+        |Block_proc_U0      |Block_proc      |     0|        0|     0|        0|   none  |
+        +-------------------+----------------+------+---------+------+---------+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+-------+---------+--------+-----+
+|         Name        | BRAM_18K| DSP48E|    FF   |   LUT  | URAM|
++---------------------+---------+-------+---------+--------+-----+
+|DSP                  |        -|      -|        -|       -|    -|
+|Expression           |        -|      -|        0|      45|    -|
+|FIFO                 |      259|      -|    13209|   21238|    -|
+|Instance             |       97|    576|   104980|  174429|    -|
+|Memory               |        -|      -|        -|       -|    -|
+|Multiplexer          |        -|      -|        -|      54|    -|
+|Register             |        -|      -|        9|       -|    -|
++---------------------+---------+-------+---------+--------+-----+
+|Total                |      356|    576|   118198|  195766|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Available SLR        |     2160|   2760|   663360|  331680|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Utilization SLR (%)  |       16|     20|       17|      59|  100|
++---------------------+---------+-------+---------+--------+-----+
+|Available            |     4320|   5520|  1326720|  663360|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Utilization (%)      |        8|     10|        8|      29|    0|
++---------------------+---------+-------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +-------------------+----------------+---------+-------+-------+-------+-----+
+    |      Instance     |     Module     | BRAM_18K| DSP48E|   FF  |  LUT  | URAM|
+    +-------------------+----------------+---------+-------+-------+-------+-----+
+    |Block_proc_U0      |Block_proc      |        0|      0|      2|     11|    0|
+    |Loop_1_proc_U0     |Loop_1_proc     |       33|     64|  10252|  26186|    0|
+    |Loop_2_proc_U0     |Loop_2_proc     |       64|      0|  18833|  64989|    0|
+    |Loop_3_proc_U0     |Loop_3_proc     |        0|    512|  71231|  76204|    0|
+    |Loop_4_proc244_U0  |Loop_4_proc244  |        0|      0|   4662|   7039|    0|
+    +-------------------+----------------+---------+-------+-------+-------+-----+
+    |Total              |                |       97|    576| 104980| 174429|    0|
+    +-------------------+----------------+---------+-------+-------+-------+-----+
+

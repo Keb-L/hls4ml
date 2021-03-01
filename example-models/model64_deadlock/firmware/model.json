@@ -1,0 +1,93 @@
+{
+    "ips": [
+        {
+            "inputs": [
+                {
+                    "name": "input",
+                    "width": 17
+                }
+            ],
+            "inst": "layer2",
+            "kernel": "conv_2d_large_cl",
+            "outputs": [
+                {
+                    "name": "output",
+                    "output_inst": "layer6",
+                    "output_port": "input",
+                    "width": 17
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "name": "input",
+                    "width": 17
+                }
+            ],
+            "inst": "layer6",
+            "kernel": "pooling2d_cl",
+            "outputs": [
+                {
+                    "name": "output",
+                    "output_inst": "layer7",
+                    "output_port": "input",
+                    "width": 9
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "name": "input",
+                    "width": 9
+                }
+            ],
+            "inst": "layer7",
+            "kernel": "conv_2d_large_cl",
+            "outputs": [
+                {
+                    "name": "output",
+                    "output_inst": "layer11",
+                    "output_port": "input",
+                    "width": 9
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "name": "input",
+                    "width": 9
+                }
+            ],
+            "inst": "layer11",
+            "kernel": "conv_2d_large_cl",
+            "outputs": [
+                {
+                    "name": "output",
+                    "output_inst": "layer15",
+                    "output_port": "input",
+                    "width": 9
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "name": "input",
+                    "width": 9
+                }
+            ],
+            "inst": "layer15",
+            "kernel": "pooling2d_cl",
+            "outputs": [
+                {
+                    "dest": 0,
+                    "name": "output",
+                    "width": 5
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,113 @@
+Found 1 solution(s) in ./myproject_prj.
+Reports for solution "solution1":
+
+C SIMULATION RESULT:
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Compiling ../../../../myproject_test.cpp in debug mode
+   Compiling ../../../../firmware/myproject.cpp in debug mode
+   Generating csim.exe
+INFO: Unable to open input/predictions file, using default input.
+INFO: Saved inference results to file: tb_data/csim_results.log
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************
+
+SYNTHESIS REPORT:
+================================================================
+== Vivado HLS Report for 'myproject'
+================================================================
+* Date:           Mon Feb 22 21:22:22 2021
+
+* Version:        2019.1 (Build 2552052 on Fri May 24 15:28:33 MDT 2019)
+* Project:        myproject_prj
+* Solution:       solution1
+* Product family: kintexu
+* Target device:  xcku115-flvb2104-2-i
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |   5.00|     4.375|        0.62|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +---------+---------+------+---------+----------+
+    |      Latency      |    Interval    | Pipeline |
+    |   min   |   max   |  min |   max   |   Type   |
+    +---------+---------+------+---------+----------+
+    |  4848356|  4867329|  2562|  4867330| dataflow |
+    +---------+---------+------+---------+----------+
+
+    + Detail: 
+        * Instance: 
+        +-------------------------+----------------------+------+---------+------+---------+---------+
+        |                         |                      |     Latency    |    Interval    | Pipeline|
+        |         Instance        |        Module        |  min |   max   |  min |   max   |   Type  |
+        +-------------------------+----------------------+------+---------+------+---------+---------+
+        |Loop_4_proc_U0           |Loop_4_proc           |   385|   706049|   385|   706049|   none  |
+        |Loop_6_proc_U0           |Loop_6_proc           |    81|     1185|    81|     1185|   none  |
+        |Loop_5_proc_U0           |Loop_5_proc           |   641|      641|   641|      641|   none  |
+        |Loop_3_proc_U0           |Loop_3_proc           |   385|   561217|   385|   561217|   none  |
+        |Loop_2_proc_U0           |Loop_2_proc           |  2561|     2561|  2561|     2561|   none  |
+        |Loop_1_proc_U0           |Loop_1_proc           |  1793|  4867329|  1793|  4867329|   none  |
+        |softmax_stream_U0        |softmax_stream        |    68|       68|    68|       68|   none  |
+        |Block_arrayctor_loop_U0  |Block_arrayctor_loop  |     1|        1|     1|        1|   none  |
+        |Block_proc_U0            |Block_proc            |     0|        0|     0|        0|   none  |
+        +-------------------------+----------------------+------+---------+------+---------+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+-------+---------+--------+-----+
+|         Name        | BRAM_18K| DSP48E|    FF   |   LUT  | URAM|
++---------------------+---------+-------+---------+--------+-----+
+|DSP                  |        -|      -|        -|       -|    -|
+|Expression           |        -|      -|        0|      58|    -|
+|FIFO                 |      388|      -|    15158|   21708|    -|
+|Instance             |      346|   1515|   315557|  487446|    0|
+|Memory               |        -|      -|        -|       -|    -|
+|Multiplexer          |        -|      -|        -|      72|    -|
+|Register             |        -|      -|       12|       -|    -|
++---------------------+---------+-------+---------+--------+-----+
+|Total                |      734|   1515|   330727|  509284|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Available SLR        |     2160|   2760|   663360|  331680|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Utilization SLR (%)  |       33|     54|       49|     153|  100|
++---------------------+---------+-------+---------+--------+-----+
+|Available            |     4320|   5520|  1326720|  663360|    0|
++---------------------+---------+-------+---------+--------+-----+
+|Utilization (%)      |       16|     27|       24|      76|    0|
++---------------------+---------+-------+---------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +-------------------------+----------------------+---------+-------+--------+--------+-----+
+    |         Instance        |        Module        | BRAM_18K| DSP48E|   FF   |   LUT  | URAM|
+    +-------------------------+----------------------+---------+-------+--------+--------+-----+
+    |Block_arrayctor_loop_U0  |Block_arrayctor_loop  |        0|      0|     327|     516|    0|
+    |Block_proc_U0            |Block_proc            |        0|      0|       2|      11|    0|
+    |Loop_1_proc_U0           |Loop_1_proc           |       33|     64|   10252|   25896|    0|
+    |Loop_2_proc_U0           |Loop_2_proc           |       64|      0|   18833|   64989|    0|
+    |Loop_3_proc_U0           |Loop_3_proc           |        0|    512|   71230|   77091|    0|
+    |Loop_4_proc_U0           |Loop_4_proc           |        0|    683|  124377|  143640|    0|
+    |Loop_5_proc_U0           |Loop_5_proc           |      128|      0|   37486|  129411|    0|
+    |Loop_6_proc_U0           |Loop_6_proc           |      114|    256|   51973|   42539|    0|
+    |softmax_stream_U0        |softmax_stream        |        7|      0|    1077|    3353|    0|
+    +-------------------------+----------------------+---------+-------+--------+--------+-----+
+    |Total                    |                      |      346|   1515|  315557|  487446|    0|
+    +-------------------------+----------------------+---------+-------+--------+--------+-----+
+
