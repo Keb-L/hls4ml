@@ -486,7 +486,7 @@ class VivadoWriter(Writer):
                     
                     if last_layer:
                         layer_output_shape = output_vars.shape
-                        if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {%d}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
+                        if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
                         newline += '\tfor(int i0 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
                         newline += '\t\t#pragma HLS UNROLL\n'
                         newline += '\t\tresult_t pTmp = (result_t) {name}[i0].read();\n'.format(name=temp_stream)
