@@ -469,19 +469,26 @@ class VivadoWriter(Writer):
 
                     if 'put' not in layer.name: #put is short for input
                         first=False
+                    
+                    # Remove loop
+                    # if func:
+                    #     # add for loop if channels != 1
+                    #     layer_input_shape = layer_vars[layer.inputs[-1]].shape
+                    #     multichannel = len(layer_input_shape) > 1
 
+                    #     if multichannel:
+                    #         newline += '\tfor(int i0 = 0; i0 < %d*%d; i0++) {\n\t' % (layer_input_shape[0], layer_input_shape[1])    
+
+                    #     for line in func:
+                    #         newline += '\t' + line + '\n'
+                    #     if multichannel:
+                    #         newline += '\t}\n'
+                    #     newline += '\n'
+
+                    # Write the layer function
                     if func:
-                        # add for loop if channels != 1
-                        layer_input_shape = layer_vars[layer.inputs[-1]].shape
-                        multichannel = len(layer_input_shape) > 1
-
-                        if multichannel:
-                            newline += '\tfor(int i0 = 0; i0 < %d*%d; i0++) {\n\t' % (layer_input_shape[0], layer_input_shape[1])    
-
                         for line in func:
-                            newline += '\t' + line + '\n'
-                        if multichannel:
-                            newline += '\t}\n'
+                                newline += '\t' + line + '\n'
                         newline += '\n'
                     
                     if last_layer:

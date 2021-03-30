@@ -247,7 +247,7 @@ pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {ou
 pooling2d_function_template = 'nnet::pooling2d_{data_format}{1x1}<{input_t}, {output_t}, {config}>({input}, {output});'
 merge_function_template = 'nnet::{merge}{strategy}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}>({input}, {output1}, {output2});'
-copy_function_template = 'nnet::copy<{input_t}, {output_t}, {size}>({input}, {output});'
+copy_function_template = 'nnet::copy<{input_t}, {output_t}, {config}>({input}, {output});'
 
 '''function_templates = {
     'Dense'                  : dense_function_template,

@@ -1771,7 +1771,9 @@ class Concatenate(Merge):
 class Copy(Layer):
     def initialize(self):
         inp = self.get_input_variable()
-        self.add_output_variable(inp.shape, inp.dim_names, out_name=self.outputs[0], var_name='layer{index}_cpy')
+        cl = self.get_attr('data_format') == 'channels_last'
+        depth = self.get_attr('n_elem')
+        self.add_output_variable(inp.shape, inp.dim_names, depth=depth, cl=cl, out_name=self.outputs[0], var_name='layer{index}_cpy')
 
     def config_cpp(self):
         params = self._default_config_params()

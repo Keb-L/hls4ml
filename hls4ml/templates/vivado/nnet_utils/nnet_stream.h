@@ -4,13 +4,13 @@
 
 #include "hls_stream.h"
 
-template<class data_T, class res_T, int N>
+template<class data_T, class res_T, typename CONFIG_T>
 void copy_stream(
     hls::stream<data_T> data[CONFIG_T::n_chan], 
     hls::stream<data_T> res[CONFIG_T::n_chan]) {
-    // Copy N values from input to output stream
+    // Copy all values from input to output stream
 
-    CopyLoop: for(int i = 0; i < N; i++) {
+    CopyLoop: for(int i = 0; i < CONFIG_T::n_elem; i++) {
         #pragma HLS PIPELINE
 
         // Copy each channel over to the new stream
