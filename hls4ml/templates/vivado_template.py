@@ -210,6 +210,12 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
     static const unsigned axis = {axis};
 }};\n"""
 
+copy_config_template = """struct config{index} : nnet::copy_config {{
+    static const unsigned n_chan = {n_chan};
+    static const unsigned in_height = {in_height};
+    static const unsigned in_width = {in_width};
+}};\n"""
+
 '''config_templates = {
     'Dense'                  : dense_config_template,
     'BinaryDense'            : dense_config_template,
@@ -226,6 +232,7 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
     'Merge'                  : merge_config_template,
     'Split'                  : split_config_template,
     'Concatenate'            : concat_config_template,
+    'Copy'                   : copy_config_template,
 }'''
 
 dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
@@ -240,6 +247,7 @@ pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {ou
 pooling2d_function_template = 'nnet::pooling2d_{data_format}{1x1}<{input_t}, {output_t}, {config}>({input}, {output});'
 merge_function_template = 'nnet::{merge}{strategy}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}>({input}, {output1}, {output2});'
+copy_function_template = 'nnet::copy<{input_t}, {output_t}, {size}>({input}, {output});'
 
 '''function_templates = {
     'Dense'                  : dense_function_template,
@@ -256,7 +264,8 @@ split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}
     'Pooling2D'              : pooling2d_function_template,
     'Merge'                  : merge_function_template,
     'Concatenate'            : merge_function_template,
-    'Split'                  : split_function_template,   
+    'Split'                  : split_function_template,  
+    'Copy',                  : copy_function_template, 
 }'''
 
 
@@ -336,6 +345,15 @@ set layer_type nnet_split{strategy}
 source ../common/build.tcl
 \n"""
 
+copy_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan} -DN_OUTPUT={n_chan}"
+set arg_1 "-DCONFIG={config}"
+set arg_2 "-DINPUT_T={input_t} -DLAYER_T={output_t}"
+set args "$arg_0 $arg_1 $arg_2
+set layer_type copy
+\n
+source ../common/build.tcl
+\n"""
+
 '''tcl_templates = {
     'Dense'                  : dense_tcl_template,
     'BinaryDense'            : dense_tcl_template,
@@ -349,6 +367,7 @@ source ../common/build.tcl
     'Merge'                  : merge_tcl_template,
     'Concatenate'            : merge_tcl_template,
     'Split'                  : split_tcl_template,   
+    'Copy'                   : copy_tcl_template,
 }'''
 
 
@@ -370,6 +389,7 @@ class VivadoBackend(Backend):
         self.register_templates('Merge'                  , merge_function_template,       merge_config_template,merge_tcl_template)
         self.register_templates('Concatenate'            , merge_function_template,       concat_config_template,merge_tcl_template)
         self.register_templates('Split'                  , split_function_template,       split_config_template,split_tcl_template)
+        self.register_templates('Copy'                   , copy_function_template,        copy_config_template,copy_tcl_template)
     
     def get_valid_reuse_factors(self, layer):
         n_in = 0

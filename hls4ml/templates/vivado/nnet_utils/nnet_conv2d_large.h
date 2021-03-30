@@ -557,7 +557,7 @@ namespace nnet
   }
 
   template <class data_T, class res_T, typename CONFIG_T>
-  void conv_2d_large_cl2(
+  void compute_conv2d(
       hls::stream<data_T> data[CONFIG_T::n_chan_in],
       hls::stream<res_T> res[CONFIG_T::n_filt_in],
       typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt / CONFIG_T::mult_config::merge_factor],
@@ -575,6 +575,24 @@ namespace nnet
     {
       conv_2d_large_cl_padded<data_T, res_T, CONFIG_T>(padded_data, res, weights, biases);
     }
+  }
+
+  template <class data_T, class res_T, typename CONFIG_T>
+  void conv_2d_large_cl2(
+      hls::stream<data_T> data[CONFIG_T::n_chan_in],
+      hls::stream<res_T> res[CONFIG_T::n_filt_in],
+      typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt / CONFIG_T::mult_config::merge_factor],
+      typename CONFIG_T::bias_t biases[CONFIG_T::n_filt])
+  {
+    // TODO: Add data type conversion housekeeping
+
+    ReadInputHeight: for(int i0 = 0; i0 < CONFIG_T::in_height; i0++) {
+      ReadInputWidth: for(int i1 = 0; i1 < CONFIG_T::in_width; i1++) {
+        #pragma HLS LOOP_FLATTEN
+        compute_conv2d<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+      }
+    }
+
   }
 
 } // namespace nnet

@@ -938,5 +938,5 @@ class VivadoWriter(Writer):
         self.write_nnet_utils(model)
         self.write_model_json(model)
         self.write_tcl_dir(model)
-        self.write_tar(model)
+        # self.write_tar(model)
         print('Done')

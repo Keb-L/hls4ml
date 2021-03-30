@@ -23,6 +23,10 @@ class HLSConfig(object):
         self.layer_type_rf = {}
         self.layer_name_rf = {}
 
+        self.model_tclk = None
+        self.layer_type_tclk = {}
+        self.layer_name_tclk = {}
+
         self.model_strategy = 'Latency'
         self.layer_type_strategy = {}
         self.layer_name_strategy = {}
@@ -80,6 +84,17 @@ class HLSConfig(object):
             raise Exception('No reuse factor for {} found and no default specified.'.format(layer.name))
 
         return rf
+    
+    def get_target_latency(self, layer):
+        tclk = self.layer_name_tclk.get(layer.name.lower())
+        if tclk is None:
+            tclk = self.layer_type_tclk.get(layer.__class__.__name__.lower())
+        if tclk is None:
+            tclk = self.model_tclk
+
+        if tclk is None:
+            raise Exception('No target latency for {} found and no default specified.'.format(layer.name))
+        return tclk
 
     def get_merge_factor(self, layer):
         mf = self.model_mf
@@ -125,6 +140,7 @@ class HLSConfig(object):
                     self.model_precision['default'] = precision_cfg # Default precision for everything
 
             self.model_rf = model_cfg.get('ReuseFactor')
+            self.model_tclk = model_cfg.get('TargetLatency')
             self.model_mf = model_cfg.get('MergeFactor')
             self.model_bf = model_cfg.get('BramFactor')
             self.model_strategy = model_cfg.get('Strategy', 'Latency')
@@ -143,6 +159,10 @@ class HLSConfig(object):
                 rf = layer_cfg.get('ReuseFactor')
                 if rf is not None:
                     self.layer_type_rf[layer_type.lower()] = rf
+
+                tclk = layer_cfg.get('TargetLatency')
+                if tclk is not None:
+                    self.layer_name_tclk[layer_type.lower()] = tclk
 
                 strategy = layer_cfg.get('Strategy')
                 if strategy is not None:
@@ -165,6 +185,10 @@ class HLSConfig(object):
                 rf = layer_cfg.get('ReuseFactor')
                 if rf is not None:
                     self.layer_name_rf[layer_name.lower()] = rf
+                
+                tclk = layer_cfg.get('TargetLatency')
+                if tclk is not None:
+                    self.layer_name_tclk[layer_name.lower()] = tclk
 
                 strategy = layer_cfg.get('Strategy')
                 if strategy is not None:
@@ -1113,20 +1137,24 @@ class Conv2D(Layer):
             chosen_rf = self.model.config.get_reuse_factor(self)
             #use chosen to balance the throughput in clocks
             shape = self.get_output_variable().shape
-            # if chosen_rf < 6*shape[1]*shape[2]: #6 clock min
-            #     print("Chosen latency cannot be achieved with a signle stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
-            # else: 
-            #     chosen_rf = chosen_rf-6*shape[1]*shape[2]
-            # approxrf=float(chosen_rf)/shape[1]/shape[2]
-            # if self.get_attr('data_format') == 'channels_last':
-            #     approxrf=float(chosen_rf)/shape[0]/shape[1]
-            # print("Approx RF2",shape[0],shape[1],shape[2],approxrf,self.get_attr('data_format'),self.name)
-            # chosen_rf = valid_rf[0]
-            # for rf in valid_rf:
-            #     if approxrf < rf:
-            #         break
-            #     chosen_rf = rf
-            # print("Choosing RF",chosen_rf,self.name)
+
+            # Get the target clock latency
+            tclk = self.model.config.get_target_latency(self)
+            if tclk is not None:
+                # Chosen_RF = target clocks
+                #  6*shape[1]*shape[2] : data shuffling overhead
+                if self.get_attr('data_format') == 'channels_last':
+                    kernel_multiplies = shape[0]*shape[1]
+                else:
+                    kernel_multiplies = shape[1]*shape[2]
+
+                if tclk < 6*kernel_multiplies: #6 clock min (6 * out_height * out_width)
+                    print("Chosen latency cannot be achieved with a single stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
+                else: 
+                    chosen_rf = tclk - 6*kernel_multiplies # subtract data shuffling overhead
+
+                chosen_rf = float(chosen_rf) / kernel_multiplies
+
             params = self._default_function_params()
             return self.model.config.backend.set_closest_reuse_factor(self, chosen_rf)
 
@@ -1740,6 +1768,30 @@ class Concatenate(Merge):
         params['strategy']='_mux'
         return self._tcl_template.format(**params)
 
+class Copy(Layer):
+    def initialize(self):
+        inp = self.get_input_variable()
+        self.add_output_variable(inp.shape, inp.dim_names, out_name=self.outputs[0], var_name='layer{index}_cpy')
+
+    def config_cpp(self):
+        params = self._default_config_params()
+        params['size'] = self.get_attr('size')
+        params['n_chan'] = self.variables[self.outputs[0]].name
+        return [self._function_template.format(**params)]
+
+    def function_cpp(self,iFirst=False):
+        params = self._default_function_params()
+        params['size'] = self.get_attr('n_elem')
+
+        return [self._function_template.format(**params)]
+
+    def config_cpp(self):
+        return None
+
+    def print_tcl(self):
+        params = self._default_tcl_params()
+        return self._tcl_template.format(**params)
+
 layer_map = {
     'InputLayer'         : Input,
     'Activation'         : Activation,
@@ -1763,6 +1815,7 @@ layer_map = {
     'Merge'              : Merge,
     'Split'              : Split,
     'Concatenate'        : Concatenate,
+    'Copy'               : Copy,
 }
 
 def register_layer(name, clazz):

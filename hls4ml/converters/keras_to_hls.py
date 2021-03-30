@@ -54,7 +54,7 @@ def keras_to_hls(yamlConfig):
     #print(model_arch)
 
     #Define supported laers
-    core_layers = ['InputLayer', 'Dropout', 'Flatten', 'Dense', 'BinaryDense', 'TernaryDense', 'Reshape']
+    core_layers = ['InputLayer', 'Dropout', 'Flatten', 'Dense', 'BinaryDense', 'TernaryDense', 'Reshape', 'Copy']
     conv_layers = ['Conv1D', 'Conv2D', 'BinaryConv2D', 'UpSampling2D']
     pooling_layers = ['MaxPooling1D', 'MaxPooling2D', 'AveragePooling1D', 'AveragePooling2D']
     norm_layers = ['BatchNormalization']
@@ -389,6 +389,6 @@ def keras_to_hls(yamlConfig):
     reader = KerasDataReader(yamlConfig)
     print('Creating HLS model')
     hls_model = HLSModel(yamlConfig, reader, layer_list, input_layers, output_layers)
-    optimizers = ['fuse_conv','fuse_conv2','fuse_merge','eliminate_linear_activation', 'merge_batch_norm_quantized_tanh', 'quantize_dense_output']#, 'fuse_dense_batch_norm']
+    optimizers = ['fuse_conv','fuse_conv2','fuse_merge','eliminate_linear_activation', 'merge_batch_norm_quantized_tanh', 'quantize_dense_output', 'insert_copy_layer']#, 'fuse_dense_batch_norm']
     optimize_model(hls_model, optimizers)
     return hls_model
