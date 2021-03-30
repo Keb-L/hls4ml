@@ -4,8 +4,10 @@
 
 #include "hls_stream.h"
 
+namespace nnet {
+
 template<class data_T, class res_T, typename CONFIG_T>
-void copy_stream(
+void copy(
     hls::stream<data_T> data[CONFIG_T::n_chan], 
     hls::stream<data_T> res[CONFIG_T::n_chan]) {
     // Copy all values from input to output stream
@@ -22,6 +24,8 @@ void copy_stream(
             res.write(data_in);
         }
     }
+}
+
 }
 
 #endif

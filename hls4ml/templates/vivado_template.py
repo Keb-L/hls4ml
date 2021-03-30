@@ -212,8 +212,7 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
 
 copy_config_template = """struct config{index} : nnet::copy_config {{
     static const unsigned n_chan = {n_chan};
-    static const unsigned in_height = {in_height};
-    static const unsigned in_width = {in_width};
+    static const unsigned n_elem = {n_elem};
 }};\n"""
 
 '''config_templates = {
@@ -345,10 +344,10 @@ set layer_type nnet_split{strategy}
 source ../common/build.tcl
 \n"""
 
-copy_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan} -DN_OUTPUT={n_chan}"
+copy_tcl_template = """set arg_0 "-I . --D1={n_chan} -D2={n_chan}"
 set arg_1 "-DCONFIG={config}"
 set arg_2 "-DINPUT_T={input_t} -DLAYER_T={output_t}"
-set args "$arg_0 $arg_1 $arg_2
+set args "$arg_0 $arg_1 $arg_2"
 set layer_type copy
 \n
 source ../common/build.tcl

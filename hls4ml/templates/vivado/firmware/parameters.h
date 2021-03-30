@@ -18,6 +18,7 @@
 #include "nnet_utils/nnet_pooling.h"
 #include "nnet_utils/nnet_merge.h"
 #include "nnet_utils/nnet_helpers.h"
+#include "nnet_utils/nnet_stream.h"
 
 //hls-fpga-machine-learning insert numbers
 

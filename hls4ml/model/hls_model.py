@@ -1777,18 +1777,15 @@ class Copy(Layer):
 
     def config_cpp(self):
         params = self._default_config_params()
-        params['size'] = self.get_attr('size')
-        params['n_chan'] = self.variables[self.outputs[0]].name
-        return [self._function_template.format(**params)]
+        params['n_elem'] = self.get_attr('n_elem')
+        params['n_chan'] = self.get_attr('n_chan')
+        return self._config_template.format(**params)
 
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
         params['size'] = self.get_attr('n_elem')
 
         return [self._function_template.format(**params)]
-
-    def config_cpp(self):
-        return None
 
     def print_tcl(self):
         params = self._default_tcl_params()

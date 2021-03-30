@@ -239,20 +239,6 @@ namespace nnet
       pPass = true;
   }
 
-
-  template <class data_T, class res_T, typename CONFIG_T>
-  void pooling2d_cl(
-      hls::stream<data_T> data[CONFIG_T::n_filt_in],
-      hls::stream<res_T> res[CONFIG_T::n_filt_in])
-  {
-    PoolHeight: for(int i0 = 0; i0 < CONFIG_T::in_height; i0++) {
-      PoolWidth: for(int i1 = 0; i1 < CONFIG_T::in_width; i1++) {
-        #pragma HLS LOOP_FLATTEN
-        compute_pool2d<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-      }
-    }
-  }
-
   template <class data_T, class res_T, typename CONFIG_T>
   void compute_pool2d(
       hls::stream<data_T> data[CONFIG_T::n_filt_in],
@@ -333,6 +319,20 @@ namespace nnet
       }
     }
   }
+  
+  template <class data_T, class res_T, typename CONFIG_T>
+  void pooling2d_cl(
+      hls::stream<data_T> data[CONFIG_T::n_filt_in],
+      hls::stream<res_T> res[CONFIG_T::n_filt_in])
+  {
+    PoolHeight: for(int i0 = 0; i0 < CONFIG_T::in_height; i0++) {
+      PoolWidth: for(int i1 = 0; i1 < CONFIG_T::in_width; i1++) {
+        #pragma HLS LOOP_FLATTEN
+        compute_pool2d<data_T, res_T, CONFIG_T>(data, res);
+      }
+    }
+  }
+
 
   template <class data_T, class res_T, typename CONFIG_T>
   void pooling2d_cl_nopad_pad(
