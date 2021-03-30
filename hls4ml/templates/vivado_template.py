@@ -210,10 +210,7 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
     static const unsigned axis = {axis};
 }};\n"""
 
-copy_config_template = """struct config{index} : nnet::copy_config {{
-    static const unsigned n_chan = {n_chan};
-    static const unsigned n_elem = {n_elem};
-}};\n"""
+copy_config_template = None
 
 '''config_templates = {
     'Dense'                  : dense_config_template,
@@ -246,7 +243,7 @@ pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {ou
 pooling2d_function_template = 'nnet::pooling2d_{data_format}{1x1}<{input_t}, {output_t}, {config}>({input}, {output});'
 merge_function_template = 'nnet::{merge}{strategy}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}>({input}, {output1}, {output2});'
-copy_function_template = 'nnet::copy<{input_t}, {output_t}, {config}>({input}, {output});'
+copy_function_template = 'nnet::copy_stream<{input_t}, {output_t}, {N_chan}, {K_elem}>({input}, {output});'
 
 '''function_templates = {
     'Dense'                  : dense_function_template,

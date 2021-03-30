@@ -17,6 +17,7 @@ class InsertCopyLayer(OptimizerPass):
         # Make some attributes for the copy layer required by its config
         # e.g., the size of the stream, maybe something else
         attrs = {
+            'class_name' : 'Copy',
             'data_format' : node.get_attr('data_format'),
             'n_chan' : node.get_attr('n_chan'),
             'n_elem' : node.get_attr('in_width') * node.get_attr('in_height')

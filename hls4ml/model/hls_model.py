@@ -1776,15 +1776,16 @@ class Copy(Layer):
         self.add_output_variable(inp.shape, inp.dim_names, depth=depth, cl=cl, out_name=self.outputs[0], var_name='layer{index}_cpy')
 
     def config_cpp(self):
-        params = self._default_config_params()
-        params['n_elem'] = self.get_attr('n_elem')
-        params['n_chan'] = self.get_attr('n_chan')
-        return self._config_template.format(**params)
+        # params = self._default_config_params()
+        # params['n_elem'] = self.get_attr('n_elem')
+        # params['n_chan'] = self.get_attr('n_chan')
+        # return self._config_template.format(**params)
+        return None
 
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
-        params['size'] = self.get_attr('n_elem')
-
+        params['N_chan'] = self.get_attr('n_chan')
+        params['K_elem'] = self.get_attr('n_elem')
         return [self._function_template.format(**params)]
 
     def print_tcl(self):
