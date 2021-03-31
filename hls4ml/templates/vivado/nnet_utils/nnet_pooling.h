@@ -260,16 +260,16 @@ namespace nnet
     static unsigned pX = 0;
     static unsigned pY = 0;
 
-    hls::stream<data_T> tmpdata[CONFIG_T::n_chan];
-    #pragma HLS STREAM variable = tmpdata depth = 1 dim = 1
+    data_T data_in[CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable = data_in complete
 
     data_T iReset = data[0].read();
-    for (int i0 = 0; i0 < CONFIG_T::n_chan; i0++)
+    for (int i1 = 0; i1 < CONFIG_T::n_chan; i1++)
     {
       #pragma HLS UNROLL
-      data_T pTmp = data[i0 + 1].read();
-      tmpdata[i0].write(pTmp);
+      data_in[i1] = data[i1 + 1].read();
     }
+    
     static res_T pReset = 0;
     if (iReset == 0)
     {
@@ -277,9 +277,9 @@ namespace nnet
       pY = 0;
       pReset = 0;
       for (int i0 = 0; i0 < CONFIG_T::pad_left + CONFIG_T::pad_top * rowsize; i0++)
-        nnet::cnnshiftzero<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
+        nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
     }
-    nnet::cnnshift<data_T, res_T, CONFIG_T>(tmpdata, layer_in_row, layer_in);
+    nnet::cnnshift_arr<data_T, res_T, CONFIG_T>(data_in, layer_in_row, layer_in);
     //Processs image
     unsigned pLoop = 1; // Padding why?
     if (pX == CONFIG_T::in_width - 1)
@@ -289,7 +289,7 @@ namespace nnet
     for (int i0 = 0; i0 < pLoop; i0++)
     {
       if (i0 > 0)
-        nnet::cnnshiftzero<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
+        nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
       if ((pX + 1) % CONFIG_T::stride_width == 0 && (pY + 1) % CONFIG_T::stride_height == 0 && pY > lShiftY - 1 && pX > lShiftX - 1)
       {
         res_T pId = pReset;
@@ -315,7 +315,7 @@ namespace nnet
         pX = 0;
         pY = pY + 1;
         for (int i1 = 0; i1 < CONFIG_T::pad_left; i1++)
-          nnet::cnnshiftzero<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
+          nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
       }
     }
   }

@@ -917,14 +917,10 @@ class Dense(Layer):
         quantize = self.get_attr('quantize', default=0)
         compression = self.model.config.get_compression(self)
         self.set_attr('n_in',self.get_input_variable().size())
-        #self.set_attr('n_out') = self.get_output_variable()
+
         if self.model.config.is_resource_strategy(self):
             if self.model.config.backend.name == 'Vivado':
-                valid_rf = self.model.config.backend.get_valid_reuse_factors(self)
-                chosen_rf = self.model.config.get_reuse_factor(self)
-                if chosen_rf not in valid_rf:
-                    print('WARNING: Using invalid ReuseFactor={} with "Resource" strategy in layer "{}". Valid ReuseFactor(s): {}'
-                        .format(chosen_rf, self.name, ','.join(map(str, valid_rf))))
+                self.set_attr('reuse', self.reuse_factor())
             if compression:
                 self.set_attr('strategy', 'compressed')
             else:
@@ -945,6 +941,30 @@ class Dense(Layer):
                     self.weights['weight'].data = np.transpose(self.weights['weight'].data)
         self.set_attr('index_t', index_t)
         self.add_bias(quantize=quantize)
+
+    def reuse_factor(self):
+        if self.model.config.backend.name == 'Vivado':
+            valid_rf = self.model.config.backend.get_valid_reuse_factors(self)
+            chosen_rf = self.model.config.get_reuse_factor(self)
+            #use chosen to balance the throughput in clocks
+            n_out = self.get_attr('n_out')
+
+            # Get the target clock latency
+            tclk = self.model.config.get_target_latency(self)
+            if tclk is not None:
+                # Chosen_RF = target clocks
+                #  6*shape[1]*shape[2] : data shuffling overhead
+                kernel_multiplies = n_out
+
+                if tclk < 6*kernel_multiplies: #6 clock min (6 * out_height * out_width)
+                    print("Chosen latency cannot be achieved with a single stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
+                else: 
+                    chosen_rf = tclk - 6*kernel_multiplies # subtract data shuffling overhead
+
+                chosen_rf = float(chosen_rf) / kernel_multiplies
+            return self.model.config.backend.set_closest_reuse_factor(self, chosen_rf)
+        else:
+            return self.model.config.get_reuse_factor(self)
 
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
@@ -968,7 +988,7 @@ class Dense(Layer):
             params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)+'-1'
             params['n_out'] = self.get_output_variable().size_cpp(isSerial=True)+'-1'
 
-            params['reuse'] = self.model.config.backend.set_closest_reuse_factor(self, params['reuse'])
+            params['reuse'] = self.get_attr('reuse')
 
             if len(self.get_input_variable().shape) > 2 and (self.get_input_variable().size()/self.get_input_variable().shape[2]) != 1:
                 params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)
@@ -1155,7 +1175,6 @@ class Conv2D(Layer):
 
                 chosen_rf = float(chosen_rf) / kernel_multiplies
 
-            params = self._default_function_params()
             return self.model.config.backend.set_closest_reuse_factor(self, chosen_rf)
 
             # if chosen_rf not in valid_rf:
