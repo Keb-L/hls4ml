@@ -167,8 +167,7 @@ class VivadoWriter(Writer):
                 strategy = ''
                 if(layer.get_attr("data_format") == 'channels_last'):
                     data_format = '_cl'
-                if(layer.is1x1):
-                    onexone = '_1x1'
+
                 if(layer.get_attr('strategy') != None):
                     strategy = "_" + layer.get_attr("strategy")
                 kernel_name = "conv_2d" + strategy + data_format + onexone
@@ -196,8 +195,6 @@ class VivadoWriter(Writer):
                 strategy = ''
                 if(layer.get_attr("data_format") == 'channels_last'):
                     data_format = '_cl'
-                if(layer.is1x1):
-                    onexone = '_1x1'
                 if(layer.get_attr('strategy') != None):
                     strategy = "_" + layer.get_attr("strategy")
                 kernel_name = "pooling2d" + strategy + data_format + onexone
@@ -764,17 +761,15 @@ class VivadoWriter(Writer):
                 for bram in model_brams:
                     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
-                    newline += indent + 'for(int iX = 0; iX < 11; iX++){\n'
+                    newline += indent + 'for(int iX = 0; iX < 11; iX++){\n' # HACK: Run for 11 iterations for testing
                     newline+= 'unsigned index=0;\n'
                     input_str = '      ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
                     shape=inp.shape
                     #add a for loop
                     for i0 in range(len(shape)): 
-                        if i0 != len(shape)-1:
-                            newline += indent + 'for(int i{} = 0; i{} < {}*{}; i{}++) {{\n'.format(i0,i0,shape[i0], shape[i0+1],i0)
-                        else:
-                            newline += indent + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+                        newline += indent + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
+
                     cl=inp.cl
                     val=0 if cl else 2
                     if val > 0: 
@@ -793,31 +788,23 @@ class VivadoWriter(Writer):
                 for inp in model.get_input_variables():
                     newline += indent + 'for(int iX = 0; iX < 11; iX++){\n'
 
-                    newline+= indent + '{} pTest = 0;\n'.format(inp.type.name)
                     input_str = '    ' + inp.definition_cpp().replace('static','') + ';\n'
                     newline += input_str
                     shape=inp.shape
-                    #add a for loop
-                    # for i0 in range(len(shape)): 
-                    #     if i0 != len(shape)-1:
-                    #         newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
-                    #     else:
-                    #         newline += indent*(i0+1) + 'for(int i{} = 0; i{} < {}+1; i{}++) {{\n'.format(i0,i0,shape[i0],i0)
 
-                    newline += indent + 'for(int i0 = 0; i0 < {}*{}; i0++) {{\n'.format(shape[0], shape[1])
-                    newline += indent + 'for(int i2 = 0; i2 < {}+1; i2++) {{\n'.format(shape[-1])
+                    # Iterate through each dimension
+                    for i0 in range(len(shape)): 
+                        newline += indent + 'for(int i{} = 0; i{} < {}; i{}++) {{\n'.format(i0,i0,shape[i0],i0)                  
                     
-                    newline += indent + 'if (i{} == 0) {}[i{}].write(pTest);\n'.format(len(shape)-1, inp.cppname, len(shape)-1)
+                    # Debug - specify data here
+                    # newline += indent + 'if (i{} < 1) {}[i{}].write(iX + 1);\n'.format(0, inp.cppname, len(shape)-1)
+                    # newline += indent + 'else {}[i{}].write(iX + 32);\n'.format(inp.cppname, len(shape)-1)
 
-                    newline += indent + 'if (i{} > 0 && i{} < 1) {}[i{}].write(iX + 1);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
-                    newline += indent + 'if (i{} > 0 && i{} > 0) {}[i{}].write(iX + 32);\n'.format(len(shape)-1, 0, inp.cppname, len(shape)-1)
+                    newline += indent + '{}[i{}].write(0);\n'.format(inp.cppname, len(shape)-1) # Channel last
 
-                    newline += indent + 'if (pTest == 0) pTest = 1;\n'
+                    for i0 in range(len(shape)): 
+                        newline += indent + '}\n'
 
-                    newline += indent + '}\n'
-                    newline += indent + '}\n'
-                    # for i0 in range(len(shape)): 
-                    #     newline += indent*(len(shape)-i0) + '}\n'
                 for out in model.get_output_variables():
                     output_str = '    ' + out.definition_cpp().replace('static','') + ';\n'
                     newline += output_str
@@ -836,6 +823,10 @@ class VivadoWriter(Writer):
                 else: 
                     top_level = indent + '{}({},{},{},{});\n'.format(model.config.get_project_name(), input_vars, output_vars, input_size_vars, output_size_vars)
                 newline += top_level
+
+                # HACK: signal end of transction
+                newline += indent + 'std::printf("Transaction %d complete\\n", iX);\n'
+
             elif '//hls-fpga-machine-learning insert predictions' in line:
                 newline = line
                 for out in model.get_output_variables():

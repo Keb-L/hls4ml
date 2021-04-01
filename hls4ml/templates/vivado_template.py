@@ -86,11 +86,9 @@ conv2d_config_template = """struct config{index} : nnet::conv2d_config {{
     static const unsigned in_height = {in_height};
     static const unsigned in_width = {in_width};
     static const unsigned n_chan = {n_chan};
-    static const unsigned n_chan_in = {n_chan_in};
     static const unsigned filt_height = {filt_height};
     static const unsigned filt_width = {filt_width};
     static const unsigned n_filt = {n_filt};
-    static const unsigned n_filt_in = {n_filt_in};
     static const unsigned stride_height = {stride_height};
     static const unsigned stride_width = {stride_width};
     static const unsigned out_height = {out_height};
@@ -169,8 +167,6 @@ pooling2d_config_template = """struct config{index} : nnet::pooling2d_config {{
     static const unsigned in_width = {in_width};
     static const unsigned n_filt = {n_filt};
     static const unsigned n_chan = {n_chan};
-    static const unsigned n_filt_in = {n_filt_in};
-    static const unsigned n_chan_in = {n_chan_in};
     static const unsigned stride_height = {stride_height};
     static const unsigned stride_width = {stride_width};
     static const unsigned pool_height = {pool_height};
@@ -234,13 +230,13 @@ copy_config_template = None
 dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 batchnorm_function_template = 'nnet::normalize{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {scale}, {bias});'
 conv1d_function_template = 'nnet::conv_1d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
-conv2d_function_template = 'nnet::conv_2d_{strategy}_{data_format}{1x1}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
+conv2d_function_template = 'nnet::conv_2d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 upsampling2d_function_template = 'nnet::upsampling2d_{strategy}<{input_t}, {output_t}, {config}>({input}, {output});'
 conv2dmerge_function_template = 'nnet::conv_2d_merge_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 activ_function_template = 'nnet::{activation}{strategy}<{input_t}, {output_t}, {config}>({input}, {output});'
 param_activ_function_template = 'nnet::{activation}{strategy}<{input_t}, {output_t}, {config}>({input}, {param}, {output});'
 pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {output});'
-pooling2d_function_template = 'nnet::pooling2d_{data_format}{1x1}<{input_t}, {output_t}, {config}>({input}, {output});'
+pooling2d_function_template = 'nnet::pooling2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
 merge_function_template = 'nnet::{merge}{strategy}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}>({input}, {output1}, {output2});'
 copy_function_template = 'nnet::copy_stream<{input_t}, {output_t}, {N_chan}, {K_elem}>({input}, {output});'
@@ -313,21 +309,21 @@ set layer_type {merge}{strategy}
 source ../common/build.tcl
 \n"""
 
-pooling2d_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan_in} -DN_OUTPUT={n_filt_in}"
+pooling2d_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan} -DN_OUTPUT={n_filt}"
 set arg_1 "-DCONFIG={config}"
 set arg_2 "-DINPUT_T={input_t} -DLAYER_T={output_t}"
 set args "$arg_0 $arg_1 $arg_2"
-set layer_type pooling2d_{data_format}{1x1}
+set layer_type pooling2d_{data_format}
 \n
 source ../common/build.tcl
 \n"""
 
-conv_2d_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan_in} -DN_OUTPUT={n_filt_in}"
+conv_2d_tcl_template = """set arg_0 "-I . -DN_INPUT={n_chan} -DN_OUTPUT={n_filt}"
 set arg_1 "-DCONFIG={config}"
 set arg_2 "-DINPUT_T={input_t} -DLAYER_T={output_t}"
 set arg_3 "-DN_WEIGHTS={n_weights} -DWEIGHTS={weights}  -DBIASES={biases}"
 set args "$arg_0 $arg_1 $arg_2 $arg_3"
-set layer_type conv_2d_{strategy}_{data_format}{1x1}_port
+set layer_type conv_2d_{strategy}_{data_format}_port
 \n
 source ../common/build.tcl
 \n"""

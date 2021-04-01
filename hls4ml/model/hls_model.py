@@ -475,9 +475,9 @@ class ArrayVariable(Variable):
         if isSerial:
             if len(self.dim_names) > 2: 
                 tmp_dim_names = copy.copy(self.dim_names)
-                for i0 in range(len(tmp_dim_names)):
-                    if 'FILT' in tmp_dim_names[i0]:
-                        tmp_dim_names[i0] = '('+tmp_dim_names[i0]+'-1)'
+                # for i0 in range(len(tmp_dim_names)):
+                #     if 'FILT' in tmp_dim_names[i0]:
+                #         tmp_dim_names[i0] = '('+tmp_dim_names[i0]+'-1)'
             else:
                 tmp_dim_names=[self.dim_names[0]]
             return '*'.join([str(k) for k in tmp_dim_names])
@@ -859,11 +859,11 @@ class Layer(object):
         for k, v in self.get_output_variable().get_shape():
             if self.model.config.get_config_value('IOType') == 'io_serial':
                 if 'FILT' in k:
-                    numbers += '#define {} {}\n'.format(k,v+1)
+                    numbers += '#define {} {}\n'.format(k,v) # +1 reset
                 elif 'INPUT_3_1' in k and lastinput==k: #and self.get_attr('data_format') == 'channels_last':
-                    numbers += '#define {} {}\n'.format(k,v+1)
+                    numbers += '#define {} {}\n'.format(k,v)
                 elif 'INPUT_2_1' in k and lastinput==k :
-                    numbers += '#define {} {}\n'.format(k,v+1)
+                    numbers += '#define {} {}\n'.format(k,v)
                 elif 'INPUT_1_1' in k and not self.get_attr('data_format') == 'channels_last':
                     numbers += '#define {} {}\n'.format(k,v)
                 else:
@@ -928,8 +928,10 @@ class Dense(Layer):
         else:
             self.set_attr('strategy', 'latency')
         
-        if self.model.config.get_config_value('IOType') == 'io_serial':
-            shape[0] += 1
+        # Reset channel
+        # if self.model.config.get_config_value('IOType') == 'io_serial':
+        #     shape[0] += 1
+
         self.add_output_variable(shape, dims)
         self.add_weights(quantize=quantize, compression=compression)
         index_t = 'ap_uint<1>'
@@ -957,7 +959,7 @@ class Dense(Layer):
                 kernel_multiplies = n_out
 
                 if tclk < 6*kernel_multiplies: #6 clock min (6 * out_height * out_width)
-                    print("Chosen latency cannot be achieved with a single stream!!!!!! Please consider custom stream in ",self.index,shape[1],shape[2])
+                    print("Chosen latency cannot be achieved with a single stream!")
                 else: 
                     chosen_rf = tclk - 6*kernel_multiplies # subtract data shuffling overhead
 
@@ -985,8 +987,8 @@ class Dense(Layer):
         if self.model.config.get_config_value('IOType') == 'io_serial':
             params['n_input'] = self.get_input_variable().size_cpp_cnn()
             params['n_output'] = self.get_output_variable().size_cpp(isSerial=True)
-            params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)+'-1'
-            params['n_out'] = self.get_output_variable().size_cpp(isSerial=True)+'-1'
+            params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)
+            params['n_out'] = self.get_output_variable().size_cpp(isSerial=True)
 
             params['reuse'] = self.get_attr('reuse')
 
@@ -1131,22 +1133,20 @@ class Conv2D(Layer):
         else:
             shape = [self.attributes['n_filt'], self.attributes['out_height'], self.attributes['out_width']]
             dims = ['N_FILT_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
-        self.is1x1 = False
-        #self.get_attr('filt_height') * self.get_attr('filt_width')
-        if(self.attributes['filt_height'] == 1 and self.attributes['filt_width'] == 1) : 
-            self.is1x1 = True
-        # depth=(self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
-        depth=self.attributes['out_width']*self.attributes['out_height']
+
+        depth=self.attributes['out_width']*self.attributes['out_height'] # (self.attributes['pad_right']+2+self.attributes['pad_bottom']*(self.attributes['out_width']+self.attributes['pad_right']))
         self.add_output_variable(shape, dims,depth=depth,cl=cl)
-        #self.add_internal_variable(shapeinternal,diminternal,'dummy','dummy{index}_out',type_name='model_bigdefault_t',precision='ap_uint<27>')
+
         self.add_weights()
         self.add_bias()
         if self.model.config.is_resource_strategy(self):
             self.set_attr('strategy', 'large')
         else:
             self.set_attr('strategy', 'latency')
-        params = self._default_function_params()
-        params['reuse'] = self.reuse_factor()
+
+        # params = self._default_function_params()
+        # params['reuse'] = self.reuse_factor()
+
         self.weights['weight'].data = np.transpose(self.weights['weight'].data, axes=[3, 0, 1, 2]) #(H,W,C,F) => (F,C,H,W)
 
     def reuse_factor(self):
@@ -1189,9 +1189,7 @@ class Conv2D(Layer):
         params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl2' # for padded Conv2D
         params['w'] = self.get_weights('weight').name
         params['b'] = self.get_weights('bias').name
-        params['1x1'] = ''
-        if self.is1x1:
-            params['1x1'] = '_1x1'
+
         header=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
             self.get_input_variable(self.inputs[0]).name = self.get_input_variable(self.inputs[0]).name.replace("/","_")
@@ -1219,21 +1217,20 @@ class Conv2D(Layer):
         if self.get_attr('data_format') == 'channels_last':
             params['in_height'] = self.get_input_variable().dim_names[0]
             params['in_width'] = self.get_input_variable().dim_names[1]
-            params['n_chan'] = self.get_input_variable().dim_names[2]+'-1'
-            params['n_chan_in'] = self.get_input_variable().dim_names[2]
+            params['n_chan'] = self.get_input_variable().dim_names[2] 
+
             params['out_height'] = self.get_output_variable().dim_names[0]
             params['out_width'] = self.get_output_variable().dim_names[1]
-            params['n_filt'] = self.get_output_variable().dim_names[2]+'-1'
-            params['n_filt_in'] = self.get_output_variable().dim_names[2]
+            params['n_filt'] = self.get_output_variable().dim_names[2] 
         else:
-            params['n_chan'] = self.get_input_variable().dim_names[0]+'-1'
-            params['n_chan_in'] = self.get_input_variable().dim_names[0]
             params['in_height'] = self.get_input_variable().dim_names[1]
             params['in_width'] = self.get_input_variable().dim_names[2]
-            params['n_filt'] = self.get_output_variable().dim_names[0]+'-1'
-            params['n_filt_in'] = self.get_output_variable().dim_names[0]
+            params['n_chan'] = self.get_input_variable().dim_names[0]
+
             params['out_height'] = self.get_output_variable().dim_names[1]
             params['out_width'] = self.get_output_variable().dim_names[2]
+            params['n_filt'] = self.get_output_variable().dim_names[0] 
+                    
         params['dilation'] = self.get_attr('dilation', 1)
         params['nzeros'] = self.get_weights('weight').nzeros
         params['config_t'] = 'std::nullptr_t'
@@ -1266,16 +1263,14 @@ class Conv2D(Layer):
     def print_tcl(self):
         params = self._default_tcl_params()
         if self.get_attr('data_format') == 'channels_last':
-            params['n_chan_in'] =  self.get_input_variable().dim_names[2]
-            params['n_filt_in'] = self.get_output_variable().dim_names[2]
+            params['n_chan'] =  self.get_input_variable().dim_names[2]
+            params['n_filt'] = self.get_output_variable().dim_names[2]
         else:
-            params['n_chan_in'] =  self.get_input_variable().dim_names[0]
-            params['n_filt_in'] = self.get_output_variable().dim_names[0]
+            params['n_chan'] =  self.get_input_variable().dim_names[0]
+            params['n_filt'] = self.get_output_variable().dim_names[0]
         params['n_weights']=self.get_weights('weight').data_length
         params['weights']=self.get_weights('weight').name
-        params['1x1'] = ''
-        if self.is1x1:
-            params['1x1'] = '_1x1'
+
         return self._tcl_template.format(**params)
 
 
@@ -1324,22 +1319,13 @@ class Pooling2D(Layer):
 
         self.add_output_variable(shape, dims,cl=cl,depth=depth)
         self.set_attr('pool_op', self.get_attr('class_name').split('Pooling')[0])
-        self.is1x1 = False
-        if(self.attributes['out_height'] == 1 and self.attributes['out_width'] == 1) : 
-            self.is1x1 = True
+
 
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
         params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl'
-        params['1x1'] = ''
-        if self.is1x1:
-            params['1x1'] = '_1x1'
         header=''
-        # if self.model.config.get_config_value('IOType') == 'io_serial':
-        #     if iFirst:
-        #         header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-        #     else:
-        #         header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
+
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
@@ -1350,34 +1336,27 @@ class Pooling2D(Layer):
             params['in_width'] = self.get_input_variable().dim_names[1]
             params['out_height'] = self.get_output_variable().dim_names[0]
             params['out_width'] = self.get_output_variable().dim_names[1]
-            params['n_filt'] = self.get_output_variable().dim_names[2]+'-1'
-            params['n_filt_in'] = self.get_output_variable().dim_names[2]
-            params['n_chan'] = self.get_input_variable().dim_names[2]+'-1'
-            params['n_chan_in'] = self.get_input_variable().dim_names[2]
+            params['n_filt'] = self.get_output_variable().dim_names[2]
+            params['n_chan'] = self.get_input_variable().dim_names[2]
         else:
             params['n_in'] = self.get_input_variable().dim_names[0]
             params['in_height'] = self.get_input_variable().dim_names[1]
             params['in_width'] = self.get_input_variable().dim_names[2]
             params['out_height'] = self.get_output_variable().dim_names[1]
             params['out_width'] = self.get_output_variable().dim_names[2]
-            params['n_filt'] = self.get_output_variable().dim_names[0]+'-1'
-            params['n_filt_in'] = self.get_output_variable().dim_names[0]
-            params['n_chan'] = self.get_input_variable().dim_names[0]+'-1'
-            params['n_chan_in'] = self.get_input_variable().dim_names[0]
+            params['n_filt'] = self.get_output_variable().dim_names[0]
+            params['n_chan'] = self.get_input_variable().dim_names[0]
         return self._config_template.format(**params)
 
     def print_tcl(self):
         params = self._default_tcl_params()
         if self.get_attr('data_format') == 'channels_last':            
-            params['n_chan_in'] =  self.get_input_variable().dim_names[2]
-            params['n_filt_in'] = self.get_output_variable().dim_names[2]
+            params['n_chan'] =  self.get_input_variable().dim_names[2]
+            params['n_filt'] = self.get_output_variable().dim_names[2]
         else:
-            params['n_chan_in'] =  self.get_input_variable().dim_names[0]
-            params['n_filt_in'] = self.get_output_variable().dim_names[0]
+            params['n_chan'] =  self.get_input_variable().dim_names[0]
+            params['n_filt'] = self.get_output_variable().dim_names[0]
 
-        params['1x1'] = ''
-        if self.is1x1:
-            params['1x1'] = '_1x1'        
         return self._tcl_template.format(**params)
 
 class Activation(Layer):
@@ -1396,11 +1375,8 @@ class Activation(Layer):
         params['strategy']=''
         header=''
         if self.model.config.get_config_value('IOType') == 'io_serial':
-            # if iFirst:
-            #     header='if(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
-            # else:
-            #     header='while(!'+ self.get_input_variable(self.inputs[0]).name+'[0].empty()) '
             params['strategy'] = '_stream'
+
         return [header+self._function_template.format(**params)]
 
     def config_cpp(self):
