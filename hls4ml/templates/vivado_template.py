@@ -208,6 +208,18 @@ concat_config_template = """struct config{index} : nnet::concat_config {{
 
 copy_config_template = None
 
+zeropad2d_config_template = """struct config{index} : nnet::padding2d_config {{
+    static const unsigned in_height = {in_height};
+    static const unsigned in_width = {in_width};
+    static const unsigned n_chan = {n_chan};
+    static const unsigned out_height = {out_height};
+    static const unsigned out_width = {out_width};
+    static const unsigned pad_top = {pad_top};
+    static const unsigned pad_bottom = {pad_bottom};
+    static const unsigned pad_left = {pad_left};
+    static const unsigned pad_right = {pad_right};
+}};\n"""
+
 '''config_templates = {
     'Dense'                  : dense_config_template,
     'BinaryDense'            : dense_config_template,
@@ -225,6 +237,7 @@ copy_config_template = None
     'Split'                  : split_config_template,
     'Concatenate'            : concat_config_template,
     'Copy'                   : copy_config_template,
+    'ZeroPadding2D'          : zeropad2d_config_template,
 }'''
 
 dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
@@ -240,6 +253,7 @@ pooling2d_function_template = 'nnet::pooling2d_{data_format}<{input_t}, {output_
 merge_function_template = 'nnet::{merge}{strategy}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 split_function_template = 'nnet::split{strategy}<{input_t}, {output_t}, {config}>({input}, {output1}, {output2});'
 copy_function_template = 'nnet::copy_stream<{input_t}, {output_t}, {N_chan}, {K_elem}>({input}, {output});'
+zeropad2d_function_template = 'nnet::zeropad2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
 
 '''function_templates = {
     'Dense'                  : dense_function_template,
@@ -258,6 +272,7 @@ copy_function_template = 'nnet::copy_stream<{input_t}, {output_t}, {N_chan}, {K_
     'Concatenate'            : merge_function_template,
     'Split'                  : split_function_template,  
     'Copy',                  : copy_function_template, 
+    'ZeroPadding2D',         : zeropad2d_function_template,
 }'''
 
 
@@ -346,6 +361,8 @@ set layer_type copy
 source ../common/build.tcl
 \n"""
 
+zeropad2d_tcl_template = None
+
 '''tcl_templates = {
     'Dense'                  : dense_tcl_template,
     'BinaryDense'            : dense_tcl_template,
@@ -360,6 +377,7 @@ source ../common/build.tcl
     'Concatenate'            : merge_tcl_template,
     'Split'                  : split_tcl_template,   
     'Copy'                   : copy_tcl_template,
+    'ZeroPadding2D'          : zeropad2d_tcl_template,
 }'''
 
 
@@ -382,6 +400,7 @@ class VivadoBackend(Backend):
         self.register_templates('Concatenate'            , merge_function_template,       concat_config_template,merge_tcl_template)
         self.register_templates('Split'                  , split_function_template,       split_config_template,split_tcl_template)
         self.register_templates('Copy'                   , copy_function_template,        copy_config_template,copy_tcl_template)
+        self.register_templates('ZeroPadding2D'          , zeropad2d_function_template,   zeropad2d_config_template,zeropad2d_tcl_template)
     
     def get_valid_reuse_factors(self, layer):
         n_in = 0

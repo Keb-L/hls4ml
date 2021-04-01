@@ -126,74 +126,76 @@ void cnnshiftzero(
   nnet::cnnshift<data_T, res_T, CONFIG_T>(tmpinput, layer_in_row, output);
 }
 
-template <class data_T, class res_T, typename CONFIG_T>
-void zeropad(
-    unsigned &iN,
-    hls::stream<data_T> data[CONFIG_T::n_chan],
-    hls::stream<res_T> res[CONFIG_T::n_chan]) {
-// TODO: change to Vlad's implementation!
-#pragma HLS PIPELINE
-  const static int rowsize = (CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right);
-  static int pX = 0;
-  static int pY = 0;
+/*
+// template <class data_T, class res_T, typename CONFIG_T>
+// void zeropad(
+//     unsigned &iN,
+//     hls::stream<data_T> data[CONFIG_T::n_chan],
+//     hls::stream<res_T> res[CONFIG_T::n_chan]) {
+// // TODO: change to Vlad's implementation!
+// #pragma HLS PIPELINE
+//   const static int rowsize = (CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right);
+//   static int pX = 0;
+//   static int pY = 0;
 
-  data_T data_in[CONFIG_T::n_chan];
-#pragma HLS ARRAY_RESHAPE variable = data_in complete
+//   data_T data_in[CONFIG_T::n_chan];
+// #pragma HLS ARRAY_RESHAPE variable = data_in complete
 
-  // Stream -> array
-  for (int i1 = 0; i1 < CONFIG_T::n_chan; i1++) {
-#pragma HLS UNROLL
-    data_in[i1] = data[i1].read();
-  }
+//   // Stream -> array
+//   for (int i1 = 0; i1 < CONFIG_T::n_chan; i1++) {
+// #pragma HLS UNROLL
+//     data_in[i1] = data[i1].read();
+//   }
 
-  // Start of image
-  if (pX == 0 && pY == 0) {
-  PadTop:
-    for (unsigned i1 = 0; i1 < CONFIG_T::pad_left + CONFIG_T::pad_top * rowsize; i1++) {
-#pragma HLS PIPELINE II = 1
-      iN++;
+//   // Start of image
+//   if (pX == 0 && pY == 0) {
+//   PadTop:
+//     for (unsigned i1 = 0; i1 < CONFIG_T::pad_left + CONFIG_T::pad_top * rowsize; i1++) {
+// #pragma HLS PIPELINE II = 1
+//       iN++;
 
-      for (unsigned i2 = 0; i2 < CONFIG_T::n_chan; i2++) {
-        res[i2].write(0);
-      }
-    }
-  }
+//       for (unsigned i2 = 0; i2 < CONFIG_T::n_chan; i2++) {
+//         res[i2].write(0);
+//       }
+//     }
+//   }
 
-// Copy pixels
-CopyMain:
-  for (unsigned i0 = 0; i0 < CONFIG_T::n_chan; i0++) {
-#pragma HLS UNROLL
-    res[i0].write(data_in[i0]);
-  }
-  iN++;
+// // Copy pixels
+// CopyMain:
+//   for (unsigned i0 = 0; i0 < CONFIG_T::n_chan; i0++) {
+// #pragma HLS UNROLL
+//     res[i0].write(data_in[i0]);
+//   }
+//   iN++;
 
-  // Based on pointer positions, determine end of line or end of image padding
-  unsigned pLoop = 0;
-  if (pX == CONFIG_T::in_width - 1 && pY == CONFIG_T::in_height - 1)
-    pLoop = CONFIG_T::pad_right + CONFIG_T::pad_bottom * rowsize;  //Fill the end with zeros for bottom paddings
-  else if (pX == CONFIG_T::in_width - 1)                           // Fill the side paddings
-    pLoop = CONFIG_T::pad_right + CONFIG_T::pad_left;
+//   // Based on pointer positions, determine end of line or end of image padding
+//   unsigned pLoop = 0;
+//   if (pX == CONFIG_T::in_width - 1 && pY == CONFIG_T::in_height - 1)
+//     pLoop = CONFIG_T::pad_right + CONFIG_T::pad_bottom * rowsize;  //Fill the end with zeros for bottom paddings
+//   else if (pX == CONFIG_T::in_width - 1)                           // Fill the side paddings
+//     pLoop = CONFIG_T::pad_right + CONFIG_T::pad_left;
 
-PadZeroes:
-  for (unsigned i0 = 0; i0 < pLoop; i0++) {
-    iN++;
-  PadChannel:
-    for (unsigned i1 = 0; i1 < CONFIG_T::n_chan; i1++) {
-#pragma HLS UNROLL
-      res[i1].write(0);
-    }
-  }
+// PadZeroes:
+//   for (unsigned i0 = 0; i0 < pLoop; i0++) {
+//     iN++;
+//   PadChannel:
+//     for (unsigned i1 = 0; i1 < CONFIG_T::n_chan; i1++) {
+// #pragma HLS UNROLL
+//       res[i1].write(0);
+//     }
+//   }
 
-  // Pointer Updates
-  pX = pX + 1;
-  if (pX == CONFIG_T::in_width) {
-    pX = 0;
-    pY = pY + 1;
-  }
-  if (pY == CONFIG_T::in_height) {
-    pY = 0;
-  }
-}
+//   // Pointer Updates
+//   pX = pX + 1;
+//   if (pX == CONFIG_T::in_width) {
+//     pX = 0;
+//     pY = pY + 1;
+//   }
+//   if (pY == CONFIG_T::in_height) {
+//     pY = 0;
+//   }
+// }
+*/
 
 template <class data_T, class res_T, typename CONFIG_T>
 void conv_2d_large_cl_padded(
@@ -260,23 +262,85 @@ void conv_2d_large_cl_padded(
   }
 }
 
+// template <class data_T, class res_T, typename CONFIG_T>
+// void compute_conv2d(
+//     hls::stream<data_T> data[CONFIG_T::n_chan],
+//     hls::stream<res_T> res[CONFIG_T::n_filt],
+//     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt / CONFIG_T::mult_config::merge_factor],
+//     typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+//   //    #pragma HLS DATAFLOW
+//   const static unsigned rowsize = (CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right);
+//   const static unsigned depth = 2 * (CONFIG_T::pad_left + CONFIG_T::pad_top * rowsize);
+//   hls::stream<res_T> padded_data[CONFIG_T::n_chan];
+// #pragma HLS STREAM variable = padded_data depth = depth dim = 1
+//   unsigned iN = 0;  // Number of zeros added
+//   zeropad<data_T, res_T, CONFIG_T>(iN, data, padded_data);
+
+//   for (unsigned i0 = 0; i0 < iN; i0++)  // For each added zero, call conv2d padded
+//   {
+//     conv_2d_large_cl_padded<data_T, res_T, CONFIG_T>(padded_data, res, weights, biases);
+//   }
+// }
+
 template <class data_T, class res_T, typename CONFIG_T>
 void compute_conv2d(
     hls::stream<data_T> data[CONFIG_T::n_chan],
     hls::stream<res_T> res[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt / CONFIG_T::mult_config::merge_factor],
     typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
-  //    #pragma HLS DATAFLOW
-  const static unsigned rowsize = (CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right);
-  const static unsigned depth = 2 * (CONFIG_T::pad_left + CONFIG_T::pad_top * rowsize);
-  hls::stream<res_T> padded_data[CONFIG_T::n_chan];
-#pragma HLS STREAM variable = padded_data depth = depth dim = 1
-  unsigned iN = 0;  // Number of zeros added
-  zeropad<data_T, res_T, CONFIG_T>(iN, data, padded_data);
 
-  for (unsigned i0 = 0; i0 < iN; i0++)  // For each added zero, call conv2d padded
+  const static int lShiftX = CONFIG_T::filt_width - 1;
+  const static int lShiftY = CONFIG_T::filt_height - 1;
+
+  static ap_shift_reg<data_T, (CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right)> layer_in_row[(CONFIG_T::filt_height)-1][CONFIG_T::n_chan];
+  #pragma HLS ARRAY_RESHAPE variable = layer_in_row complete dim = 2
+
+  data_T data_in[CONFIG_T::n_chan];
+  #pragma HLS ARRAY_RESHAPE variable = data_in complete
+
+  static data_T layer_in[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+  #pragma HLS ARRAY_RESHAPE variable = layer_in complete
+
+  res_T layer_reluout[CONFIG_T::n_filt];
+  #pragma HLS ARRAY_RESHAPE variable = layer_reluout complete dim = 0
+
+  res_T layer_out[CONFIG_T::n_filt];
+  #pragma HLS ARRAY_RESHAPE variable = layer_out complete dim = 0
+
+  static int pX = 0;
+  static int pY = 0;
+
+  // Stream -> array
+  for (int i1 = 0; i1 < CONFIG_T::n_chan; i1++) {
+    #pragma HLS UNROLL
+    data_in[i1] = data[i1].read();
+  }
+
+  nnet::cnnshift_arr<data_T, res_T, CONFIG_T>(data_in, layer_in_row, layer_in);
+
+  if ((pX - lShiftX) % CONFIG_T::stride_width == 0 && (pY - lShiftY) % CONFIG_T::stride_height == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+    data_T filter_in[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+    #pragma HLS ARRAY_PARTITION variable = filter_in complete
+
+    // Flatten filter
+    for (unsigned itmp = 0; itmp < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; itmp++) {
+      #pragma HLS UNROLL
+      filter_in[itmp] = layer_in[itmp];
+    }
+    nnet::dense_large<data_T, res_T, typename CONFIG_T::mult_config>(filter_in, layer_reluout, weights, biases);
+    nnet::leaky_relu<data_T, res_T, typename CONFIG_T::relu_config>(layer_reluout, 30000001192092896, layer_out);
+    nnet::fill_image<data_T, data_T, CONFIG_T>(layer_out, res);
+  }
+
+  // Pointer Housekeeping
+  pX = pX + 1;
+  if (pX == CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right)  // Includes padding, end of line (padded)
   {
-    conv_2d_large_cl_padded<data_T, res_T, CONFIG_T>(padded_data, res, weights, biases);
+    pX = 0;
+    pY = pY + 1;
+  }
+  if (pY == CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom) {  // Reached bottom of image
+    pY = 0;
   }
 }
 

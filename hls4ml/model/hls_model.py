@@ -1771,10 +1771,6 @@ class Copy(Layer):
         self.add_output_variable(inp.shape, inp.dim_names, depth=depth, cl=cl, out_name=self.outputs[0], var_name='layer{index}_cpy')
 
     def config_cpp(self):
-        # params = self._default_config_params()
-        # params['n_elem'] = self.get_attr('n_elem')
-        # params['n_chan'] = self.get_attr('n_chan')
-        # return self._config_template.format(**params)
         return None
 
     def function_cpp(self,iFirst=False):
@@ -1786,6 +1782,42 @@ class Copy(Layer):
     def print_tcl(self):
         params = self._default_tcl_params()
         return self._tcl_template.format(**params)
+
+class ZeroPadding2D(Layer):
+    def initialize(self):
+        if self.get_attr('data_format') == 'channels_last':
+            shape = [self.attributes['out_height'], self.attributes['out_width'], self.attributes['n_chan']]
+            dims = ['OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index), 'N_CHAN_{}'.format(self.index)]
+        else:
+            shape = [self.attributes['n_chan'], self.attributes['out_height'], self.attributes['out_width']]
+            dims = ['N_CHAN_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
+        self.add_output_variable(shape, dims)
+
+    def function_cpp(self,iFirst=False):
+        params = self._default_function_params()
+        params['data_format'] = 'cf' if self.get_attr('data_format') == 'channels_first' else 'cl'
+        return [self._function_template.format(**params)]
+
+    def config_cpp(self):
+        params = self._default_config_params()
+        if self.get_attr('data_format') == 'channels_last':
+            params['in_height'] = self.get_input_variable().dim_names[0]
+            params['in_width'] = self.get_input_variable().dim_names[1]
+            params['n_chan'] = self.get_input_variable().dim_names[2]
+            params['out_height'] = self.get_output_variable().dim_names[0]
+            params['out_width'] = self.get_output_variable().dim_names[1]
+        else:
+            params['n_chan'] = self.get_input_variable().dim_names[0]
+            params['in_height'] = self.get_input_variable().dim_names[1]
+            params['in_width'] = self.get_input_variable().dim_names[2]
+            params['out_height'] = self.get_output_variable().dim_names[1]
+            params['out_width'] = self.get_output_variable().dim_names[2]
+
+        return self._config_template.format(**params)
+    
+    def print_tcl(self):
+        return ""
+
 
 layer_map = {
     'InputLayer'         : Input,
@@ -1811,6 +1843,7 @@ layer_map = {
     'Split'              : Split,
     'Concatenate'        : Concatenate,
     'Copy'               : Copy,
+    'ZeroPadding2D'      : ZeroPadding2D,
 }
 
 def register_layer(name, clazz):
