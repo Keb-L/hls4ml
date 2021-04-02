@@ -138,6 +138,7 @@ conv2dmerge_config_template = """struct config{index} : nnet::conv2d_config {{
 
 activ_config_template = """struct {type}_config{index} : nnet::activ_config {{
     static const unsigned n_in = {n_in};
+    static const unsigned n_chan = {n_chan};
     static const unsigned table_size = 1024;
     static const unsigned io_type = nnet::{iotype};
 }};\n"""

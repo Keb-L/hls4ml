@@ -389,6 +389,6 @@ def keras_to_hls(yamlConfig):
     reader = KerasDataReader(yamlConfig)
     print('Creating HLS model')
     hls_model = HLSModel(yamlConfig, reader, layer_list, input_layers, output_layers)
-    optimizers = ['fuse_conv','fuse_conv2','fuse_merge','eliminate_linear_activation', 'merge_batch_norm_quantized_tanh', 'quantize_dense_output', 'insert_copy_layer', 'conv2d_same_pad']#, 'fuse_dense_batch_norm']
+    optimizers = ['fuse_conv2','fuse_merge','eliminate_linear_activation', 'merge_batch_norm_quantized_tanh', 'quantize_dense_output', 'insert_copy_layer', 'conv2d_same_pad']#, 'fuse_dense_batch_norm'] 'fuse_conv','
     optimize_model(hls_model, optimizers)
     return hls_model

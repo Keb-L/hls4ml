@@ -266,7 +266,7 @@ void dense_large(
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in * CONFIG_T::n_out / CONFIG_T::merge_factor],
     typename CONFIG_T::bias_t biases[CONFIG_T::n_out]) {
 #pragma HLS INLINE region
-  //  if(CONFIG_T::merge_factor == 1) {
+
   if (CONFIG_T::reuse_factor <= CONFIG_T::n_in) {
     dense_large_rf_leq_nin<data_T, res_T, CONFIG_T>(data, res, weights, biases);
   } else if (CONFIG_T::reuse_factor % CONFIG_T::n_in == 0) {
@@ -274,17 +274,7 @@ void dense_large(
   } else {
     dense_large_rf_gt_nin<data_T, res_T, CONFIG_T>(data, res, weights, biases);
   }
-  /* 
- } else if (CONFIG_T::merge_factor == 2) {
-    if (CONFIG_T::reuse_factor <= CONFIG_T::n_in) {
-       dense_large_rf_leq_nin_merge<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-    } else if (CONFIG_T::reuse_factor % CONFIG_T::n_in == 0) {
-        dense_large_rf_gt_nin_rem0_merge<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-    } else {
-        dense_large_rf_gt_nin_merge<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-    } 
-  } // can't merge more weights to use DSPs just yet
-    */
+
 }
 
 template <class data_T, class res_T, typename CONFIG_T>
@@ -333,10 +323,40 @@ void dense_large_stream(
     hls::stream<res_T> res[CONFIG_T::n_output],
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in * CONFIG_T::n_out],
     typename CONFIG_T::bias_t biases[CONFIG_T::n_out]) {
-  for (int j = 0; j < CONFIG_T::n_in / (CONFIG_T::n_input); j++) {
-#pragma HLS UNROLL
-    compute_dense<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+
+  static data_T dense_data[CONFIG_T::n_in];
+#pragma HLS ARRAY_PARTITION variable = dense_data complete
+
+  res_T dense_res[CONFIG_T::n_out];
+#pragma HLS ARRAY_PARTITION variable = dense_res complete
+
+  // Flatten the data before dense operation
+DataPrepare:
+  for (int i_in = 0; i_in < CONFIG_T::n_in / CONFIG_T::n_input; i_in++) {
+  DataChannel:
+    for (int c = 0; c < CONFIG_T::n_input; c++) {
+      #pragma HLS UNROLL
+      dense_data[i_in * CONFIG_T::n_input + c] = data[c].read();
+    }
   }
+
+  // Compute dense result
+  dense_large<data_T, res_T, CONFIG_T>(dense_data, dense_res, weights, biases);
+
+  // Write result to output streams
+ResWrite:
+  for (int i_out = 0; i_out < CONFIG_T::n_out / CONFIG_T::n_output; i_out++) {
+  ResChannel:
+    for (int c = 0; c < CONFIG_T::n_output; c++) {
+      #pragma HLS UNROLL
+      res[c].write(dense_res[i_out * CONFIG_T::n_output + c]);
+    }
+  }
+
+  //   for (int j = 0; j < CONFIG_T::n_in / (CONFIG_T::n_input); j++) {
+  // #pragma HLS UNROLL
+  //     compute_dense<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+  //   }
 }
 
 }  // namespace nnet

@@ -50,6 +50,7 @@ struct padding2d_config {
 template <class res_T, typename CONFIG_T>
 void fill_zero(hls::stream<res_T> res[CONFIG_T::n_chan]) {
   #pragma HLS INLINE
+  ChannelFillZero:
   for (int c = 0; c < CONFIG_T::n_chan; c++) {
     #pragma HLS UNROLL
     res[c].write(0);

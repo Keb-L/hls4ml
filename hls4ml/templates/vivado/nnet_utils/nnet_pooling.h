@@ -168,7 +168,7 @@ void compute_pool2d(
       nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
   }
 
-  nnet::cnnshift_arr<data_T, res_T, CONFIG_T>(data_in, layer_in_row, layer_in);
+  nnet::shift_line_buffer<data_T, res_T, CONFIG_T>(data_in, layer_in_row, layer_in);
 
   //Processs image
   unsigned pLoop = 1;  // Padding why?

@@ -1384,6 +1384,7 @@ class Activation(Layer):
         params['type'] = self.get_attr('activation')
         if self.model.config.get_config_value('IOType') == 'io_serial':
             params['n_in'] = self.get_input_variable().size_cpp_cnn()
+            params['n_elem'] = self.get_input_variable().size_cpp() 
         else:
             params['n_in'] = self.get_input_variable().size_cpp()
 
@@ -1791,7 +1792,11 @@ class ZeroPadding2D(Layer):
         else:
             shape = [self.attributes['n_chan'], self.attributes['out_height'], self.attributes['out_width']]
             dims = ['N_CHAN_{}'.format(self.index), 'OUT_HEIGHT_{}'.format(self.index), 'OUT_WIDTH_{}'.format(self.index)]
-        self.add_output_variable(shape, dims)
+
+        cl = self.get_attr('data_format') == 'channels_last'
+        depth = self.get_attr('out_height')*self.get_attr('out_width')
+
+        self.add_output_variable(shape, dims, depth=depth, cl=cl)
 
     def function_cpp(self,iFirst=False):
         params = self._default_function_params()
