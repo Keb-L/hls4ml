@@ -384,15 +384,10 @@ template <class data_T, class res_T, typename CONFIG_T>
 void leaky_relu(data_T data[CONFIG_T::n_in], data_T alpha, res_T res[CONFIG_T::n_in]) {
   #pragma HLS INLINE
 
-  if (CONFIG_T::io_type == io_parallel) {
-#pragma HLS PIPELINE
-  }
-
   data_T datareg;
   for (int ii = 0; ii < CONFIG_T::n_in; ii++) {
-    if (CONFIG_T::io_type == io_serial) {
-#pragma HLS PIPELINE
-    }
+    #pragma HLS UNROLL
+
     datareg = data[ii];
     if (datareg > 0)
       res[ii] = datareg;
@@ -412,7 +407,7 @@ void leaky_relu_stream(hls::stream<data_T> data[CONFIG_T::n_in], data_T alpha, h
 
 LeakyReLUActLoop:
   for (int i0 = 0; i0 < CONFIG_T::n_elem / CONFIG_T::n_in; i0++) {
-    // #pragma HLS PIPELINE
+    #pragma HLS PIPELINE
 
   DataPrepare:
     for (int c = 0; c < CONFIG_T::n_in; c++) {

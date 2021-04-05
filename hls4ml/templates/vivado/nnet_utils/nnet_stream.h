@@ -58,6 +58,17 @@ void fill_zero(hls::stream<res_T> res[CONFIG_T::n_chan]) {
 }
 
 template <class data_T, class res_T, typename CONFIG_T>
+void fill_data(hls::stream<data_T> data[CONFIG_T::n_chan],
+               hls::stream<res_T> res[CONFIG_T::n_chan]) {
+  #pragma HLS INLINE
+  ChannelFillData:
+  for (int c = 0; c < CONFIG_T::n_chan; c++) {
+    #pragma HLS UNROLL
+    res[c].write(data[c].read());
+  }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
 void zeropad2d_cl(
     hls::stream<data_T> data[CONFIG_T::n_chan],
     hls::stream<res_T> res[CONFIG_T::n_chan]) {
@@ -77,10 +88,7 @@ PadMain:
     }
   CopyMain:
     for (int j = 0; j < CONFIG_T::in_width; j++) {
-    CopyChannel:
-      for (int c = 0; c < CONFIG_T::n_chan; c++) {
-        res[c].write(data[c].read());
-      }
+      fill_data<data_T, res_T, CONFIG_T>(data, res);
     }
   PadRight:
     for (int j = 0; j < CONFIG_T::pad_right; j++) {
