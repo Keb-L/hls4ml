@@ -92,8 +92,8 @@ class HLSConfig(object):
         if tclk is None:
             tclk = self.model_tclk
 
-        if tclk is None:
-            raise Exception('No target latency for {} found and no default specified.'.format(layer.name))
+        # if tclk is None:
+        #     raise Exception('No target latency for {} found and no default specified.'.format(layer.name))
         return tclk
 
     def get_merge_factor(self, layer):
@@ -445,7 +445,8 @@ class ArrayVariable(Variable):
         self.pragma = pragma.format(name=self.name, type=type, factor=factor, dim=dim)
 
     def stream(self, depth=1, dim=1):
-        pragma = '#pragma HLS STREAM variable={name} depth={depth} dim={dim}'
+        pragma = '#pragma HLS STREAM variable={name} depth={depth} dim={dim}\n\t'
+        pragma += '#pragma HLS STABLE variable={name}'
         self.pragma = pragma.format(name=self.name, depth=self.depth, dim=dim)
 
     def get_shape(self):
@@ -1156,6 +1157,7 @@ class Conv2D(Layer):
             valid_rf = self.model.config.backend.get_valid_reuse_factors(self)
             chosen_rf = self.model.config.get_reuse_factor(self)
             #use chosen to balance the throughput in clocks
+            # shape = self.get_input_variable().shape
             shape = self.get_output_variable().shape
 
             # Get the target clock latency

@@ -442,7 +442,7 @@ class VivadoWriter(Writer):
                 first=True
 
                 for layer in model.get_layers():
-                    last_layer = layer is list(model.get_layers())[-1]
+                    # last_layer = layer is list(model.get_layers())[-1]
 
                     vars = layer.get_variables()
                     for var in vars:
@@ -456,13 +456,13 @@ class VivadoWriter(Writer):
                                     newline += '    ' + var.pragma + '\n'
 
                     func = layer.function_cpp(first)
-                    if last_layer: # for the last layer, insert temporary layer
-                        output_vars = model.get_output_variables()[-1]
-                        temp_stream = output_vars.name[:-4]+'b_out'
-                        newline += '\thls::stream<{type}>{name}[{shape}];\n'.format(type='result_t', name=temp_stream, shape=output_vars.dim_names[-1])
-                        newline += '\t#pragma HLS STREAM variable={name} depth=1 dim=1\n'.format(name=temp_stream) 
+                    # if last_layer: # for the last layer, insert temporary layer
+                    #     output_vars = model.get_output_variables()[-1]
+                    #     temp_stream = output_vars.name[:-4]+'b_out'
+                    #     newline += '\thls::stream<{type}>{name}[{shape}];\n'.format(type='result_t', name=temp_stream, shape=output_vars.dim_names[-1])
+                    #     newline += '\t#pragma HLS STREAM variable={name} depth=1 dim=1\n'.format(name=temp_stream) 
 
-                        func[-1] = func[-1].replace(output_vars.cppname, temp_stream)
+                    #     func[-1] = func[-1].replace(output_vars.cppname, temp_stream)
 
                     if 'put' not in layer.name: #put is short for input
                         first=False
@@ -488,15 +488,15 @@ class VivadoWriter(Writer):
                                 newline += '\t' + line + '\n'
                         newline += '\n'
                     
-                    if last_layer:
-                        layer_output_shape = output_vars.shape
-                        if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
-                        newline += '\tfor(int i0 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
-                        newline += '\t\t#pragma HLS UNROLL\n'
-                        newline += '\t\tresult_t pTmp = (result_t) {name}[i0].read();\n'.format(name=temp_stream)
-                        newline += '\t\t{name}[i0].write(pTmp);\n'.format(name=output_vars.cppname)
-                        newline += '\t}\n'
-                        if len(layer_output_shape) > 1: newline += '\t}\n'
+                    # if last_layer:
+                    #     layer_output_shape = output_vars.shape
+                    #     if len(layer_output_shape) > 1: newline += '\tfor(int i0 = 0; i0 < {}; i0++) {{ \n'.format( np.prod(layer_output_shape[0:-1]) )
+                    #     newline += '\tfor(int i0 = 0; i0 < {shape}; i0++) {{ \n'.format(shape=layer_output_shape[-1])
+                    #     newline += '\t\t#pragma HLS UNROLL\n'
+                    #     newline += '\t\tresult_t pTmp = (result_t) {name}[i0].read();\n'.format(name=temp_stream)
+                    #     newline += '\t\t{name}[i0].write(pTmp);\n'.format(name=output_vars.cppname)
+                    #     newline += '\t}\n'
+                    #     if len(layer_output_shape) > 1: newline += '\t}\n'
 
                     prev_layer = layer
 

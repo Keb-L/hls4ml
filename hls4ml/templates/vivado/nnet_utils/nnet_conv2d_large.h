@@ -150,14 +150,16 @@ void compute_conv2d(
   }
 
   // Pointer Housekeeping
-  pX = pX + 1;
-  if (pX == CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right)  // Includes padding, end of line (padded)
+  if (pX + 1 == CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right)  // Includes padding, end of line (padded)
   {
     pX = 0;
-    pY = pY + 1;
-  }
-  if (pY == CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom) {  // Reached bottom of image
-    pY = 0;
+    if (pY + 1 == CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom) {  // Reached bottom of image
+      pY = 0;
+    } else {
+      pY = pY + 1;
+    }
+  } else {
+    pX = pX + 1;
   }
 }
 

@@ -199,16 +199,18 @@ void compute_pool2d(
     }
     
     // Update pointers
-    pX = pX + 1;
-    if (pX == CONFIG_T::in_width + CONFIG_T::pad_right) {
+    if (pX + 1 == CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right)  // Includes padding, end of line (padded)
+    {
       pX = 0;
-      pY = pY + 1;
-      for (int i1 = 0; i1 < CONFIG_T::pad_left; i1++)
-        nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
-    }
-
-    if (pY == CONFIG_T::in_height) {
-      pY = 0;
+      if (pY + 1 == CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom) {  // Reached bottom of image
+        pY = 0;
+      } else {
+        pY = pY + 1;
+        for (int i1 = 0; i1 < CONFIG_T::pad_left; i1++) // Add padding
+          nnet::cnnshiftzero_arr<data_T, res_T, CONFIG_T>(layer_in_row, layer_in);
+      }
+    } else {
+      pX = pX + 1;
     }
   }
 }
