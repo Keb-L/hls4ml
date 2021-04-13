@@ -223,7 +223,8 @@ PoolHeight:
   for (int i0 = 0; i0 < CONFIG_T::in_height; i0++) {
   PoolWidth:
     for (int i1 = 0; i1 < CONFIG_T::in_width; i1++) {
-#pragma HLS LOOP_FLATTEN
+      #pragma HLS LOOP_FLATTEN
+      #pragma HLS PIPELINE
       compute_pool2d<data_T, res_T, CONFIG_T>(data, res);
     }
   }
