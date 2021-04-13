@@ -135,17 +135,14 @@ void compute_conv2d(
 
   // Check pointers to compute dense
   if ((pX - lShiftX) % CONFIG_T::stride_width == 0 && (pY - lShiftY) % CONFIG_T::stride_height == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
-    // data_T filter_in[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
-    // #pragma HLS ARRAY_PARTITION variable = filter_in complete
-
-    // // Flatten filter
-    // for (unsigned itmp = 0; itmp < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; itmp++) {
-    //   #pragma HLS UNROLL
-    //   filter_in[itmp] = layer_in[itmp];
-    // }
+    // Dense multiply
     #pragma HLS INLINE region
-    nnet::dense_large<data_T, res_T, typename CONFIG_T::mult_config>(layer_in, layer_out, weights, biases);
-    // nnet::leaky_relu<data_T, res_T, typename CONFIG_T::relu_config>(layer_reluout, 30000001192092896, layer_out);
+    if (CONFIG_T::strategy == nnet::latency) {
+        dense_large_latency<data_T, res_T, typename CONFIG_T::mult_config>(layer_in, layer_out, weights, biases);
+    } else {
+        dense_large_resource<data_T, res_T, typename CONFIG_T::mult_config>(layer_in, layer_out, weights, biases);
+    }
+    // Write output
     nnet::fill_image<data_T, data_T, CONFIG_T>(layer_out, res);
   }
 
@@ -175,7 +172,10 @@ ReadInputHeight:
   for (int i0 = 0; i0 < CONFIG_T::in_height; i0++) {
   ReadInputWidth:
     for (int i1 = 0; i1 < CONFIG_T::in_width; i1++) {
-#pragma HLS LOOP_FLATTEN
+      #pragma HLS LOOP_FLATTEN
+      if(CONFIG_T::strategy == nnet::latency) {
+        #pragma HLS PIPELINE II=CONFIG_T::reuse_factor // For latency
+      }
       compute_conv2d<data_T, res_T, CONFIG_T>(data, res, weights, biases);
     }
   }

@@ -260,7 +260,7 @@ Result:
 }
 
 template <class data_T, class res_T, typename CONFIG_T>
-void dense_large(
+void dense_large_resource(
     data_T data[CONFIG_T::n_in],
     res_T res[CONFIG_T::n_out],
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in * CONFIG_T::n_out / CONFIG_T::merge_factor],
@@ -274,48 +274,75 @@ void dense_large(
   } else {
     dense_large_rf_gt_nin<data_T, res_T, CONFIG_T>(data, res, weights, biases);
   }
-
 }
 
-template <class data_T, class res_T, typename CONFIG_T>
-void compute_dense(
-    hls::stream<data_T> data[CONFIG_T::n_input],
-    hls::stream<res_T> res[CONFIG_T::n_output],
-    typename CONFIG_T::weight_t weights[CONFIG_T::n_in * CONFIG_T::n_out],
-    typename CONFIG_T::bias_t biases[CONFIG_T::n_out]) {
-  // Input pointer
-  static unsigned pX = 0;
+template<class data_T, class res_T, typename CONFIG_T>
+void dense_large_latency(
+    data_T    data[CONFIG_T::n_in],
+    res_T     res[CONFIG_T::n_out],
+    typename CONFIG_T::weight_t  weights[CONFIG_T::n_in*CONFIG_T::n_out],
+    typename CONFIG_T::bias_t    biases[CONFIG_T::n_out])
+{
+    data_T cache;
+    typename CONFIG_T::accum_t mult[CONFIG_T::n_in*CONFIG_T::n_out];
+    typename CONFIG_T::accum_t acc[CONFIG_T::n_out];
 
-  // Flatten
-  static data_T tmpdata[CONFIG_T::n_in];
-#pragma HLS ARRAY_PARTITION variable = tmpdata complete
+    // Use a function_instantiate in case it helps to explicitly optimize unchanging weights/biases
+    #pragma HLS function_instantiate variable=weights,biases
 
-  // for (int j = 0; j < CONFIG_T::n_in / (CONFIG_T::n_input - 1); j++) {
-  // Read one element from each channel and save to tmpdata
-  for (int i0 = 0; i0 < CONFIG_T::n_input; i0++) {
-#pragma HLS UNROLL
-    data_T pTmp = data[i0].read();
-    //if(pX == 0) tmpdata[i0] = pTmp;
-    unsigned index = i0 + pX * CONFIG_T::n_input;
-    tmpdata[index] = pTmp;
-  }
-  pX = pX + 1;
-  // }
+    #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
 
-  // Compute dense
-  if (pX == CONFIG_T::block_factor) {
-    data_T tmpres[CONFIG_T::n_out];
-#pragma HLS ARRAY_PARTITION variable = tmpdres complete
-    dense_large<data_T, res_T, CONFIG_T>(tmpdata, tmpres, weights, biases);
+    #pragma HLS ARRAY_PARTITION variable=biases complete
+    #pragma HLS ARRAY_PARTITION variable=mult complete
+    #pragma HLS ARRAY_PARTITION variable=acc complete
 
-    for (int i0 = 0; i0 < CONFIG_T::n_out; i0++) {
-#pragma HLS UNROLL
-      res_T pTmp = tmpres[i0];
-      res[i0].write(pTmp);
+    int multiplier_limit  = ceil(float(CONFIG_T::n_in*CONFIG_T::n_out) / float(CONFIG_T::reuse_factor)) - floor(float(CONFIG_T::n_zeros) / float(CONFIG_T::reuse_factor));
+    #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
+
+    // Do the matrix-multiply
+    Product1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
+        cache = data[ii];
+        Product2: for(int jj = 0; jj < CONFIG_T::n_out; jj++) {
+          int index = ii*CONFIG_T::n_out+jj;
+          mult[index] = cache * weights[index];
+        }
     }
-    pX = 0;
-  }
+
+    // Initialize accumulator with input biases
+    ResetAccum: for(int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
+      acc[iacc] = (typename CONFIG_T::accum_t) biases[iacc];
+    }
+
+    // Accumulate multiplication result
+    Accum1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
+        Accum2: for(int jj = 0; jj < CONFIG_T::n_out; jj++) {
+        int index = ii*CONFIG_T::n_out+jj;
+        acc[jj] += mult[index];
+        }
+    }
+
+    // Cast to "res_t" type
+    Result: for(int ires = 0; ires < CONFIG_T::n_out; ires++){
+        res[ires] = cast<data_T, res_T, CONFIG_T>(acc[ires]);
+    }
 }
+
+template<class data_T, class res_T, typename CONFIG_T>
+void dense_large(
+    data_T data[CONFIG_T::n_in],
+    res_T  res[CONFIG_T::n_out],
+    typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out / CONFIG_T::merge_factor],
+    typename CONFIG_T::bias_t   biases[CONFIG_T::n_out]
+) {
+    #pragma HLS INLINE region
+    if (CONFIG_T::strategy == nnet::latency) {
+      #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+      dense_large_latency<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+      dense_large_resource<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
+}
+
 
 template <class data_T, class res_T, typename CONFIG_T>
 void dense_large_stream(
@@ -352,11 +379,6 @@ ResWrite:
       res[c].write(dense_res[i_out * CONFIG_T::n_output + c]);
     }
   }
-
-  //   for (int j = 0; j < CONFIG_T::n_in / (CONFIG_T::n_input); j++) {
-  // #pragma HLS UNROLL
-  //     compute_dense<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-  //   }
 }
 
 }  // namespace nnet

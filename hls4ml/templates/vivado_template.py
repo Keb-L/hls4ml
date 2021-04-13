@@ -14,7 +14,8 @@ dense_config_template = """struct config{index} : nnet::dense_config {{
     static const unsigned n_in = {n_in};
     static const unsigned n_out = {n_out};
     static const unsigned io_type = nnet::{iotype};
-    static const unsigned reuse_factor = {reuse};
+    static const unsigned strategy = nnet::{strategy};
+    static const unsigned reuse_factor = {reuse_factor};
     static const unsigned n_zeros = {nzeros};
     static const unsigned n_nonzeros = {nonzeros};
     static const bool store_weights_in_bram = false;
@@ -72,6 +73,7 @@ conv_mult_config_template = """struct config{index}_mult : nnet::dense_config {{
     static const unsigned n_out = {n_out};
     static const unsigned reuse_factor = {reuse};
     static const unsigned merge_factor = {merge_factor};
+    static const unsigned strategy = nnet::{strategy};
     typedef {accum_t} accum_t;
     typedef {bias_t} bias_t;
     typedef {weight_t} weight_t;
@@ -96,6 +98,7 @@ conv2d_config_template = """struct config{index} : nnet::conv2d_config {{
     static const unsigned reuse_factor = {reuse};
     static const unsigned n_zeros = {nzeros};
     static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::{strategy};
     typedef {accum_t} accum_t;
     typedef {bias_t} bias_t;
     typedef {weight_t} weight_t;
@@ -241,13 +244,13 @@ zeropad2d_config_template = """struct config{index} : nnet::padding2d_config {{
     'ZeroPadding2D'          : zeropad2d_config_template,
 }'''
 
-dense_function_template = 'nnet::dense_{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
-batchnorm_function_template = 'nnet::normalize{strategy}<{input_t}, {output_t}, {config}>({input}, {output}, {scale}, {bias});'
-conv1d_function_template = 'nnet::conv_1d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
-conv2d_function_template = 'nnet::conv_2d_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
+dense_function_template = 'nnet::dense_large_stream<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
+batchnorm_function_template = 'nnet::normalize<{input_t}, {output_t}, {config}>({input}, {output}, {scale}, {bias});'
+conv1d_function_template = 'nnet::conv_1d_large_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
+conv2d_function_template = 'nnet::conv_2d_large_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
 upsampling2d_function_template = 'nnet::upsampling2d_{strategy}<{input_t}, {output_t}, {config}>({input}, {output});'
 conv2dmerge_function_template = 'nnet::conv_2d_merge_{strategy}_{data_format}<{input_t}, {output_t}, {config}>({input}, {output}, {w}, {b});'
-activ_function_template = 'nnet::{activation}{strategy}<{input_t}, {output_t}, {config}>({input}, {output});'
+activ_function_template = 'nnet::{activation}_stream<{input_t}, {output_t}, {config}>({input}, {output});'
 param_activ_function_template = 'nnet::{activation}{strategy}<{input_t}, {output_t}, {config}>({input}, {param}, {output});'
 pooling1d_function_template = 'nnet::pooling1d<{input_t}, {config}>({input}, {output});'
 pooling2d_function_template = 'nnet::pooling2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'

@@ -920,15 +920,14 @@ class Dense(Layer):
         self.set_attr('n_in',self.get_input_variable().size())
 
         if self.model.config.is_resource_strategy(self):
-            if self.model.config.backend.name == 'Vivado':
-                self.set_attr('reuse', self.reuse_factor())
+            self.set_attr('strategy', 'resource')
             if compression:
-                self.set_attr('strategy', 'compressed')
-            else:
-                self.set_attr('strategy', 'large')
+                self.set_attr('strategy', 'compressed')                
         else:
             self.set_attr('strategy', 'latency')
         
+        if self.model.config.backend.name == 'Vivado':
+            self.set_attr('reuse_factor', self.reuse_factor())
         # Reset channel
         # if self.model.config.get_config_value('IOType') == 'io_serial':
         #     shape[0] += 1
@@ -991,7 +990,7 @@ class Dense(Layer):
             params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)
             params['n_out'] = self.get_output_variable().size_cpp(isSerial=True)
 
-            params['reuse'] = self.get_attr('reuse')
+            params['reuse_factor'] = self.get_attr('reuse_factor')
 
             if len(self.get_input_variable().shape) > 2 and (self.get_input_variable().size()/self.get_input_variable().shape[2]) != 1:
                 params['n_in'] = self.get_input_variable().size_cpp(isSerial=True)
@@ -1013,6 +1012,8 @@ class Dense(Layer):
         params['merge_factor'] = self.model.config.get_merge_factor(self)
         params['nzeros'] = self.get_weights('weight').nzeros
         params['nonzeros'] = self.get_weights('weight').nonzeros
+
+        params['strategy'] = self.get_attr('strategy')
 
         return self._config_template.format(**params)
 
@@ -1140,19 +1141,19 @@ class Conv2D(Layer):
 
         self.add_weights()
         self.add_bias()
+
         if self.model.config.is_resource_strategy(self):
-            self.set_attr('strategy', 'large')
+            self.set_attr('strategy', 'resource')
         else:
             self.set_attr('strategy', 'latency')
+
 
         # params = self._default_function_params()
         # params['reuse'] = self.reuse_factor()
 
-        self.weights['weight'].data = np.transpose(self.weights['weight'].data, axes=[3, 0, 1, 2]) #(H,W,C,F) => (F,C,H,W)
+        # self.weights['weight'].data = np.transpose(self.weights['weight'].data, axes=[3, 0, 1, 2]) #(H,W,C,F) => (F,C,H,W)
 
     def reuse_factor(self):
-        if self.get_attr('strategy') == 'latency':
-            return self.model.config.get_reuse_factor(self)
         if self.model.config.backend.name == 'Vivado':
             valid_rf = self.model.config.backend.get_valid_reuse_factors(self)
             chosen_rf = self.model.config.get_reuse_factor(self)
@@ -1236,30 +1237,32 @@ class Conv2D(Layer):
         params['dilation'] = self.get_attr('dilation', 1)
         params['nzeros'] = self.get_weights('weight').nzeros
         params['config_t'] = 'std::nullptr_t'
+        params['strategy'] = self.get_attr('strategy')
 
-        if self.model.config.is_resource_strategy(self):
-            params['config_t'] = 'config{}_mult'.format(self.index)
-            params['config_t_relu'] = 'config{}_relu'.format(self.index)
-            conv_config = self._config_template[0].format(**params)
-            
-            mult_params = self._default_config_params()
-            mult_params['reuse'] = params['reuse']
-            mult_params['merge_factor'] = self.model.config.get_merge_factor(self)
-            if self.get_attr('data_format') == 'channels_last':
-                mult_params['n_in'] = self.get_input_variable().shape[2] * self.get_attr('filt_height') * self.get_attr('filt_width')
-            else:
-                mult_params['n_in'] = self.get_input_variable().shape[0] * self.get_attr('filt_height') * self.get_attr('filt_width')
-            mult_params['n_out'] = self.get_attr('n_filt')
-            mult_config = self._config_template[1].format(**mult_params)
-
-            relu_params = self._default_config_params()
-            relu_params['n_in'] = self.get_attr('n_filt') 
-            relu_params['n_out'] = self.get_attr('n_filt') 
-            relu_config = self._config_template[2].format(**relu_params)
-
-            return relu_config + '\n' + mult_config + '\n' + conv_config
+        # if self.model.config.is_resource_strategy(self):
+        params['config_t'] = 'config{}_mult'.format(self.index)
+        params['config_t_relu'] = 'config{}_relu'.format(self.index)
+        conv_config = self._config_template[0].format(**params)
+        
+        mult_params = self._default_config_params()
+        mult_params['reuse'] = params['reuse']
+        mult_params['strategy'] = self.get_attr('strategy')
+        mult_params['merge_factor'] = self.model.config.get_merge_factor(self)
+        if self.get_attr('data_format') == 'channels_last':
+            mult_params['n_in'] = self.get_input_variable().shape[2] * self.get_attr('filt_height') * self.get_attr('filt_width')
         else:
-            return self._config_template[0].format(**params)
+            mult_params['n_in'] = self.get_input_variable().shape[0] * self.get_attr('filt_height') * self.get_attr('filt_width')
+        mult_params['n_out'] = self.get_attr('n_filt')
+        mult_config = self._config_template[1].format(**mult_params)
+
+        relu_params = self._default_config_params()
+        relu_params['n_in'] = self.get_attr('n_filt') 
+        relu_params['n_out'] = self.get_attr('n_filt') 
+        relu_config = self._config_template[2].format(**relu_params)
+
+        return relu_config + '\n' + mult_config + '\n' + conv_config
+        # else:
+        #     return self._config_template[0].format(**params)
     
 
     def print_tcl(self):

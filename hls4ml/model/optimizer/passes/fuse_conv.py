@@ -90,7 +90,7 @@ class FuseConv2(OptimizerPass):
             bn_scale_um = norm_node.weights['scale']
         bn_bias     = norm_node.weights['bias']
 
-        if dense_node.get_attr('strategy') != 'large':
+        if dense_node.get_attr('strategy') != 'resource':
             fused_weight = bn_scale.data * dense_weight.data
         else:
             fused_weight = (bn_scale.data * dense_weight.data.T).T
