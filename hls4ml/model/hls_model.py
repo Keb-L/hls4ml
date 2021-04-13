@@ -1144,6 +1144,7 @@ class Conv2D(Layer):
 
         if self.model.config.is_resource_strategy(self):
             self.set_attr('strategy', 'resource')
+            self.weights['weight'].data = np.transpose(self.weights['weight'].data, axes=[3, 0, 1, 2]) #(H,W,C,F) => (F,C,H,W)
         else:
             self.set_attr('strategy', 'latency')
 
