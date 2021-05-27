@@ -307,13 +307,12 @@ void print_result(res_T result[SIZE], std::ostream &out, bool keep = false) {
 }
 
 template<class res_T, size_t SIZE>
-void print_result(hls::stream<res_T> &result, std::ostream &out, bool keep = false) {
-    for(int i = 0; i < SIZE / res_T::size; i++) {
-        res_T res_pack = result.read();
-        for(int j = 0; j < res_T::size; j++) {
-            out << res_pack[j] << " ";
-        }
-        if (keep) result.write(res_pack);
+void print_result(hls::stream<res_T> result[SIZE], std::ostream &out, bool keep = false) {
+    for(int i = 0; i < SIZE; i++) {
+        res_T res = result[i].read();
+        out << res << " ";
+
+        if (keep) result[i].write(res);
     }
     out << std::endl;
 }
@@ -323,14 +322,12 @@ void fill_zero(data_T data[SIZE]) {
     std::fill_n(data, SIZE, 0.);
 }
 
-template<class data_T, size_t SIZE>
-void fill_zero(hls::stream<data_T> &data) {
-    for(int i = 0; i < SIZE / data_T::size; i++) {
-        data_T data_pack;
-        for(int j = 0; j < data_T::size; j++) {
-            data_pack[j] = 0.;
+template<class data_T, size_t SIZE, size_t DIM>
+void fill_zero(hls::stream<data_T> data[DIM]) {
+    for(int i = 0; i < SIZE / DIM; i++) {
+        for(int j = 0; j < DIM; j++) {
+            data[j].write(0.);
         }
-        data.write(data_pack);
     }
 }
 

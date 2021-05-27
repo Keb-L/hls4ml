@@ -171,7 +171,8 @@ class ArrayVariable(Variable):
 
 class StreamVariable(Variable):
     def __init__(self, shape, dim_names, var_name='layer{index}', type_name='layer{index}_t', precision=None, n_pack=1, depth=0, **kwargs):
-        super(StreamVariable, self).__init__(var_name, PackedType(type_name, precision, shape[-1], n_pack, **kwargs), **kwargs)
+        # super(StreamVariable, self).__init__(var_name, PackedType(type_name, precision, shape[-1], n_pack, **kwargs), **kwargs)
+        super(StreamVariable, self).__init__(var_name,  HLSType(type_name, precision, **kwargs), **kwargs)
         self.shape = shape
         self.dim_names = dim_names
         if depth == 0:
@@ -634,6 +635,8 @@ class Dense(Layer):
         params = self._default_config_params()
         params['n_in'] = self.get_input_variable().size_cpp()
         params['n_out'] = self.get_output_variable().size_cpp()
+        params['n_chan'] = self.get_input_variable().dim_names[-1]
+        params['n_filt'] = self.get_output_variable().dim_names[-1]
         params['nzeros'] = self.get_weights('weight').nzeros
         params['nonzeros'] = self.get_weights('weight').nonzeros
         params['product_type'] = self.model.config.backend.product_type(self.get_input_variable().type.precision, self.get_weights('weight').type.precision)
@@ -1318,7 +1321,7 @@ class Activation(Layer):
         params = self._default_config_params()
         params['type'] = self.get_attr('activation')
         params['n_in'] = self.get_input_variable().size_cpp()
-
+        params['n_filt'] = self.get_input_variable().dim_names[-1]
         return self._config_template.format(**params)
 
 class ParametrizedActivation(Activation):

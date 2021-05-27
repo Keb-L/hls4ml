@@ -157,9 +157,9 @@ void pooling2d_encoded_cl(
 // *************************************************
 template<class data_T, class res_T, typename CONFIG_T>
 void compute_pool_buffer_2d(
-    const data_T& in_elem,
-    ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::pool_height - 1][CONFIG_T::n_filt],
-    hls::stream<res_T> &res
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    ap_shift_reg<data_T, CONFIG_T::in_width> line_buffer[CONFIG_T::pool_height - 1][CONFIG_T::n_filt],
+    hls::stream<res_T> res[CONFIG_T::n_filt]
 ) {
     #pragma HLS INLINE
     const static int lShiftX = CONFIG_T::pool_width - 1;
@@ -169,17 +169,21 @@ void compute_pool_buffer_2d(
     static int sX = 0; // stride X
     static int sY = 0; // stride Y
 
-    typename data_T::value_type pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+    data_T pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
     #pragma HLS ARRAY_PARTITION variable=pool_window complete
 
-    static typename data_T::value_type kernel_data[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+    static data_T kernel_data[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
     #pragma HLS ARRAY_PARTITION variable = kernel_data complete dim = 0
 
-    res_T res_pack;
-    #pragma HLS DATA_PACK variable=res_pack
+    data_T data_in[CONFIG_T::n_chan];
+    #pragma HLS ARRAY_PARTITION variable=data_in complete
+
+    for(int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+        data_in[i_ic] = data[i_ic].read();
+    }
 
     // Add pixel into line buffer, return pooling kernels
-    nnet::shift_line_buffer<data_T, res_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+    nnet::shift_line_buffer<data_T, res_T, CONFIG_T>(data_in, line_buffer, kernel_data);
 
     // Can compute pooling output
     if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
@@ -192,11 +196,9 @@ void compute_pool_buffer_2d(
             }
 
             // Compute Pooling
-            res_pack[i_ic] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window);
+            res[i_ic].write(reduce_pool<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window));
         }
 
-        // Write to output
-        res.write(res_pack);
     }
 
     // Counter Housekeeping
@@ -221,13 +223,13 @@ void compute_pool_buffer_2d(
 
 template<class data_T, class res_T, typename CONFIG_T>
 void pooling2d_buffer_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T> &res
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T> res[CONFIG_T::n_filt]
 ) {
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width);
 
-    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::pool_height - 1][CONFIG_T::n_filt];
+    static ap_shift_reg<data_T, CONFIG_T::in_width> line_buffer[CONFIG_T::pool_height - 1][CONFIG_T::n_filt];
     #pragma HLS ARRAY_PARTITION variable = line_buffer complete dim = 2
 
     ReadInputHeight: for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
@@ -235,24 +237,24 @@ void pooling2d_buffer_cl(
             #pragma HLS LOOP_FLATTEN
             #pragma HLS PIPELINE
 
-            compute_pool_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res);
+            compute_pool_buffer_2d<data_T, res_T, CONFIG_T>(data, line_buffer, res);
         }
     }
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
 void pooling2d_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T> &res
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T> res[CONFIG_T::n_filt]
 ) {
     #pragma HLS inline region
     switch(CONFIG_T::implementation){
         case conv_implementation::linebuffer:
             pooling2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
             break;
-        case conv_implementation::encoded:
-            pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
-            break;
+        // case conv_implementation::encoded:
+        //     pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+        //     break;
         } 
 }
 

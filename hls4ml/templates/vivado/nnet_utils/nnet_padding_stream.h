@@ -6,26 +6,26 @@
 namespace nnet {
 
 template<class res_T, typename CONFIG_T>
-void fill_zero(hls::stream<res_T> &res) {
+void fill_zero(hls::stream<res_T> res[CONFIG_T::n_chan]) {
     #pragma HLS INLINE
-    res_T res_part;
+    // res_T res_part;
 	for (int c = 0; c < CONFIG_T::n_chan; c++) {
         #pragma HLS UNROLL
-	    res_part[c] = 0;
+	    res[c].write(0);
     }
-    res.write(res_part);
+    // res.write(res_part);
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
-void fill_data(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+void fill_data(hls::stream<data_T> data[CONFIG_T::n_chan], hls::stream<res_T> res[CONFIG_T::n_chan]) {
     #pragma HLS INLINE
-    data_T data_part = data.read();
-    res_T res_part;
+    // data_T data_part = data.read();
+    // res_T res_part;
     for (int c = 0; c < CONFIG_T::n_chan; c++) {
         #pragma HLS UNROLL
-        res_part[c] = data_part[c];
+        res[c].write(data[c].read());
     }
-    res.write(res_part);
+    // res.write(res_part);
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
@@ -48,8 +48,8 @@ void zeropad1d_cl(
 
 template<class data_T, class res_T, typename CONFIG_T>
 void zeropad2d_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T>  &res
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T>  res[CONFIG_T::n_chan]
 ) {
 
     PadTop: for (int i = 0; i < CONFIG_T::pad_top; i++) {

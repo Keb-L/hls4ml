@@ -66,15 +66,15 @@ void conv_2d_encoded_cl(
 // Line Buffer
 template <class data_T, class res_T, typename CONFIG_T>
 void conv_2d_buffer_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T>  &res,
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T>  res[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_filt])
 {
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
 
-    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::filt_height - 1][CONFIG_T::n_chan];
-    #pragma HLS ARRAY_PARTITION variable = line_buffer complete dim = 2
+    static ap_shift_reg<data_T, CONFIG_T::in_width> line_buffer[CONFIG_T::filt_height - 1][CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable = line_buffer complete dim = 2
 
     ReadInputHeight: for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
         ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
@@ -82,15 +82,15 @@ void conv_2d_buffer_cl(
             if(CONFIG_T::strategy == nnet::latency) {
                 #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
             }
-            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res, weights, biases);
+            compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data, line_buffer, res, weights, biases);
         }
     }
 }
 
 template <class data_T, class res_T, typename CONFIG_T>
 void conv_2d_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T>  &res,
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T>  res[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_filt])
 {
@@ -99,9 +99,9 @@ void conv_2d_cl(
         case conv_implementation::linebuffer:
             conv_2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
             break;
-        case conv_implementation::encoded:
-            conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-            break;
+        // case conv_implementation::encoded:
+        //     conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        //     break;
     }  
 }
 

@@ -35,14 +35,14 @@ namespace nnet {
 // *************************************************
 template<class data_T, class res_T, typename CONFIG_T>
 void linear(hls::stream<data_T> &data, hls::stream<res_T> &res) {
-    LinearActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    LinearActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        LinearPackLoop: for (int j = 0; j < res_T::size; j++) {
+        LinearPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             out_data[j] = in_data[j];
         }
@@ -57,14 +57,14 @@ void linear(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 // *************************************************
 template<class data_T, class res_T, typename CONFIG_T>
 void relu(hls::stream<data_T> &data, hls::stream<res_T> &res) {
-    ReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    ReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        ReLUPackLoop: for (int j = 0; j < res_T::size; j++) {
+        ReLUPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             if (in_data[j] > 0) out_data[j] = in_data[j];
             else out_data[j] = 0;
@@ -93,14 +93,14 @@ void sigmoid(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         initialized = true;
     }
 
-    SigmoidActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    SigmoidActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        SigmoidPackLoop: for (int j = 0; j < res_T::size; j++) {
+        SigmoidPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             int data_round = in_data[j]*CONFIG_T::table_size/16;
             int index = data_round + 8*CONFIG_T::table_size/16;
@@ -119,7 +119,7 @@ void sigmoid(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 // *************************************************
 
 template <class data_T, class res_T, typename CONFIG_T>
-void softmax_latency(hls::stream<data_T> &data, hls::stream<res_T> &res){
+void softmax_latency(hls::stream<data_T> data[CONFIG_T::n_filt], hls::stream<res_T> res[CONFIG_T::n_filt]){
     // Initialize the lookup tables
 #ifdef __HLS_SYN__
     bool initialized = false;
@@ -133,7 +133,7 @@ void softmax_latency(hls::stream<data_T> &data, hls::stream<res_T> &res){
 #endif
     if (!initialized) {
         // Note we are exponentiating the inputs, which have type data_T
-        init_exp_table<typename data_T::value_type, CONFIG_T>(exp_table);
+        init_exp_table<data_T, CONFIG_T>(exp_table);
         // Note we are inverting the exponentials, which have type exp_table_t
         init_invert_table<typename CONFIG_T::exp_table_t, CONFIG_T>(invert_table);
         initialized = true;
@@ -146,17 +146,13 @@ void softmax_latency(hls::stream<data_T> &data, hls::stream<res_T> &res){
     typename CONFIG_T::exp_table_t exp_res[CONFIG_T::n_in];
     #pragma HLS array_partition variable=exp_res complete
     typename CONFIG_T::exp_table_t exp_sum(0);
-    SoftmaxExpLoop: for(unsigned i = 0; i < CONFIG_T::n_in / data_T::size; i++){
-        if (CONFIG_T::n_in / data_T::size > 1) {
-            #pragma HLS PIPELINE
-        }
-        data_T in_pack = data.read();
-        SoftmaxExpPackLoop: for(unsigned j = 0; j < data_T::size; j++){
-            #pragma HLS UNROLL
-            unsigned x = softmax_idx_from_real_val<typename data_T::value_type, CONFIG_T>(in_pack[j]);
-            exp_res[i * data_T::size + j] = exp_table[x];
-        }
+
+    SoftmaxExpPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++){
+        #pragma HLS UNROLL
+        unsigned x = softmax_idx_from_real_val<data_T, CONFIG_T>(data[j].read());
+        exp_res[j] = exp_table[x];
     }
+ 
 
     // Explicitly sum the results with an adder tree.
     // Rounding & Saturation mode, which improve accuracy, prevent Vivado from expression balancing
@@ -164,18 +160,23 @@ void softmax_latency(hls::stream<data_T> &data, hls::stream<res_T> &res){
     exp_sum = reduce<typename CONFIG_T::exp_table_t, CONFIG_T::n_in, Op_add<typename CONFIG_T::exp_table_t>>(exp_res, op_add);
 
     typename CONFIG_T::inv_table_t inv_exp_sum = invert_table[softmax_idx_from_real_val<typename CONFIG_T::exp_table_t,CONFIG_T>(exp_sum)];
-    SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / res_T::size; i++){
-        #pragma HLS PIPELINE II=ii
+    // SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++){
+    //     #pragma HLS PIPELINE II=ii
 
-        res_T out_pack;
-        #pragma HLS DATA_PACK variable=out_pack
-        SoftmaxInvPackLoop: for(unsigned j = 0; j < res_T::size; j++){
-            #pragma HLS UNROLL
-            #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
-            out_pack[i * res_T::size + j] = exp_res[i * res_T::size + j] * inv_exp_sum;
-        }
-        res.write(out_pack);
+    //     res_T out_pack;
+    //     #pragma HLS DATA_PACK variable=out_pack
+        
+    SoftmaxInvPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++){
+        #pragma HLS UNROLL
+        #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
+        // out_pack[j] = exp_res[j] * inv_exp_sum; 
+        res[j].write(exp_res[j] * inv_exp_sum);
     }
+
+    // for(unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+    //     res[c].write(out_pack[c]);
+    // }
+    // }
 }
 
 template <class data_T, class res_T, typename CONFIG_T>
@@ -204,14 +205,14 @@ void softmax_stable(hls::stream<data_T> &data, hls::stream<res_T> &res){
 
     typename data_T::value_type data_array[CONFIG_T::n_in];
     #pragma HLS ARRAY_PARTITION variable=data_array complete
-    SoftmaxArrayLoop: for(unsigned i = 0; i < CONFIG_T::n_in / data_T::size; i++){
-        if (CONFIG_T::n_in / data_T::size > 1) {
+    SoftmaxArrayLoop: for(unsigned i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++){
+        if (CONFIG_T::n_in / CONFIG_T::n_filt > 1) {
             #pragma HLS PIPELINE
         }
         data_T in_pack = data.read();
-        SoftmaxArrayPackLoop: for(unsigned j = 0; j < data_T::size; j++){
+        SoftmaxArrayPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++){
             #pragma HLS UNROLL
-            data_array[i * data_T::size + j] = in_pack[j];
+            data_array[i * CONFIG_T::n_filt + j] = in_pack[j];
         }
     }
 
@@ -242,15 +243,15 @@ void softmax_stable(hls::stream<data_T> &data, hls::stream<res_T> &res){
     exp_sum = reduce<typename CONFIG_T::exp_table_t, CONFIG_T::n_in, Op_add<typename CONFIG_T::exp_table_t>>(exp_res, op_add);
 
     typename CONFIG_T::inv_table_t inv_exp_sum = invert_table[softmax_idx_from_real_val<typename CONFIG_T::exp_table_t,CONFIG_T>(exp_sum)];
-    SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / res_T::size; i++){
+    SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++){
         #pragma HLS PIPELINE II=ii
 
         res_T out_pack;
         #pragma HLS DATA_PACK variable=out_pack
-        SoftmaxInvPackLoop: for(unsigned j = 0; j < res_T::size; j++){
+        SoftmaxInvPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++){
             #pragma HLS UNROLL
             #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
-            out_pack[i * res_T::size + j] = exp_res[i * res_T::size + j] * inv_exp_sum;
+            out_pack[i * CONFIG_T::n_filt + j] = exp_res[i * CONFIG_T::n_filt + j] * inv_exp_sum;
         }
         res.write(out_pack);
     }
@@ -279,13 +280,13 @@ void softmax_legacy(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     typename CONFIG_T::table_t exp_diff_res;
     typename data_T::value_type data_cache[CONFIG_T::n_in];
 
-    SoftmaxInitLoop: for(unsigned i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
+    SoftmaxInitLoop: for(unsigned i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
         data_T in_pack = data.read();
-        SoftmaxInitPackLoop: for(unsigned j = 0; j < data_T::size; j++) {
+        SoftmaxInitPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
-            data_cache[i * data_T::size + j] = in_pack[j];
-            exp_res[i * data_T::size + j] = 0;
+            data_cache[i * CONFIG_T::n_filt + j] = in_pack[j];
+            exp_res[i * CONFIG_T::n_filt + j] = 0;
         }
     }
 
@@ -308,36 +309,36 @@ void softmax_legacy(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         }
     }
 
-    SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    SoftmaxInvLoop: for(unsigned i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         res_T out_pack;
         #pragma HLS DATA_PACK variable=out_pack
-        SoftmaxInvPackLoop: for(unsigned j = 0; j < res_T::size; j++) {
+        SoftmaxInvPackLoop: for(unsigned j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             
-            int exp_res_index = exp_res[i * res_T::size + j] * CONFIG_T::table_size / 64;
+            int exp_res_index = exp_res[i * CONFIG_T::n_filt + j] * CONFIG_T::table_size / 64;
             if (exp_res_index < 0) exp_res_index = 0;
             if (exp_res_index > CONFIG_T::table_size - 1) exp_res_index = CONFIG_T::table_size - 1;
             
-            out_pack[i * res_T::size + j] = (typename res_T::value_type) invert_table[exp_res_index];
+            out_pack[i * CONFIG_T::n_filt + j] = (typename res_T::value_type) invert_table[exp_res_index];
         }
         res.write(out_pack);
     }
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
-void softmax(hls::stream<data_T> &data, hls::stream<res_T> &res){
+void softmax(hls::stream<data_T> data[CONFIG_T::n_filt], hls::stream<res_T> res[CONFIG_T::n_filt]){
     switch(CONFIG_T::implementation){
     case softmax_implementation::latency:
         softmax_latency<data_T, res_T, CONFIG_T>(data, res);
         break;
-    case softmax_implementation::stable:
-        softmax_stable<data_T, res_T, CONFIG_T>(data, res);
-        break;
-    case softmax_implementation::legacy:
-        softmax_legacy<data_T, res_T, CONFIG_T>(data, res);
-        break;
+    // case softmax_implementation::stable:
+    //     softmax_stable<data_T, res_T, CONFIG_T>(data, res);
+    //     break;
+    // case softmax_implementation::legacy:
+    //     softmax_legacy<data_T, res_T, CONFIG_T>(data, res);
+    //     break;
     }    
 }
 
@@ -361,14 +362,14 @@ void tanh(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         initialized = true;
     }
 
-    TanHActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    TanHActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        TanHPackLoop: for (int j = 0; j < res_T::size; j++) {
+        TanHPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             int data_round = in_data[j]*CONFIG_T::table_size/8;
             int index = data_round + 4*CONFIG_T::table_size/8;
@@ -391,14 +392,14 @@ void hard_sigmoid(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     typename data_T::value_type slope = (typename data_T::value_type) 0.2;
     typename data_T::value_type shift = (typename data_T::value_type) 0.5;
 
-    HardSigmoidActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    HardSigmoidActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        HardSigmoidPackLoop: for (int j = 0; j < res_T::size; j++) {
+        HardSigmoidPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             typename data_T::value_type datareg = slope * in_data[j] + shift;
             if (datareg > 1) datareg = 1;
@@ -416,20 +417,18 @@ void hard_sigmoid(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 // *************************************************
 
 template<class data_T, class res_T, typename CONFIG_T>
-void leaky_relu(hls::stream<data_T> &data, typename data_T::value_type alpha, hls::stream<res_T> &res) {
-    LeakyReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+void leaky_relu(hls::stream<data_T> data[CONFIG_T::n_filt], data_T alpha, hls::stream<res_T> res[CONFIG_T::n_filt]) {
+    LeakyReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
-        data_T in_data = data.read();
-        res_T out_data;
-        #pragma HLS DATA_PACK variable=out_data
-
-        LeakyReLUPackLoop: for (int j = 0; j < res_T::size; j++) {
+        LeakyReLUPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
-            if (in_data[j] > 0) out_data[j] = in_data[j];
-            else out_data[j] = alpha * in_data[j];
+            data_T in_data = data[j].read();
+
+            if (in_data > 0) res[j].write(in_data);
+            else res[j].write(alpha * in_data);
         }
-        res.write(out_data);
+       
     }
 }
 
@@ -440,14 +439,14 @@ void leaky_relu(hls::stream<data_T> &data, typename data_T::value_type alpha, hl
 
 template<class data_T, class res_T, typename CONFIG_T>
 void thresholded_relu(hls::stream<data_T> &data, typename data_T::value_type theta, hls::stream<res_T> &res) {
-    ThresholdedReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    ThresholdedReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        ThresholdedReLUPackLoop: for (int j = 0; j < res_T::size; j++) {
+        ThresholdedReLUPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             if (in_data[j] > theta) out_data[j] = in_data[j];
             else out_data[j] = 0;
@@ -477,14 +476,14 @@ void softplus(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         initialized = true;
     }
 
-    SoftplusActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    SoftplusActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        SoftplusPackLoop: for (int j = 0; j < res_T::size; j++) {
+        SoftplusPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             int data_round = in_data[j]*CONFIG_T::table_size/16;
             int index = data_round + 8*CONFIG_T::table_size/16;
@@ -516,14 +515,14 @@ void softsign(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         initialized = true;
     }
 
-    SoftsignActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    SoftsignActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        SoftsignPackLoop: for (int j = 0; j < res_T::size; j++) {
+        SoftsignPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             int data_round = in_data[j]*CONFIG_T::table_size/16;
             int index = data_round + 8*CONFIG_T::table_size/16;
@@ -554,14 +553,14 @@ void elu(hls::stream<data_T> &data, typename data_T::value_type alpha, hls::stre
         initialized = true;
     }
 
-    EluActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    EluActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        EluPackLoop: for (int j = 0; j < res_T::size; j++) {
+        EluPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             
             typename data_T::value_type datareg = in_data[j];
@@ -601,14 +600,14 @@ void selu(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         initialized = true;
     }
 
-    SeluActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    SeluActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        SeluPackLoop: for (int j = 0; j < res_T::size; j++) {
+        SeluPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
 
             typename data_T::value_type datareg = in_data[j];
@@ -631,17 +630,17 @@ void selu(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 
 template<class data_T, class res_T, typename CONFIG_T>
 void prelu(hls::stream<data_T> &data, typename data_T::value_type alpha[CONFIG_T::n_in], hls::stream<res_T> &res) {
-    PReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
+    PReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / CONFIG_T::n_filt; i++) {
         #pragma HLS PIPELINE
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
-        PReLUPackLoop: for (int j = 0; j < res_T::size; j++) {
+        PReLUPackLoop: for (int j = 0; j < CONFIG_T::n_filt; j++) {
             #pragma HLS UNROLL
             if (in_data[j] > 0) out_data[j] = in_data[j];
-            else out_data[j] = alpha[i*res_T::size+j] * in_data[j];
+            else out_data[j] = alpha[i*CONFIG_T::n_filt+j] * in_data[j];
         }
         res.write(out_data);
     }

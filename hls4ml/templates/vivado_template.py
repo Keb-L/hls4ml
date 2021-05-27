@@ -9,6 +9,8 @@ from hls4ml.templates.templates import Backend
 dense_config_template = """struct config{index} : nnet::dense_config {{
     static const unsigned n_in = {n_in};
     static const unsigned n_out = {n_out};
+    static const unsigned n_chan = {n_chan};
+    static const unsigned n_filt = {n_filt};
     static const unsigned io_type = nnet::{iotype};
     static const unsigned strategy = nnet::{strategy};
     static const unsigned reuse_factor = {reuse};
@@ -110,6 +112,7 @@ sepconv_config_template = """struct config{index} {{
 
 activ_config_template = """struct {type}_config{index} : nnet::activ_config {{
     static const unsigned n_in = {n_in};
+    static const unsigned n_filt = {n_filt};
     static const unsigned table_size = {table_size};
     static const unsigned io_type = nnet::{iotype};
     static const unsigned reuse_factor = {reuse};
@@ -118,6 +121,7 @@ activ_config_template = """struct {type}_config{index} : nnet::activ_config {{
 
 softmax_config_template = """struct {type}_config{index} : nnet::activ_config {{
     static const unsigned n_in = {n_in};
+    static const unsigned n_filt = {n_filt};
     static const unsigned table_size = {table_size};
     static const unsigned io_type = nnet::{iotype};
     static const unsigned reuse_factor = {reuse};

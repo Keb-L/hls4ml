@@ -42,9 +42,11 @@ class VivadoWriter(Writer):
             return '{type} {name}{suffix}[{shape}]'.format(type=var.type.name, name=var.cppname, suffix=name_suffix, shape=var.size_cpp())
         elif var_class == 'StreamVariable':
             if as_reference: # Function parameter
-                return 'hls::stream<{type}> &{name}{suffix}'.format(type=var.type.name, name=var.cppname, suffix=name_suffix)
+                # return 'hls::stream<{type}> &{name}{suffix}'.format(type=var.type.name, name=var.cppname, suffix=name_suffix)
+                return 'hls::stream<{type}> {name}{suffix}[{channel}]'.format(type=var.type.name, name=var.cppname, suffix=name_suffix, channel=var.dim_names[-1])
             else: # Declaration
-                return 'hls::stream<{type}> {name}{suffix}("{name}")'.format(type=var.type.name, name=var.cppname, suffix=name_suffix)
+                # return 'hls::stream<{type}> {name}{suffix}("{name}")'.format(type=var.type.name, name=var.cppname, suffix=name_suffix)
+                return 'hls::stream<{type}> {name}{suffix}[{channel}]'.format(type=var.type.name, name=var.cppname, suffix=name_suffix, channel=var.dim_names[-1])
         elif var_class == 'WeightVariable':
             return '{type} {name}{suffix}[{size}]'.format(type=var.type.name, name=var.cppname, suffix=name_suffix, size=var.data_length)
         elif var_class == 'InplaceVariable':
@@ -431,7 +433,8 @@ class VivadoWriter(Writer):
                 #     newline += bram.definition_cpp()+';\n'
                 for inp in model.get_input_variables():
                     newline += '      ' + self.variable_definition_cpp(model, inp) + ';\n'
-                    newline += '      nnet::copy_data<float, {}, {}, {}>(in, {});\n'.format(inp.type.name, offset, inp.size_cpp(), inp.cppname)
+                    # newline += '      nnet::copy_data<float, {}, {}, {}, {}>(in, {});\n'.format(inp.type.name, offset, inp.size_cpp(), inp.dim_names[-1], inp.cppname)
+                    newline += '    nnet::fill_zero<{}, {}, {}>({});\n'.format(inp.type.name, inp.size_cpp(), inp.dim_names[-1], inp.cppname)
                     offset += inp.size()
                 for out in model.get_output_variables():
                     newline += '      ' + self.variable_definition_cpp(model, out) + ';\n'
@@ -439,7 +442,7 @@ class VivadoWriter(Writer):
                 newline = line
                 for inp in model.get_input_variables():
                     newline += '    ' + self.variable_definition_cpp(model, inp) + ';\n'
-                    newline += '    nnet::fill_zero<{}, {}>({});\n'.format(inp.type.name, inp.size_cpp(), inp.cppname)
+                    newline += '    nnet::fill_zero<{}, {}, {}>({});\n'.format(inp.type.name, inp.size_cpp(), inp.dim_names[-1], inp.cppname)
                 for out in model.get_output_variables():
                     newline += '    ' + self.variable_definition_cpp(model, out) + ';\n'
             elif '//hls-fpga-machine-learning insert top-level-function' in line:
