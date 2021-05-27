@@ -179,6 +179,7 @@ void compute_pool_buffer_2d(
     #pragma HLS ARRAY_PARTITION variable=data_in complete
 
     for(int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+        #pragma HLS UNROLL
         data_in[i_ic] = data[i_ic].read();
     }
 
