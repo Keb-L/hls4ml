@@ -37,9 +37,7 @@ unsigned scale_index(const unsigned idx) {
 template<class data_T, class res_T, typename CONFIG_T>
 void mult_buffer(
     hls::stream<data_T> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
-    res_T& res_pack,
-    hls::stream<res_T>& res_stream,
-    unsigned & outputs_ready,
+    hls::stream<res_T> res_stream[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
     typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]
 ) {
@@ -64,39 +62,22 @@ void mult_buffer(
 
     CastLoop: for (unsigned jj = 0; jj < CONFIG_T::n_filt; jj++) {
         #pragma HLS UNROLL
-        if (res_T::size / CONFIG_T::n_filt == 1) {
-            res_pack[jj] = res[jj];
-        } else {
-            res_pack[outputs_ready * CONFIG_T::n_filt + jj] = res[jj];
-        }
-    }
-
-    if (res_T::size / CONFIG_T::n_filt == 1) {
-        res_stream.write(res_pack);
-    } else {
-        if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
-            res_stream.write(res_pack);
-            outputs_ready = 0;
-        } else {
-            outputs_ready++;
-        }
+        res_stream[jj].write(res[jj]);
     }
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
 void compute_encoded_output(
-    const data_T& in_elem,
+    data_T in_elem[CONFIG_T::n_chan],
     hls::stream<data_T> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
-    hls::stream<res_T> &res,
-    res_T &res_pack,
-    unsigned &outputs_ready,
+    hls::stream<res_T>  res[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
     typename CONFIG_T::bias_t biases[CONFIG_T::n_filt],
     ap_uint<CONFIG_T::kernel_size> *pixel_idx
 ) {
     #pragma HLS INLINE
 
-    MultLoop: for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+    MultLoop: for (unsigned p = 0; p < 1; p++) {
         #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
         CopyDataFilt: for (unsigned f = 0; f < CONFIG_T::kernel_size; f++) {
             #pragma HLS UNROLL
@@ -106,7 +87,7 @@ void compute_encoded_output(
             }
         }
         if (pixel_idx[p][CONFIG_T::kernel_size - 1]) {
-            mult_buffer<data_T, res_T, CONFIG_T>(data_window, res_pack, res, outputs_ready, weights, biases);
+            mult_buffer<data_T, res_T, CONFIG_T>(data_window, res, weights, biases);
         }
     }
 }

@@ -40,11 +40,9 @@ template<class data_T, class res_T, typename CONFIG_T>
 void compute_pool_encoded_2d(
     const unsigned h_idx,
     const unsigned w_idx,
-    const data_T& in_elem,
-    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt],
-    hls::stream<res_T> &res,
-    res_T &res_pack,
-    unsigned &outputs_ready
+    data_T in_elem[CONFIG_T::n_chan],
+    hls::stream<data_T> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt],
+    hls::stream<res_T>  res[CONFIG_T::n_filt]
 ) {
     // Nearest H without unused pixels on the right
     constexpr unsigned nH = ((CONFIG_T::in_height - CONFIG_T::pool_height) / CONFIG_T::stride_height) * CONFIG_T::stride_height + CONFIG_T::pool_height;
@@ -72,18 +70,13 @@ void compute_pool_encoded_2d(
 
     #pragma HLS INLINE
 
-    if (data_T::size / CONFIG_T::n_filt > 1) {
-        #pragma HLS ARRAY_PARTITION variable=pool_table_height complete
-        #pragma HLS ARRAY_PARTITION variable=pool_table_width complete
-    }
-
-    typename data_T::value_type pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+    data_T pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
     #pragma HLS ARRAY_PARTITION variable=pool_window complete
 
     const unsigned sh_idx = pool_table_height[h_idx] * CONFIG_T::pool_width;
-    const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
+    const unsigned wp_idx = w_idx;
 
-    PixelLoop: for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+    PixelLoop: for (unsigned p = 0; p < 1; p++) {
         #pragma HLS PIPELINE
 
         ap_uint<CONFIG_T::pool_height * CONFIG_T::pool_width> filt_mask = 0;
@@ -100,22 +93,7 @@ void compute_pool_encoded_2d(
                 PoolLoop: for(unsigned f = 0; f < CONFIG_T::pool_height * CONFIG_T::pool_width; f++) {
                     pool_window[f] = data_window[c * CONFIG_T::pool_height * CONFIG_T::pool_width + f].read();
                 }
-                if (res_T::size / CONFIG_T::n_filt == 1) { // Saves resources if we don't pack output, compiler will remove the else branch
-                    res_pack[c] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window);
-                } else {
-                    res_pack[outputs_ready * CONFIG_T::n_filt + c] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window);
-                }
-
-            }
-            if (res_T::size / CONFIG_T::n_filt == 1) { // Saves resources if we don't pack output, compiler will remove the else branch
-                res.write(res_pack);
-            } else {
-                if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
-                    res.write(res_pack);
-                    outputs_ready = 0;
-                } else {
-                    outputs_ready++;
-                }
+                res[c].write(reduce_pool<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window));
             }
         }
     }
@@ -123,31 +101,32 @@ void compute_pool_encoded_2d(
 
 template<class data_T, class res_T, typename CONFIG_T>
 void pooling2d_encoded_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T> &res
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T> res[CONFIG_T::n_filt]
 ) {
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width);
 
-    res_T res_pack;
-    #pragma HLS DATA_PACK variable=res_pack
-    unsigned outputs_ready = 0;
-
-    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+    hls::stream<data_T> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
     constexpr int win_depth = CONFIG_T::pool_height * CONFIG_T::out_width;
     for (unsigned i_out = 0; i_out < CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
         #pragma HLS STREAM variable=data_window[i_out] depth=win_depth
     }
 
-    constexpr int pack_factor = data_T::size / CONFIG_T::n_filt;
+    data_T data_in[CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable=data_in complete
 
     ReadInputHeight: for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
-        ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (pack_factor); i_iw++) {
+        ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
             #pragma HLS LOOP_FLATTEN
-            if (res_T::size / CONFIG_T::n_filt == 1) {
-                #pragma HLS PIPELINE II=pack_factor
+            #pragma HLS PIPELINE
+
+            for(int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+                #pragma HLS UNROLL
+                data_in[i_ic] = data[i_ic].read();
             }
-            compute_pool_encoded_2d<data_T, res_T, CONFIG_T>(i_ih, i_iw, data.read(), data_window, res, res_pack, outputs_ready);
+            
+            compute_pool_encoded_2d<data_T, res_T, CONFIG_T>(i_ih, i_iw, data_in, data_window, res);
         }
     }
 }
@@ -253,9 +232,9 @@ void pooling2d_cl(
         case conv_implementation::linebuffer:
             pooling2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
             break;
-        // case conv_implementation::encoded:
-        //     pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
-        //     break;
+        case conv_implementation::encoded:
+            pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+            break;
         } 
 }
 
@@ -267,7 +246,7 @@ template<class data_T, class res_T, typename CONFIG_T>
 void compute_pool_encoded_1d(
     const unsigned w_idx,
     const data_T& in_elem,
-    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt],
+    hls::stream<data_T> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt],
     hls::stream<res_T> &res,
     res_T &res_pack,
     unsigned &outputs_ready
@@ -295,7 +274,7 @@ void compute_pool_encoded_1d(
         #pragma HLS ARRAY_PARTITION variable=pool_table_width complete
     }
 
-    typename data_T::value_type pool_window[CONFIG_T::pool_width];
+    data_T pool_window[CONFIG_T::pool_width];
     #pragma HLS ARRAY_PARTITION variable=pool_window complete
 
     const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
@@ -318,9 +297,9 @@ void compute_pool_encoded_1d(
                     pool_window[f] = data_window[c * CONFIG_T::pool_width + f].read();
                 }
                 if (res_T::size / CONFIG_T::n_filt == 1) { // Saves resources if we don't pack output, compiler will remove the else branch
-                    res_pack[c] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                    res_pack[c] = reduce_pool<data_T, CONFIG_T::pool_width, CONFIG_T>(pool_window);
                 } else {
-                    res_pack[outputs_ready * CONFIG_T::n_filt + c] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                    res_pack[outputs_ready * CONFIG_T::n_filt + c] = reduce_pool<data_T, CONFIG_T::pool_width, CONFIG_T>(pool_window);
                 }
 
             }
@@ -350,7 +329,7 @@ void pooling1d_encoded_cl(
     #pragma HLS DATA_PACK variable=res_pack
     unsigned outputs_ready = 0;
 
-    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt];
+    hls::stream<data_T> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt];
     constexpr int win_depth = CONFIG_T::n_out;
     for (unsigned i_out = 0; i_out < CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
         #pragma HLS STREAM variable=data_window[i_out] depth=win_depth
@@ -373,7 +352,7 @@ void pooling1d_encoded_cl(
 template<class data_T, class res_T, typename CONFIG_T>
 void compute_pool_buffer_1d(
     const data_T& in_elem,
-    // ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::n_filt],
+    // ap_shift_reg<data_T, CONFIG_T::in_width> line_buffer[CONFIG_T::n_filt],
     hls::stream<res_T> &res
 ) {
     #pragma HLS INLINE
@@ -382,10 +361,10 @@ void compute_pool_buffer_1d(
     static int pX = 0;
     static int sX = 0;
 
-    typename data_T::value_type pool_window[CONFIG_T::pool_width];
+    data_T pool_window[CONFIG_T::pool_width];
     #pragma HLS ARRAY_PARTITION variable=pool_window complete
 
-    static typename data_T::value_type kernel_data[CONFIG_T::pool_width * CONFIG_T::n_filt];
+    static data_T kernel_data[CONFIG_T::pool_width * CONFIG_T::n_filt];
     #pragma HLS ARRAY_PARTITION variable = kernel_data complete dim = 0
 
     res_T res_pack;
@@ -406,7 +385,7 @@ void compute_pool_buffer_1d(
             }
 
             // Compute Pooling
-            res_pack[i_ic] = reduce_pool<typename data_T::value_type, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+            res_pack[i_ic] = reduce_pool<data_T, CONFIG_T::pool_width, CONFIG_T>(pool_window);
         }
 
         // Write to output
@@ -480,19 +459,19 @@ void compute_global_pool(
     const unsigned h_idx,
     const unsigned w_idx,
     const data_T& in_elem,
-    typename data_T::value_type data_window[CONFIG_T::n_filt]
+    data_T data_window[CONFIG_T::n_filt]
 ) {
     PoolFilt: for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
         #pragma HLS UNROLL
 
-        typename data_T::value_type data_pack[data_T::size / CONFIG_T::n_filt];
+        data_T data_pack[data_T::size / CONFIG_T::n_filt];
         #pragma HLS ARRAY_PARTITION variable=data_pack complete dim=0
 
         PixelLoop: for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
             #pragma HLS UNROLL
             data_pack[p] = in_elem[p * CONFIG_T::n_filt + c];
         }
-        data_window[c] = reduce_global_pool<typename data_T::value_type, data_T::size / CONFIG_T::n_filt, CONFIG_T>(data_window[c], data_pack);
+        data_window[c] = reduce_global_pool<data_T, data_T::size / CONFIG_T::n_filt, CONFIG_T>(data_window[c], data_pack);
     }
 }
 
@@ -504,12 +483,12 @@ void global_pooling2d_cl(
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width);
 
-    typename data_T::value_type data_window[CONFIG_T::n_filt];
+    data_T data_window[CONFIG_T::n_filt];
     #pragma HLS ARRAY_PARTITION variable=data_window complete
 
-    typename data_T::value_type init = 0;
+    data_T init = 0;
     if (CONFIG_T::pool_op == Max) {
-        init = hls::numeric_limits<typename data_T::value_type>::min();
+        init = hls::numeric_limits<data_T>::min();
     }
 
     PoolInitLoop: for (unsigned i_init = 0; i_init < CONFIG_T::n_filt; i_init++) {

@@ -15,9 +15,9 @@ void compute_scaled_indices_2d(
     ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> *pixel_idx
 ) {
     const unsigned sh_idx = scale_index<CONFIG_T::filt_height, CONFIG_T::stride_height, CONFIG_T::in_height>(h_idx);
-    unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_chan);
+    unsigned wp_idx = w_idx;
 
-    ComputeIndex: for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+    ComputeIndex: for (unsigned p = 0; p < 1; p++) {
         #pragma HLS UNROLL
 
         unsigned sw_idx = scale_index<CONFIG_T::filt_width, CONFIG_T::stride_width, CONFIG_T::in_width>(wp_idx + p);
@@ -27,8 +27,8 @@ void compute_scaled_indices_2d(
 
 template<class data_T, class res_T, typename CONFIG_T>
 void conv_2d_encoded_cl(
-    hls::stream<data_T> &data,
-    hls::stream<res_T>  &res,
+    hls::stream<data_T> data[CONFIG_T::n_chan],
+    hls::stream<res_T>  res[CONFIG_T::n_filt],
     typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_filt])
 {
@@ -36,7 +36,7 @@ void conv_2d_encoded_cl(
     assert(CONFIG_T::filt_height == CONFIG_T::filt_width);
     assert(CONFIG_T::stride_height <= CONFIG_T::filt_height && CONFIG_T::stride_width <= CONFIG_T::filt_width);
 
-    hls::stream<typename data_T::value_type> data_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+    hls::stream<data_T> data_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
     const int win_depth = CONFIG_T::filt_height * CONFIG_T::out_width;
     for (unsigned i_out = 0; i_out < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; i_out++) {
         #pragma HLS STREAM variable=data_window[i_out] depth=win_depth
@@ -44,21 +44,27 @@ void conv_2d_encoded_cl(
 
     #pragma HLS ARRAY_PARTITION variable=CONFIG_T::pixels complete
 
-    res_T res_pack;
-    #pragma HLS DATA_PACK variable=res_pack
-    unsigned outputs_ready = 0;
-
-    ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> pixel_idx[data_T::size / CONFIG_T::n_chan];
+    ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> pixel_idx[1];
     #pragma HLS ARRAY_PARTITION variable=pixel_idx complete
 
+    data_T data_in[CONFIG_T::n_chan];
+    #pragma HLS ARRAY_RESHAPE variable=data_in complete
+
+
     ReadInputHeight: for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
-        ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
+        ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
             #pragma HLS LOOP_FLATTEN
-            if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
+            if (CONFIG_T::strategy == nnet::latency) {
                 #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
             }
+
+            for(int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+                #pragma HLS UNROLL
+                data_in[i_ic] = data[i_ic].read();
+            }
+
             compute_scaled_indices_2d<data_T, CONFIG_T>(i_ih, i_iw, pixel_idx);
-            compute_encoded_output<data_T, res_T, CONFIG_T>(data.read(), data_window, res, res_pack, outputs_ready, weights, biases, pixel_idx);
+            compute_encoded_output<data_T, res_T, CONFIG_T>(data_in, data_window, res, weights, biases, pixel_idx);
         }
     }
 }
@@ -99,9 +105,9 @@ void conv_2d_cl(
         case conv_implementation::linebuffer:
             conv_2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
             break;
-        // case conv_implementation::encoded:
-        //     conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
-        //     break;
+        case conv_implementation::encoded:
+            conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+            break;
     }  
 }
 
